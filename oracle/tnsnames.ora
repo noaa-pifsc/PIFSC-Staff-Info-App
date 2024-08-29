@@ -1,0 +1,32 @@
+PIC.NMFS.LOCAL =
+ (DESCRIPTION =
+   (ADDRESS_LIST =
+     (ADDRESS = (PROTOCOL = TCP)(HOST = pickaku.nmfs.local)(PORT = 1521))
+   )
+   (CONNECT_DATA =
+     (SID = PIC)
+     (SERVER = DEDICATED)
+   )
+ )
+
+PIC =
+ (DESCRIPTION =
+   (ADDRESS_LIST =
+     (ADDRESS = (PROTOCOL = TCP)(HOST = pickaku.nmfs.local)(PORT = 1521))
+   )
+   (CONNECT_DATA =
+     (SID = PIC)
+     (SERVER = DEDICATED)
+   )
+ )
+
+PIC.PIC.GOV =
+ (DESCRIPTION =
+   (ADDRESS_LIST =
+     (ADDRESS = (PROTOCOL = TCP)(HOST = pickaku.nmfs.local)(PORT = 1521))
+   )
+   (CONNECT_DATA =
+     (SID = PIC)
+     (SERVER = DEDICATED)
+   )
+ )

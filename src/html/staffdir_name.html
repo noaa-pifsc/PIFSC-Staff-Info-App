@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<!-- Template Design by www.studio7designs.com. -->
+
+<head>
+<SCRIPT LANGUAGE="JavaScript">
+function toForm() {
+document.submitname.lastname.focus();
+}
+</script>
+<link rel="SHORTCUT ICON" href="../images/noaa_sm.jpg"/>
+<title>PIFSC Intranet Staff Directory - Submit Information Form</title>
+<meta http-equiv="Content-Language" content="en-gb" />
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
+<link rel="stylesheet" type="text/css" href="../style/staffdir_style.css" />
+</head>
+
+<form action="/cgi-bin/getname.pl" method="get" name="submitname">
+
+<!-- Begin Body -->
+
+<body onload="toForm()">
+
+
+
+<div id="border">
+<div id ="container">
+<div id="topmenu"></div>
+<!-- header background image is in the style sheet-->
+<div id="header"></div>
+
+<!-- content -->
+<div id="content">
+<p>
+<center>
+<span class="style24">PIFSC Staff Directory: Introduce Yourself to Staff!</span> 
+</center>
+
+
+</div>
+
+
+<center>
+<table border=0 width="60%">
+<tr><td colspan="2"><span class="style44"><p><center>Please Enter Your Name</center></span><p></td></tr>
+<tr>
+<td align="right"><span class="style42">Last Name:</span> </td>
+<td align="left"><input type="text" name="lastname" size="20"></td>
+</tr>
+
+<tr>
+<td align="right"><span class="style42">First Name: </span></td>
+<td align="left"><input type="text" name="firstname" size="20"></td>
+</tr>
+
+
+</div> 
+  
+<tr><td align="center" colspan="2"><p><input value="SUBMIT" type="submit" name="requestType">&nbsp;<input value="RESET" type="reset" name="requestType" onclick="toForm();"></td></tr>
+</table></center>
+</div>
+	
+</form>
+<center>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+            
+<!-- footer -->
+<div id="footer">
+<p><span class="style8">Please send questions or comments to <a href="mailto:PIFSC.Librarian@noaa.gov">PIFSC Librarian</a>.<br></span>
+</div>     
+<!-- end footer -->
+
+
+</body>
+
+</html>
