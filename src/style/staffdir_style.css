@@ -1,0 +1,100 @@
+/* This Style sheet was made by aran @ studio7designs.com  if you have any questions please email me or visit http://www.studio7designs.com */  /*{border:1;margin:0;padding:0;background:transparent;} */
+
+body {
+font-family: trebuchet ms, verdana, arial, tahoma;
+font-size: 80%;
+color:#3366CC;
+background-color: #ffffff;
+line-height: 150%;
+margin-top: 0px;
+background: #ffffff url('../img/bg.gif') top center repeat-x;
+text-align:center
+}
+
+#border { border: 0px ; width: 770px; background-color: #FFFFFF; background:url('../img/backround2.gif'); background-repeat: no-repeat; margin: 0 auto; }
+
+#header { height: 100px; width:743px; margin-left:-2px; background-image:url('../img/header.jpg'); background-repeat: no-repeat; }
+
+
+#content { padding: .5em 1em; max-width: 750px; background-color: #FFFFFF;
+a:active, a:visited, a:link { color: #3366CC; text-decoration: none; } a:hover { color: #FF9933; text-decoration: none; }
+}
+
+* html #content {height:1%}
+*>html #content {height:auto}
+
+#container {
+width: 740px;
+margin: 0px auto;
+background-color: #FFFFFF;
+border: 0px solid #669900;
+text-align:left
+}
+
+.img {
+	height: 250px;
+	width: 188px;
+	border:1px solid #aaaaaa;
+	padding: 2px;
+	background:#dddddd;
+}
+
+.pub_tb {width: 630px;background-color: #F8F8F8; border: 1px solid #585858;  color: #585858;  margin-bottom:30px;  font-size:14px; }
+
+.pub_tb table tr td {padding: 10px 10px 10px 10px; }
+
+.pub_tb2 {width: 400px;background-color: #white; border: 0px;  color: #585858;  margin-bottom:30px;  font-size:14px; }
+
+
+    /* ~~~~~~~~~ footer ~~~~~~~~~ */
+#footer {	 	text-align: center; 	height: 40px; 	background-color: #E7F2FE; 	border-top-width: 1px; 	border-top-style: solid; 	border-top-color: #CCCCCC; 	margin-top: 00px; 	margin-right: 15px; 	margin-bottom: 0; 	margin-left: 15px; 	padding-top: 0; 	padding-right: 20px; 	padding-bottom: 0; 	padding-left: 20px; 	clear: both; 	 }   #footer a:link, a:visited{ 	color:#3366CC; }  #footer a:hover, a:active{ 	color: #FF9933; }     a:active, a:visited, a:link { color: #3366CC; text-decoration: none; } a:hover	{ color: #FF9933; text-decoration: none; }
+/* ~~~~~~~~~ PROPS FOR THE MENU GO OUT TO EXPLODING-BOY.COM ~~~~~~~~~ */
+#topmenu { 	position: relative; 	top: 13px; 	left: 13px; 	width: 500px; 	font-size:93%; 	margin: 0; 	line-height:normal; 	height: 41px;       }
+#topmenu ul { 	  margin:0; 	  padding:0px 0px 0 2px; 	  list-style:none;       }
+#topmenu li {       display:inline;       margin:0;       padding:0;       }
+
+ /* Commented Backslash Hack hides rule from IE5-Mac \*/     #topmenu a span {float:none;}     /* End IE5-Mac hack */     #topmenu a:hover span {       color:#3366CC;       }     #topmenu a:hover {       background-position:0% -42px;       }     #topmenu a:hover span {       background-position:100% -42px;     } /* ~~~~~~~~~ Headings ~~~~~~~~~ */     h1 { font-size: 120%; color: #659500; }  h3{ 	color:#666666; 	font-family:geneva,arial,sans-serif; 	font-weight:normal; 	text-transform:uppercase; 	word-spacing:4px; 	letter-spacing:3px; 	font-size:0.8em; 	font-weight:bold; 	padding:0 2px; 	margin:0; }  /*~~~~~~~~~~~styles~~~~~~~~~~~~~~~*/  .style4 {font-size:14px; font-weight:bold; 		color:#585858; 		letter-spacing:1px; 	} 		 .style5 { 	font-size: 10px; 	color:#999999;} 	 .style6 {font-size: 12px; 		color:#666666; font-weight:bold;}  .style7 {font-size: 22px; 		color:#000000; 		font-family: "Freestyle Script"; 		line-height: 15pt; 		word-spacing:1pt;} 		 .style8 {font-size: 12px;color:#336699;} .style9 {font-size: 24px; color:#CCCCCC;}
+
+.style10 {color: #000000;}
+.style21 {font-weight: bold;}
+.style22 {color: #333333;}
+.style26 {color: #000000; font-size: large;}
+.style28 {color: #003366; font-size: large; }
+.style29 {font-size: small; color: #000000;}
+.style31 {color: #000000; font-weight: bold; }
+.style33 {color: red; font-size: 14px;}
+.style25 {font-size: 9px;}
+.style34 {color: #666666}
+.style35 {font-size: medium;}
+.style38 {font-size: small; color: #666666; font-weight: bold; }
+.style39 {font-size: x-small; color: #999999;}
+.style40 {font-size: 12px; font-weight: bold;}
+.style41 {color: #585858; font-size: 18px;}
+.style43 {color: black; font-size: 14px;}
+.style44 {color: #336699; font-size: 18px;}
+.style45 {color: black; font-size: 20px;}
+.style47 {color: black; font-size: 12px; font-weight:bold;}
+
+
+table.display {background-color: #FFFFFF; border: 1px outset black; padding: 1px; margin: 1px;}
+
+table.display td, table.display th {border: 1px inset gray; margin: 2px; padding: 3px;}
+	
+table.display thead {background-color: #DDDDDD;}
+
+span.page_heading {color: #336699; font-weight: bold; font-size: 22px; font: trebuchet ms; margin-top: 20px; margin-bottom: 15px; display: block;}
+
+span.page_content_on_background {color: #585858; font-size: 16px; display: block; color: white; font-weight: bold;}
+
+
+span.spacer {margin-bottom: 20px; display: block;}
+
+a.top_link {padding: 10px; display: block;}
+
+
+a.mail_link {color: orange;}
+
+
+table.display td {color: #336699; font-size: 12px; font-weight:bold; }
+
+table.display th {color: black; font-size: 12px; font-weight:bold;}

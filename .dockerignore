@@ -1,5 +1,0 @@
-*.zip
-[Dd]ocker*
-.DS_Store
-bash/*
-.env

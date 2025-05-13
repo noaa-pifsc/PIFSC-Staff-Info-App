@@ -1,7 +1,0 @@
-version: '2'
-services:
-  staff-directory:
-    ports:
-      - "8443:443"
-    logging:
-      driver: "journald"

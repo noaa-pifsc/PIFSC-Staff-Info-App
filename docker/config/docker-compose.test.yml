@@ -1,0 +1,15 @@
+version: '2'
+services:
+  staff-directoryd:
+    build:
+      context: .
+    image: noaa/staff-directoryd:latest
+    container_name: staff-directoryd
+    restart: always
+    ports:
+      - "127.0.0.1:5007:80"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"

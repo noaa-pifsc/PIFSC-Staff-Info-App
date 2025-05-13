@@ -3,11 +3,11 @@ services:
   staff-directory:
     build:
       context: .
-    image: noaa/noaa-staff-directory:latest
+    image: noaa/staff-directory:latest
     container_name: staff-directory
     restart: always
     ports:
-      - "8443:443"
+      - "127.0.0.1:5004:80"
     logging:
       driver: "json-file"
       options:
