@@ -4,7 +4,8 @@
 FROM oraclelinux:8
 
 # Install required repos and packages
-RUN dnf -y install oracle-epel-release-el8 && \
+RUN dnf -y install oracle-instantclient-release-el8 && \
+    dnf -y install oracle-instantclient-basic oracle-instantclient-devel oracle-instantclient-sqlplus && \
     dnf -y module enable php:8.2 httpd:2.4 && \
     dnf -y install \
         httpd \
@@ -39,14 +40,6 @@ RUN dnf -y install oracle-epel-release-el8 && \
     # Disable userdirs and the auto-generated welcome message
     rm -f /etc/httpd/conf.d/{userdir.conf,welcome.conf}
     
-# Copy Oracle Instant Client RPMs into the container (make sure to download these locally)
-COPY ./oracle/oracle-instantclient-basic*.rpm /tmp/
-COPY ./oracle/oracle-instantclient-devel*.rpm /tmp/
-
-# Install Oracle Instant Client
-RUN dnf -y install /tmp/oracle-instantclient-basic*.rpm /tmp/oracle-instantclient-devel*.rpm \
-    && rm -f /tmp/oracle-instantclient-*.rpm
-
 # Set environment variables for Oracle Instant Client libraries
 ENV LD_LIBRARY_PATH=/usr/lib/oracle/21/client64/lib:$LD_LIBRARY_PATH
 ENV PATH=$PATH:/usr/lib/oracle/21/client64/bin
