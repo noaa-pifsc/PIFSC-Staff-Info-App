@@ -1,4 +1,3 @@
-version: '2'
 services:
   staff-directory-dev:
     build:
@@ -7,7 +6,7 @@ services:
     container_name: staff-directory-dev
     restart: always
     ports:
-      - "127.0.0.1:5003:80"
+      - "0.0.0.0:5006:80"
     logging:
       driver: "json-file"
       options:

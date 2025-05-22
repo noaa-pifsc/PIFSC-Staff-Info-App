@@ -18,7 +18,7 @@ mkdir $project_folder_path/tmp
 echo "clone the project repository"
 
 #checkout the git projects into the same temporary docker directory
-git clone $lib_git_url $project_folder_path/tmp/staff-directory
+git clone $sd_git_url $project_folder_path/tmp/staff-directory
 
 echo "configure/copy docker files"
 cp $project_folder_path/tmp/staff-directory/docker/config/docker-compose.prod.prod.yml $project_folder_path/docker-compose.prod.yml

@@ -1,55 +1,73 @@
 # Staff Directory Project
-The Staff Directory Project is a CentOS 7 Docker container with Apache, Perl and Oracle connection drivers hosting a set of dynamic Perl scripts that serve dynamic staff directory contents.
+The Staff Directory is a docker app with Apache, Perl and Oracle connection drivers hosting a set of PHP scripts that query an Oracle database for the staff directory contents.
+
+## Resources
+-   Version Control Information:
+    -   URL: https://picgitlab.nmfs.local/omi-apps/staff-directory.git
+    -   Application: 1.1 (Git tag: staff_directory_docker_app_v1.1)
 
 ## System Requirements
-The following packages should be installed on the host operating system:
-
-* `docker`
-* `docker-compose`
-* Production: `journald`
+-   Docker
 
 ## Image Details
-The Docker image is built from the official CentOS 7 Docker image. Apache, Perl, Oracle drivers and Oracle CPAN modules are installed on top of the base operating system.
+The Docker image is built from the official Oracle InstantClient on OracleLinux 8 [Docker image](https://github.com/oracle/docker-images/blob/main/OracleInstantClient/oraclelinux8/21/Dockerfile). Apache and PHP are installed on the base image.
 
-The image has been configured to write both `access.log` and `error.log` to `/dev/stdout` and `/dev/stderr` respectively to prevent the container from growing in size from traffic logs.
+## Setup
+-   ### Docker Application Setup
+    -   \*Note: the steps shown here were developed and tested on a Windows computer
+    -   #### Project Preparation
+        -   Clone the [Staff Directory repository](https://picgitlab.nmfs.local/omi-apps/staff-directory) on the docker host where the container will be deployed
+        -   Open the [project_config.sh](./docker/deployment_scripts/sh_script_config/project_config.sh) and set the $root_directory to an appropriate folder path on the computer you are using.
+        -   Run the appropriate project preparation script (e.g. [prepare_docker_project.test.sh](./docker/deployment_scripts/prepare_docker_project.test.sh) for the test application) to generate a preparation folder based on the $project_folder variable with the code for the corresponding application instance.
+            -   The script will clone the repository in the specified preparation folder and prepare the files to deploy the docker container
+        -   Open the credentials file (includes/db_credentials.php) in the preparation folder and specify the database connection information for the database instance the given application will use
+    -   #### Docker Deployment
+        -   ##### Local Docker Desktop
+            -   Execute the deployment_scripts/build_deploy_project.sh script in the preparation folder to build and run the docker container
+        -   ##### Docker Host Server (via PuTTY)
+            -   Open Pageant
+                -   Click "Add CAPI Cert" and choose your CAC credentials
+            -   Open PuTTY
+                -   login to the specific docker host with your CAC username
+                -   Make the temporary directory used to transfer files and grant permissions to read the directory by executing the following command (where [username] is your account username)
+                    ```
+                    mkdir /tmp/[username]
+                    chmod -R 755 /tmp/[username]
+                    ```
+            -   Open a Command Prompt and change to the prepared folder
+                -   Recursively copy the prepared folder contents using the following command (where   [server host] is the hostname/IP address of the docker host server):
+                    ```
+                    pscp -r ./ [username]@[server host]:/tmp/[username]/
+                    ```
+            -   In PuTTY, run the following commands to move the prepared files into the specified directory on the docker host server:
+                ```
+                # switch to the directory containing the prepared folder contents
+                cd /tmp/[username]
 
-In production, the image will write to `journald` and in development it will write to a local `json` file and rotate logs automatically.
+                # update the permissions on the prepared folder's files
+                chmod -R 755 *
 
-## Development
-The application files can be edited outside of the Docker container but to run Docker in a development environment use the following commands and edit the files on the host operating system which is mounted to a volume inside the container. This will start the container with the settings in `docker-compose.yml`.
+                # switch to the docker user
+                sudo su - docker-user
 
-#### Start docker-compose environment
-* Active console output: `docker-compose up`
-* Run as daemon: `docker-compose -d`
+                # create the target docker folder where [container folder] is the name of the folder where the docker container will be run from
+                mkdir containers/[container folder]
 
-#### Stop docker-compose environment
-* `docker-compose down`
+                # switch to the target docker folder where the docker container will be run from
+                cd containers/[container folder]
 
-## Build
-To build a version of this image for production use or commiting to a registry run the following command.
+                # shutdown the container (if it is already running)
+                docker compose down
 
-* `docker-compose -f docker-compose.yml -f docker-compose.prod.yml build`
+                # remove any source files from the target directory:
+                rm -rf *
 
-**NOTE:** This is not required for the current solution as the image alone is not being transferred between machines or pushed to a Docker registry. The image will be built at deployment time as detailed in the following _Deployment_ section.
+                # copy the files from the prepared folder to the
+                rsync -aP /tmp/[username]/* .
 
-## Deployment
-To deploy to a production environment the following steps should be taken.
+                # build and run the container:
+                docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d  --build
 
-**NOTE:** The port that will be mapped to on the production server is defined in `docker-compose.prod.yml` and is recommended to be edited before the following steps but can also be modified on the host operating system prior to starting the `docker-compose up` command. The internal container port `80` should not be changed in the following declaration:
-
-```
- ports:
-      - "5000:80"
-```
-
-1. Create a `.tar.gz` archive containing the entire contents of the project directory
-    * Ex. `tar zcvf staff-directory.tar.gz .`
-2. Copy the `staff-directory.tar.gz` to destination server.
-3. Extract archive in location of choice on destination server
-    * `cd /some/project/path/`
-    * `tar xvf staff-directory.tar.gz`
-    * `cd staff-directory`
-    * `docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d`
-4. Site will now be accessible on the IP of the host and the port specified in `docker-compose.prod.yml`
-
-**NOTE:** All access logs will be written to `journald` and can be accessed via `journalctl` on the host operating system.
+                # cleanup the container source files in the temporary directory
+                rm -rf /tmp/[username]/*
+                ```
