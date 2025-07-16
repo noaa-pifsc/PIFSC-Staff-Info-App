@@ -54,17 +54,17 @@ echo "clone the project repository"
 git clone $sd_git_url $project_folder_path/tmp/staff-directory
 
 echo "copy source code/docker files"
-cp -R $project_folder_path/tmp/staff-directory/docker/ $project_folder_path
+cp -R $project_folder_path/tmp/staff-directory/docker/* $project_folder_path
 
 # copy the source files to the www directory:
-cp -R $project_folder_path/tmp/staff-directory/src/ $project_folder_path/www 
+cp -R $project_folder_path/tmp/staff-directory/src/* $project_folder_path/www 
 
 # remove the unnecessary dockerfile and .yml files
 rm -rf $project_folder_path/config
 
 
 # rename the db_credentials.template.php to the active db_credentials.php file
-mv $project_folder_path/src/includes/db_credentials.template.php $project_folder_path/src/includes/db_credentials.php
+mv $project_folder_path/www/includes/db_credentials.template.php $project_folder_path/www/includes/db_credentials.php
 
 # move the includes files out of the web root folder
 mv $project_folder_path/www/includes/* $project_folder_path/backend/staff-directory
