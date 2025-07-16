@@ -1,5 +1,5 @@
 <?php
 
-define ("INCLUDE_PATH", "/usr/src/library/");
+define ("INCLUDE_PATH", "/usr/src/app/");
 
 ?>

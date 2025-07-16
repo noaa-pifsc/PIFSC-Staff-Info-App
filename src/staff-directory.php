@@ -1,10 +1,13 @@
 <?php
  
 	//include the php file that defines the includes directory path:
-	include("/usr/src/library/include_path.php");
+	include("/usr/src/app/staff-directory/include_path.php");
+
+	//include the DB credentials file
+	include(INCLUDE_PATH."staff-directory/db_credentials.php");
 
 	//include the php file that connects to the Oracle database
-	include(INCLUDE_PATH."db_connect.php");
+	include(INCLUDE_PATH."php-shared-library/db_connect.php");
 
 ?>
 

@@ -51,17 +51,17 @@ RUN echo instantclient,/usr/lib/oracle/21/client64/lib | pecl install oci8 \
     && echo "extension=oci8.so" > /etc/php.d/20-oci8.ini
 
 # Configure httpd
-COPY ./httpd/*.conf /etc/httpd/conf.d/
+COPY ./config/httpd/*.conf /etc/httpd/conf.d/
 
 # Disable directory listing, specifically for virtual directory '/icons/small/'
 RUN sed -i 's/Options Indexes MultiViews FollowSymlinks/Options MultiViews FollowSymlinks/' /etc/httpd/conf.d/autoindex.conf
 
 # Secure php
-COPY ./php/*.ini /etc/php.d/
+COPY ./config/php/*.ini /etc/php.d/
 
 # copy the application source files:
-COPY ./src/ /var/www/html/
-COPY ./includes/* /usr/src/library/
+COPY ./www/ /var/www/html/
+COPY ./backend/* /usr/src/app/
 
 # Set WORKDIR to webroot to set default context for remaining commands
 WORKDIR /var/www/html
