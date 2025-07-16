@@ -1,9 +1,9 @@
 services:
-  staff-directory:
+  staff-info:
     build:
       context: .
-    image: noaa/staff-directory:latest
-    container_name: staff-directory
+    image: pifsc/staff-info:latest
+    container_name: staff-info
     restart: always
     ports:
       - "0.0.0.0:5006:80"

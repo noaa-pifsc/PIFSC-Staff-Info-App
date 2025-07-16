@@ -1,13 +1,12 @@
 #! /bin/sh
 
-#development deployment script
-
-echo "running Staff Directory test deployment script"
+# deployment script
+echo "running Staff Directory deployment script"
 
 # load the project configuration script to set the runtime variable values
 . ./sh_script_config/project_config.sh
 
-project_folder="staff-directoryd"
+project_folder="staff-directory"
 
 project_folder_path="$project_directory/$project_folder"
 
@@ -20,10 +19,8 @@ echo "clone the project repository"
 #checkout the git projects into the same temporary docker directory
 git clone $sd_git_url $project_folder_path/tmp/staff-directory
 
-echo "configure/copy docker files"
-cp $project_folder_path/tmp/staff-directory/docker/config/docker-compose.prod.test.yml $project_folder_path/docker-compose.prod.yml
-cp $project_folder_path/tmp/staff-directory/docker/config/docker-compose.test.yml $project_folder_path/docker-compose.yml
-cp $project_folder_path/tmp/staff-directory/docker/config/Dockerfile $project_folder_path/Dockerfile
+echo "copy docker files"
+cp $project_folder_path/tmp/staff-directory/docker/config/ $project_folder_path
 
 # copy the source files to the src directory:
 cp -R $project_folder_path/tmp/staff-directory/src $project_folder_path 
@@ -44,7 +41,6 @@ mv $project_folder_path/src/includes $project_folder_path/includes
 # remove the working directories where the files in the export folder were prepared from
 echo "remove all temporary files"
 rm -rf $project_folder_path/tmp
-
 
 echo "the docker project files are now ready for configuration and image building/deployment"
 

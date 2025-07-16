@@ -68,6 +68,9 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
                 # build and run the container:
                 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d  --build
 
+                # revert to user account
+                exit
+
                 # cleanup the container source files in the temporary directory
                 rm -rf /tmp/[username]/*
                 ```
