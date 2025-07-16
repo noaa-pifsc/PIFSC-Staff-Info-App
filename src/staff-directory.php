@@ -45,6 +45,12 @@ function generate_staff_directory ($type = null)
 			$sort_order = "div_abbr, program, lastname asc";
 		else if ($type == "alpha")
 			$sort_order = "lastname desc";
+		else if ($type == "email")
+			$sort_order = "email_addr asc";
+		else if ($type == "phone")
+			$sort_order = "workph1 asc";
+		else if ($type == "title")
+			$sort_order = "position_name, lastname asc";
 		else
 		{
 			echo "<span class=\"page_content_on_background\">Error: You used an invalid link, you can access the PIFSC Staff Directory by following the <a class=\"mail_link\" href=\"./staff-directory.php\">link</a></span>";
@@ -114,12 +120,12 @@ function generate_staff_directory ($type = null)
 				//construct the HTML table header:
 				$table_string = "<center><table id=\"staff_directory\" class=\"display\">";
 				$table_string .= "<thead><tr>
-				<th align=\"left\"><a href=\"./staff-directory.php?type=alpha\"><span><b><u>NAME</u></b></span></th>
-				<th align=\"left\"><span>EMAIL</span></th>
-				<th align=\"left\"><span>PHONE</span></th>
+				<th align=\"left\"><a href=\"./staff-directory.php?type=alpha\"><span><b><u>NAME</u></b></span></a></th>
+				<th align=\"left\"><a href=\"./staff-directory.php?type=email\"><span><b><u>EMAIL</u></b></span></a></th>
+				<th align=\"left\"><a href=\"./staff-directory.php?type=phone\"><span><b><u>PHONE</u></b></span></a></th>
 				<th align=\"left\"><a href=\"./staff-directory.php?type=div\"><span><b><u>DIVISION</u></b></span></a></th>
 				<th align=\"left\"><a href=\"./staff-directory.php?type=loc\"><span><b><u>LOCATION</u></b></span></th>
-				<th align=\"left\"><span>POSITION TITLE</span></th></tr>
+				<th align=\"left\"><a href=\"./staff-directory.php?type=title\"><span><b><u>POSITION TITLE</u></b></span></a></th></tr>
 				</thead><tbody>\n";
 					
 				while ($row = oci_fetch_array($stid,  OCI_BOTH+OCI_RETURN_NULLS)) 
