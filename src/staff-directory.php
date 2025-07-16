@@ -78,7 +78,8 @@ function generate_staff_directory ($type = null)
 		//prepare the SQL statement
 		$stid = oci_parse($conn, $SQL);
 	
-		if (!$stid) {
+		if (!($oracle_db->query($SQL, $stid, $return_id)))
+		{
 			//log the query parsing database error:
 			$e = oci_error($conn);
 			//log the Oracle error message:
@@ -90,76 +91,57 @@ function generate_staff_directory ($type = null)
 		}
 		else 
 		{
-//			echo "Execute the query<BR>";
-
-			$r = oci_execute($stid);
-			if (!$r) 
-			{
-				//the query was not executed successfully
-
-				//capture and log the query error:
-				$e = oci_error($stid);
-				error_log("Oracle error - Code: ".($e['code'] ?? "N/A")." | Message: ".($e['message'] ?? "N/A")." | Offset: ".($e['offset'] ?? "N/A"));
-
-				//output generic error message to the user
-				echo "<span class=\"page_content_on_background\">Error: we're experiencing technical difficulties, please try again later</span>";
-				exit;
-
-			}
-			else 
-			{
-				
+			//the query was successful
 //				print "The select query was successful<BR>";
-				
-				$content_string .= "<span class=\"page_content_on_background\">Click the appropriate column header to sort by name, division, or work location.</span>";
-				
-				$content_string .= "<span class=\"page_content_on_background\">For corrections, contact <a class=\"mail_link\" href=\"mailto:Jeffrey.Jones@noaa.gov\">Jeffrey.Jones@noaa.gov</a></span>";
-				$content_string .= "<span class=\"spacer\"></span>";
+			
+			$content_string .= "<span class=\"page_content_on_background\">Click the appropriate column header to sort by name, division, or work location.</span>";
+			
+			$content_string .= "<span class=\"page_content_on_background\">For corrections, contact <a class=\"mail_link\" href=\"mailto:Jeffrey.Jones@noaa.gov\">Jeffrey.Jones@noaa.gov</a></span>";
+			$content_string .= "<span class=\"spacer\"></span>";
 
+			
+			//construct the HTML table header:
+			$table_string = "<center><table id=\"staff_directory\" class=\"display\">";
+			$table_string .= "<thead><tr>
+			<th align=\"left\"><a href=\"./staff-directory.php?type=alpha\"><span><b><u>NAME</u></b></span></a></th>
+			<th align=\"left\"><a href=\"./staff-directory.php?type=email\"><span><b><u>EMAIL</u></b></span></a></th>
+			<th align=\"left\"><a href=\"./staff-directory.php?type=phone\"><span><b><u>PHONE</u></b></span></a></th>
+			<th align=\"left\"><a href=\"./staff-directory.php?type=div\"><span><b><u>DIVISION</u></b></span></a></th>
+			<th align=\"left\"><a href=\"./staff-directory.php?type=loc\"><span><b><u>LOCATION</u></b></span></th>
+			<th align=\"left\"><a href=\"./staff-directory.php?type=title\"><span><b><u>POSITION TITLE</u></b></span></a></th></tr>
+			</thead><tbody>\n";
 				
-				//construct the HTML table header:
-				$table_string = "<center><table id=\"staff_directory\" class=\"display\">";
-				$table_string .= "<thead><tr>
-				<th align=\"left\"><a href=\"./staff-directory.php?type=alpha\"><span><b><u>NAME</u></b></span></a></th>
-				<th align=\"left\"><a href=\"./staff-directory.php?type=email\"><span><b><u>EMAIL</u></b></span></a></th>
-				<th align=\"left\"><a href=\"./staff-directory.php?type=phone\"><span><b><u>PHONE</u></b></span></a></th>
-				<th align=\"left\"><a href=\"./staff-directory.php?type=div\"><span><b><u>DIVISION</u></b></span></a></th>
-				<th align=\"left\"><a href=\"./staff-directory.php?type=loc\"><span><b><u>LOCATION</u></b></span></th>
-				<th align=\"left\"><a href=\"./staff-directory.php?type=title\"><span><b><u>POSITION TITLE</u></b></span></a></th></tr>
-				</thead><tbody>\n";
-					
-				while ($row = oci_fetch_array($stid,  OCI_BOTH+OCI_RETURN_NULLS)) 
-				{
+			while ($row = $oracle_db->fetch($stid)) 
+			{
 //					echo "the value of the current row is: " . var_export($row, true)."<BR>\n";
-					//loop through the results and format/add them to the display table
-				
-					$table_string .= "<tr><td><span>$row[0], $row[1]</span></td>
-					<td><span><a href=\"mailto:$row[2]\">$row[2]</a></span></td>
-					<td><span>$row[3]<br>$row[10]</span></TD>
-					<TD><span>$row[11]</span></td>
-					<td><span>$row[4]<br>$row[5]</span></td>
-					<td><span>$row[9]</span></td> </tr>";
-				}
+				//loop through the results and format/add them to the display table
+			
+				$table_string .= "<tr><td><span>".$row['LASTNAME'].", ".$row['FIRSTNAME']."</span></td>
+				<td><span><a href=\"mailto:".$row['EMAIL_ADDR']."\">".$row['EMAIL_ADDR']."</a></span></td>
+				<td><span>".$row['WORKPH1']."<br>".$row['WORKPH2']."</span></TD>
+				<TD><span>".$row['DIV_PROG']."</span></td>
+				<td><span>".$row['WORKSITE']."<br>".$row['ROOM_NUM']."</span></td>
+				<td><span>".$row['POSITION_NAME']."</span></td> </tr>";
+			}
 
-				//end the html table:
-				$table_string .= "</tbody></table>";
+			//end the html table:
+			$table_string .= "</tbody></table>";
 
-				//add the image link:
-				$content_string .= $table_string;
-				
-				//add the image/top link
-				$content_string .= "<a class=\"top_link\" href=\"#top\"><img src=\"./img/blue_arrow.gif\" border=\"0\"></a>";
+			//add the image link:
+			$content_string .= $table_string;
+			
+			//add the image/top link
+			$content_string .= "<a class=\"top_link\" href=\"#top\"><img src=\"./img/blue_arrow.gif\" border=\"0\"></a>";
 
-				//print the $table_string
-				echo $content_string;
-				
-				//release the database statement from memory
-				oci_free_statement($stid);
+			//print the $table_string
+			echo $content_string;
+			
+			//release the database statement from memory
+			oci_free_statement($stid);
 
-				//close and unset the database connection
-				oci_close($conn);
-				unset ($conn);
-			}			
+			//close and unset the database connection
+			oci_close($conn);
+			unset ($conn);
 		
 		}
 	}
