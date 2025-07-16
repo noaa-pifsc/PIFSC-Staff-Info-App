@@ -61,7 +61,7 @@ COPY ./config/php/*.ini /etc/php.d/
 
 # copy the application source files:
 COPY ./www/ /var/www/html/
-COPY ./backend/* /usr/src/app
+COPY ./backend/ /usr/src/app
 
 # Set WORKDIR to webroot to set default context for remaining commands
 WORKDIR /var/www/html

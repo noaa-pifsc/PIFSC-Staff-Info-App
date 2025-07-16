@@ -3,11 +3,8 @@
 	//include the php file that defines the includes directory path:
 	include("/usr/src/app/staff-directory/include_path.php");
 
-	//include the DB credentials file
-	include(INCLUDE_PATH."staff-directory/db_credentials.php");
-
 	//include the php file that connects to the Oracle database
-	include(INCLUDE_PATH."php-shared-library/db_connect.php");
+	include(INCLUDE_PATH."staff-directory/db_connect.php");
 
 ?>
 
@@ -36,7 +33,7 @@ function generate_staff_directory ($type = null)
 
 	$content_string = '';
 
-	if ($conn = db_connect())
+	if ($conn = db_connect($oracle_db))
 	{
 		
 		//define the sort order of the result set based on the $type parameter value
