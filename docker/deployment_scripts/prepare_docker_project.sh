@@ -59,10 +59,6 @@ cp -R $project_folder_path/tmp/staff-directory/docker/* $project_folder_path
 # copy the source files to the www directory:
 cp -R $project_folder_path/tmp/staff-directory/src/* $project_folder_path/www 
 
-# remove the unnecessary dockerfile and .yml files
-rm -rf $project_folder_path/config
-
-
 # rename the db_credentials.template.php to the active db_credentials.php file
 mv $project_folder_path/www/includes/db_credentials.template.php $project_folder_path/www/includes/db_credentials.php
 
@@ -83,7 +79,7 @@ rmdir $project_folder_path/www/includes/
 
 # remove the working directories where the files in the export folder were prepared from
 echo "remove all temporary files"
-# rm -rf $project_folder_path/tmp
+rm -rf $project_folder_path/tmp
 
 echo "the docker project files are now ready for configuration and image building/deployment"
 
