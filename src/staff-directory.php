@@ -33,6 +33,7 @@ function generate_staff_directory ($type = null)
 
 	$content_string = '';
 
+	//connect to the database
 	if ($conn = db_connect($oracle_db))
 	{
 		
