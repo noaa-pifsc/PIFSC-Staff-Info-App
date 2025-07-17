@@ -151,8 +151,8 @@ function div_prog_personnel_content ($do_org_id)
 		{
 
 			$content_string .= "		<TD COLSPAN=2 VALIGN=TOP CLASS=\"divisionouter\">
-			<TABLE CELLSPACING=0>\n
-				<TR><TD STYLE=\"height: 40px;\" CLASS=\"division\">".$division_row['ORG_NAME']."\n				</TD></TR>\n";
+			<TABLE class=\"layout_table\">\n
+				<TR><TD CLASS=\"division\">".$division_row['ORG_NAME']."\n				</TD></TR>\n";
 
 			//add content for the organization's personnel
 			$content_string .= org_person_content($division_row['ORG_ID']);
@@ -360,18 +360,7 @@ function org_person_content ($org_id)
 <HEAD>
 	<META HTTP-EQUIV="Pragma" CONTENT="no-cache"><META HTTP-EQUIV="Expires" CONTENT="-1">
 	<TITLE>PIFSC Organization Hierarchy</TITLE>
-	<STYLE type="text/css">
-		td { font-size: smaller; }
-		td.divisionouter { padding: 0px 8px; text-align: center; }
-		td.program { border: 1px solid black; padding: 2px 4px; text-align: center; font-weight: bold; }
-		td.subprogram { padding: 2px 4px; text-align: center; font-weight: bold; }
-		td.division { border: 2px solid black; padding: 2px 4px; text-align: center; font-weight: bold; background-color: silver; }
-		td.subdivision { border: 1px solid black; padding: 2px 4px; text-align: center; font-weight: bold; background-color: silver; }
-		td.lineleft { border-left: 2px solid black; }
-		td.linetopleft { border-left: 2px solid black; border-top: 2px solid black; }
-		td.linetop { border-top: 2px solid black; }
-		td.linetopright { border-right: 2px solid black; border-top: 2px solid black; }
-	</STYLE>
+	<link rel="stylesheet" href="style/org_chart.css">
 </HEAD>
 
 <BODY>
@@ -434,9 +423,9 @@ function org_person_content ($org_id)
 	}
 
 ?>
-	<TABLE CELLSPACING=0>
+	<TABLE class="layout_table">
 		<TR>
-			<TD COLSPAN=8 STYLE="text-align: center; font-size: larger; font-weight: bold; padding-bottom: 6px">
+			<TD COLSPAN=8 class="main_layout_cell">
 <?php
 echo $pifsc_org_name
 ?>
@@ -499,7 +488,7 @@ echo $pifsc_org_name
 			<TD COLSPAN=2>&nbsp;</TD>
 			<TD COLSPAN=4 CLASS="program">
 				<TABLE ALIGN=CENTER>
-					<TR><TD COLSPAN=2 STYLE="text-align: center; font-weight: bold;"><?php echo $do_org_name; ?>
+					<TR><TD COLSPAN=2 class="director_office_display_header"><?php echo $do_org_name; ?>
 					</TD></TR>
 					<TR>
 						<TD ALIGN=CENTER VALIGN=TOP >

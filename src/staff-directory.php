@@ -10,7 +10,7 @@
 
 
 <HTML><HEAD><TITLE>PIFSC Staff Directory - Full List</TITLE>
-<link rel="stylesheet" type="text/css" href="./style/staffdir_style.css" />
+<link rel="stylesheet" type="text/css" href="./style/staff_dir.css" />
 <link rel="SHORTCUT ICON" href="./img/noaa_sm.jpg" />
 </HEAD><BODY>
 <a name="top"></a>
