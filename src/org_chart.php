@@ -63,19 +63,16 @@
 		}
 		else
 		{
-			$db_error_exists = true;
-
-			echo "<span class=\"page_content_on_background\">Error: we're experiencing technical difficulties, please try again later</span>";
+			//the query was unsuccessful
+			db_error_exists();
 
 		}
 	}
 	else
 	{
 		//could not successfully connect to the DB
-
-		$db_error_exists = true;
-
-		echo "<span class=\"page_content_on_background\">Error: we're experiencing technical difficulties, please try again later</span>";
+		db_error_exists();
+		
 	}
 
 ?>
