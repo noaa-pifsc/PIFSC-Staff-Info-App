@@ -11,11 +11,11 @@ function display_do_personnel_content ()
 	//query for the director's office personnel
 	$SQL = "SELECT pers_id
 				 , DECODE(mgt_position, 'Director', 1, 'Deputy Director', 2, 3) orderby
-				 , SUBSTR(firstname, 1, 1) firstname, lastname, NVL(mgt_position, position_name) position
+				 , SUBSTR(firstname, 1, 1) firstname, lastname, NVL(mgt_position, position_name) position_abbr
 				 , DECODE(mgt_position, NULL, '', '<B>') bold
 				 , DECODE(mgt_position, NULL, '', '</B>') endbold
 				 , DECODE(employer, 'CIMAR', ' (CI)', 'AF', ' (AF)', 'MOP', ' (MOP)', '') employer
-				 , DECODE( perstype, 'PIC-Contracted', ' (c)', '') contracted
+				 , DECODE( perstype, 'PIC-Contracted', ' (c)', '') type_abbr
 			FROM picadm.vpub_staff_info_v
 		 WHERE program = 'Dir'
 				OR mgt_position = 'Director'
@@ -31,11 +31,8 @@ function display_do_personnel_content ()
 		while ($row = $oracle_db->fetch($stid))
 		{
 
-			$content_string .= "			<TR>\n
-				<TD NOWRAP>\n
-					".$row['BOLD'].$row['FIRSTNAME'].". ".$row['LASTNAME'].", ".$row['POSITION']." ".$row['EMPLOYER']." ".$row['CONTRACTED']." ".$row['ENDBOLD']."\n
-				</TD>\n
-			</TR>\n";
+			//append the person row content for the current result set row
+			$content_string .= person_row_content($row);
 		}
 	}
 	else
@@ -45,10 +42,6 @@ function display_do_personnel_content ()
 		$content_string = "<span class=\"page_content_on_background\">Error: we're experiencing technical difficulties, please try again later</span>";
 
 	}
-
-
-
-
 	return $content_string;
 }
 
@@ -66,7 +59,7 @@ function cimar_admin_personnel_content ()
 						 , DECODE(employer, 'CIMAR', ' (CI)', 'AF', ' (AF)', 'MOP', ' (MOP)', '') employer
 						 , DECODE(mgt_position, NULL, '', '<B>') bold
 						 , DECODE(mgt_position, NULL, '', '</B>') endbold
-						 , DECODE( perstype, 'PIC-Contracted', ' (c)', '') contracted
+						 , DECODE( perstype, 'PIC-Contracted', ' (c)', '') type_abbr
 					FROM picadm.view_persons_v
 				 WHERE pers_id in (6449, 6720, 6715, 6708, 6945)
 				 ORDER BY position_abbr DESC, lastname";
@@ -81,11 +74,8 @@ function cimar_admin_personnel_content ()
 		while ($row = $oracle_db->fetch($stid))
 		{
 
-			$content_string .= "			<TR>\n
-				<TD NOWRAP>\n
-					".$row['BOLD'].$row['FIRSTNAME'].". ".$row['LASTNAME'].", ".$row['POSITION_ABBR']." ".$row['EMPLOYER']." ".$row['CONTRACTED']." ".$row['ENDBOLD']."\n
-				</TD>\n
-			</TR>\n";
+			$content_string .= person_row_content($row);
+
 		}
 	}
 	else
@@ -137,16 +127,17 @@ function div_prog_personnel_content ($do_org_id)
 
 			$content_string .= "		<TD COLSPAN=2 VALIGN=TOP CLASS=\"divisionouter\">
 			<TABLE class=\"layout_table\">\n
-				<TR><TD CLASS=\"division\">".$division_row['ORG_NAME']."\n				</TD></TR>\n";
+				<TR><TD CLASS=\"division display_header\">".$division_row['ORG_NAME']."\n				</TD></TR>\n";
 
 			//add content for the organization's personnel
 			$content_string .= org_person_content($division_row['ORG_ID']);
 
 			//query for any subdivisions/programs
-			$SQL = "SELECT org_id, org_name, ROW_NUMBER() OVER (ORDER BY org_name) AS row_num
+			$SQL = "SELECT org_id, org_name
 			FROM picadm.orgs_v
 			WHERE retired_yn = 'N'
-			AND parent_org_id = :org_id";
+			AND parent_org_id = :org_id
+			ORDER BY org_name";
 
 
 			$bind_array = array(array(":org_id", $division_row['ORG_ID']));
@@ -162,7 +153,7 @@ function div_prog_personnel_content ($do_org_id)
 				{
 
 					$content_string .= "			<TR><TD>&nbsp;</TD></TR>\n
-				<TR><TD CLASS=\"program\">".$subdivision_row['ORG_NAME']."\n				</TD></TR>\n";
+				<TR><TD CLASS=\"program display_header\">".$subdivision_row['ORG_NAME']."\n				</TD></TR>\n";
 
 					//add content for the organization's personnel
 					$content_string .= org_person_content($subdivision_row['ORG_ID']);
@@ -172,7 +163,8 @@ function div_prog_personnel_content ($do_org_id)
 					$SQL = "SELECT org_id, org_name, org_level
 					FROM picadm.orgs_v
 					WHERE retired_yn = 'N'
-					AND parent_org_id = :org_id";
+					AND parent_org_id = :org_id
+					order by org_name";
 
 
 					$bind_array = array(array(":org_id", $subdivision_row['ORG_ID']));
@@ -189,11 +181,11 @@ function div_prog_personnel_content ($do_org_id)
 
 							if ($program_row['ORG_LEVEL'] == "PIC Program")
 							{
-								$content_string .= "					<TR><TD CLASS=\"program\">";
+								$content_string .= "					<TR><TD CLASS=\"program display_header\">";
 							}
 							else
 							{
-								$content_string .= "					<TR><TD CLASS=\"subprogram\">";
+								$content_string .= "					<TR><TD CLASS=\"subprogram display_header\">";
 							}
 
 							$content_string .= $program_row['ORG_NAME']."</TD></TR>\n";
@@ -205,7 +197,8 @@ function div_prog_personnel_content ($do_org_id)
 							$SQL = "SELECT org_id, org_name
 							FROM picadm.orgs_v
 							WHERE retired_yn = 'N'
-							AND parent_org_id = :org_id";
+							AND parent_org_id = :org_id
+							order by org_name";
 
 							$bind_array = array(array(":org_id", $program_row['ORG_ID']));
 
@@ -220,7 +213,7 @@ function div_prog_personnel_content ($do_org_id)
 								{
 
 									$content_string .= "					<TR><TD>&nbsp;</TD></TR>\n
-					<TR><TD CLASS=\"subprogram\">\n".$subprogram_row['ORG_NAME']."\n				</TD></TR>\n";
+					<TR><TD CLASS=\"subprogram display_header\">\n".$subprogram_row['ORG_NAME']."\n				</TD></TR>\n";
 
 									//generate the HTML content for the subprogram personnel
 									$content_string .= org_person_content($subprogram_row['ORG_ID']);
@@ -312,10 +305,9 @@ function org_person_content ($org_id)
 		//loop through the result rows and generate the table row content for each person
 		while ($row = $oracle_db->fetch($stid))
 		{
-			$content_string .= "				<TR><TD NOWRAP>\n
-			".$row['BOLD']." ".$row['FIRSTNAME'].". ".$row['LASTNAME'].", ".$row['POSITION_ABBR']." ".$row['EMPLOYER']." ".$row['TYPE_ABBR'].$row['ENDBOLD']."\n
-			</TD></TR>\n";
 
+			//append the person row content for the current result set row
+			$content_string .= person_row_content($row);
 		}
 	}
 	else
@@ -329,4 +321,20 @@ function org_person_content ($org_id)
 
 	return $content_string;
 }
+
+
+function person_row_content($person_info)
+{
+
+
+
+	return "				<TR><TD NOWRAP>\n
+".$person_info['BOLD']." ".$person_info['FIRSTNAME'].". ".$person_info['LASTNAME'].", ".$person_info['POSITION_ABBR']." ".$person_info['EMPLOYER']." ".$person_info['TYPE_ABBR'].$person_info['ENDBOLD']."\n
+				</TD></TR>\n";
+
+
+}
+
+
+
 ?>

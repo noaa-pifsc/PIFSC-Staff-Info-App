@@ -12,7 +12,8 @@
 
 
 ?>
-<HTML>
+<!DOCTYPE html>
+<!--<html>-->
 <HEAD>
 	<META HTTP-EQUIV="Pragma" CONTENT="no-cache"><META HTTP-EQUIV="Expires" CONTENT="-1">
 	<TITLE>PIFSC Organization Hierarchy</TITLE>
@@ -20,7 +21,6 @@
 </HEAD>
 
 <BODY>
-	<CENTER>
 <?php
 
 	//initialize a variable to track if there are database errors
@@ -144,7 +144,7 @@ echo $pifsc_org_name
 			<TD COLSPAN=2>&nbsp;</TD>
 			<TD COLSPAN=4 CLASS="program">
 				<TABLE ALIGN=CENTER>
-					<TR><TD COLSPAN=2 class="director_office_display_header"><?php echo $do_org_name; ?>
+					<TR><TD COLSPAN=2 class="display_header"><?php echo $do_org_name; ?>
 					</TD></TR>
 					<TR>
 						<TD ALIGN=CENTER VALIGN=TOP >
@@ -165,12 +165,12 @@ if (!$db_error_exists)
 						<TD CLASS="program">
 							<TABLE>
 								<TR>
-									<TD CLASS="program">CIMAR</TD>
+									<TD CLASS="display_header">CIMAR</TD>
+								</TR>
 <?php
 if (!$db_error_exists)
 	echo cimar_admin_personnel_content();
 ?>
-								</TR>
 							</TABLE>
 						</TD>
 					</TR>
@@ -199,11 +199,10 @@ if (!$db_error_exists)
 ?>
 		</TR>
 	</TABLE>
-	</CENTER>
 	<P>
 	<FONT SIZE=-2>Printed on
 	<?php
 	echo date("m/d/Y H:i");
 	?></FONT></P>
 </BODY>
-</HTML>
+<!--</html>-->

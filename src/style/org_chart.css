@@ -1,10 +1,10 @@
 
 
-td { font-size: smaller; }
-td.divisionouter { padding: 0px 8px; text-align: center; }
-td.program { border: 1px solid black; padding: 2px 4px; text-align: center; font-weight: bold; }
-td.subprogram { padding: 2px 4px; text-align: center; font-weight: bold; }
-td.division { border: 2px solid black; padding: 2px 4px; text-align: center; font-weight: bold; background-color: silver; height: 40px;}
+td { font-size: small; }
+td.divisionouter { padding: 0px 8px;}
+td.program { border: 1px solid black; padding: 2px 4px; }
+td.subprogram { padding: 2px 4px; }
+td.division { border: 2px solid black; padding: 2px 4px; background-color: silver; height: 40px;}
 td.subdivision { border: 1px solid black; padding: 2px 4px; text-align: center; font-weight: bold; background-color: silver; }
 td.lineleft { border-left: 2px solid black; }
 td.linetopleft { border-left: 2px solid black; border-top: 2px solid black; }
@@ -14,8 +14,8 @@ td.linetopright { border-right: 2px solid black; border-top: 2px solid black; }
 
 
 /* org chart layout sytling */
-table.layout_table {border-spacing: 0;}
+table.layout_table {border-spacing: 0; margin-left: auto; margin-right: auto;}
 
-table.layout_table tr td.main_layout_cell {text-align: center; font-size: larger; font-weight: bold; padding-bottom: 6px}
+table.layout_table tr td.main_layout_cell {text-align: center; font-size: large; font-weight: bold; padding-bottom: 6px}
 
-td.director_office_display_header {text-align: center; font-weight: bold;}
+td.display_header {text-align: center; font-weight: bold;}
