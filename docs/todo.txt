@@ -1,0 +1,12 @@
+Future updates:
+	Remove the hardcoding for the person ids
+		add flags to the DB table
+
+near term:
+	refactor the functions
+	allow parameters? No, there were no parameters implemented in the current version
+
+	consolidate queries where feasible (division/program query can be a nested loop that processes each division separately
+		See if we can consolidate all of the queries including CIMAR and DO, if it's not feasible that's ok
+
+	replace inline css styles with classes and .css declarations
