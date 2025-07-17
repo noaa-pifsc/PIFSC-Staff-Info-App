@@ -125,7 +125,7 @@ function div_prog_personnel_content ($do_org_id)
 		while ($division_row = $oracle_db->fetch($division_stid))
 		{
 
-			$content_string .= "		<TD COLSPAN=2 VALIGN=TOP CLASS=\"divisionouter\">
+			$content_string .= "		<TD COLSPAN=2 CLASS=\"divisionouter align_top\">
 			<TABLE class=\"layout_table\">\n
 				<TR><TD CLASS=\"division display_header\">".$division_row['ORG_NAME']."\n				</TD></TR>\n";
 
@@ -328,7 +328,7 @@ function person_row_content($person_info)
 
 
 
-	return "				<TR><TD NOWRAP>\n
+	return "				<TR><TD class=\"nowrap\">\n
 ".$person_info['BOLD']." ".$person_info['FIRSTNAME'].". ".$person_info['LASTNAME'].", ".$person_info['POSITION_ABBR']." ".$person_info['EMPLOYER']." ".$person_info['TYPE_ABBR'].$person_info['ENDBOLD']."\n
 				</TD></TR>\n";
 

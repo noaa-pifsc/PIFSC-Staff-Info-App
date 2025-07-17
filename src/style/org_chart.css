@@ -4,7 +4,7 @@ td { font-size: small; }
 td.divisionouter { padding: 0px 8px;}
 td.program { border: 1px solid black; padding: 2px 4px; }
 td.subprogram { padding: 2px 4px; }
-td.division { border: 2px solid black; padding: 2px 4px; background-color: silver; height: 40px;}
+td.division { border: 2px solid black; padding: 0px 4px; background-color: silver; height: 40px;}
 td.subdivision { border: 1px solid black; padding: 2px 4px; text-align: center; font-weight: bold; background-color: silver; }
 td.lineleft { border-left: 2px solid black; }
 td.linetopleft { border-left: 2px solid black; border-top: 2px solid black; }
@@ -19,3 +19,9 @@ table.layout_table {border-spacing: 0; margin-left: auto; margin-right: auto;}
 table.layout_table tr td.main_layout_cell {text-align: center; font-size: large; font-weight: bold; padding-bottom: 6px}
 
 td.display_header {text-align: center; font-weight: bold;}
+
+td.nowrap {white-space: nowrap;}
+
+table.center, td.center {margin-left: auto; margin-right: auto;}
+
+td.align_top {vertical-align: top;}

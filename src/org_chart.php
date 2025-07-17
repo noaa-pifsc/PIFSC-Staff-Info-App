@@ -143,11 +143,11 @@ echo $pifsc_org_name
 		<TR>
 			<TD COLSPAN=2>&nbsp;</TD>
 			<TD COLSPAN=4 CLASS="program">
-				<TABLE ALIGN=CENTER>
+				<TABLE class="center">
 					<TR><TD COLSPAN=2 class="display_header"><?php echo $do_org_name; ?>
 					</TD></TR>
 					<TR>
-						<TD ALIGN=CENTER VALIGN=TOP >
+						<TD class="center align_top">
 							<TABLE>
 <?php
 if (!$db_error_exists)
@@ -159,13 +159,13 @@ if (!$db_error_exists)
 				</TABLE>
 			</TD>
 <?php /* CIMAR box begin */ ?>
-			<TD COLSPAN=2 VALIGN=TOP>
-				<TABLE ALIGN=CENTER>
+			<TD COLSPAN=2 class="align_top">
+				<TABLE class="center">
 					<TR>
 						<TD CLASS="program">
 							<TABLE>
 								<TR>
-									<TD CLASS="display_header">CIMAR</TD>
+									<TD CLASS="program display_header">CIMAR</TD>
 								</TR>
 <?php
 if (!$db_error_exists)
@@ -200,7 +200,7 @@ if (!$db_error_exists)
 		</TR>
 	</TABLE>
 	<P>
-	<FONT SIZE=-2>Printed on
+	<FONT SIZE=-2>Generated on
 	<?php
 	echo date("m/d/Y H:i");
 	?></FONT></P>
