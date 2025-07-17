@@ -29,58 +29,22 @@
 	//connect to the database
 	if ($conn = db_connect($oracle_db))
 	{
-
-
-		$SQL = "SELECT org_id, org_name, retired_yn
-		FROM picadm.orgs_v
-		WHERE abbr = 'PIFSC'
-		AND retired_yn = 'N'";
-
-		//execute the query
-		if ($oracle_db->query($SQL, $stid, $return_id))
-		{
-			//the query was successfully executed
-
-			//attempt to retrieve the first result row
-			if ($row = $oracle_db->fetch($stid))
-			{
-				//the result set row was successfully retrieved
-
-				//store the organization name in $org_name
-				$pifsc_org_name = $row['ORG_NAME'];
-				$pifsc_org_id = $row['ORG_ID'];
-				$pifsc_retired = $row['RETIRED_YN'];
-
-			}
-			else
-			{
-				//there were no records returned by the query
-				$db_error_exists = true;
-
-				echo "<span class=\"page_content_on_background\">Error: we're experiencing technical difficulties, please try again later</span>";
-
-			}
-		}
-		else
-		{
-			//the query was unsuccessful
-			db_error_exists();
-
-		}
+		//retrieve the pifsc information
+		if (!get_PIFSC_org_info($pifsc_org_info))
+			echo db_error_exists();
 	}
 	else
 	{
 		//could not successfully connect to the DB
-		db_error_exists();
-		
+		echo db_error_exists();
 	}
-
+		
 ?>
 	<TABLE class="layout_table">
 		<TR>
 			<TD COLSPAN=8 class="main_layout_cell">
 <?php
-echo $pifsc_org_name
+echo $pifsc_org_info['ORG_NAME'];
 ?>
 			</TD>
 		</TR>
@@ -90,50 +54,9 @@ echo $pifsc_org_name
 
 	if (!$db_error_exists)
 	{
-
-		$SQL = "SELECT org_id, org_name
-		FROM picadm.orgs_v
-		 WHERE parent_org_id = :org_id
-		 AND retired_yn = 'N'";
-
-		$bind_array = array(array(":org_id", $pifsc_org_id));
-
-		//execute the query
-		if ($oracle_db->query($SQL, $stid, $return_id, $bind_array))
-		{
-			//the query was successfully executed
-
-			//attempt to retrieve the first result row
-			if ($row = $oracle_db->fetch($stid))
-			{
-				//the result set row was successfully retrieved
-
-				//store the director's office organization info
-				$do_org_name = $row['ORG_NAME'];
-				$do_org_id = $row['ORG_ID'];
-
-			}
-			else
-			{
-				//there were no records returned by the query
-				$db_error_exists = true;
-
-				echo "<span class=\"page_content_on_background\">Error: we're experiencing technical difficulties, please try again later</span>";
-
-			}
-		}
-		else
-		{
-			$db_error_exists = true;
-
-			echo "<span class=\"page_content_on_background\">Error: we're experiencing technical difficulties, please try again later</span>";
-
-		}
-
-
-
-
-
+		//retrieve the director's office organization info
+		if (!get_do_org_info($pifsc_org_info['ORG_ID'], $do_org_info))
+			echo db_error_exists();
 	}
 
 ?>
@@ -141,7 +64,7 @@ echo $pifsc_org_name
 			<TD COLSPAN=2>&nbsp;</TD>
 			<TD COLSPAN=4 CLASS="program">
 				<TABLE class="center">
-					<TR><TD COLSPAN=2 class="display_header"><?php echo $do_org_name; ?>
+					<TR><TD COLSPAN=2 class="display_header"><?php echo $do_org_info['ORG_NAME']; ?>
 					</TD></TR>
 					<TR>
 						<TD class="center align_top">
@@ -192,7 +115,7 @@ if (!$db_error_exists)
 		<TR>
 <?php
 	if (!$db_error_exists)
-		echo div_prog_personnel_content($do_org_id);
+		echo div_prog_personnel_content($do_org_info['ORG_ID']);
 ?>
 		</TR>
 	</TABLE>

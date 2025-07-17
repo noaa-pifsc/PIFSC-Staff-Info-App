@@ -1,5 +1,83 @@
 <?php
 
+
+
+//function to retrieve the PIFSC organization information in $pifsc_org_info, function returns true if there were no errors and false if there were errors
+function get_PIFSC_org_info (&$pifsc_org_info)
+{
+	global $oracle_db;
+	global $db_error_exists;
+
+	//initialize the $return_value, true indicates the function was successful, false indicates an error condition
+	$return_value = true;
+
+	$SQL = "SELECT org_id, org_name
+	FROM picadm.orgs_v
+	WHERE abbr = 'PIFSC'
+	AND retired_yn = 'N'";
+
+	//execute the query
+	if ($oracle_db->query($SQL, $stid, $return_id))
+	{
+		//the query was successfully executed
+
+		//attempt to retrieve the first result row
+		if (!($pifsc_org_info = $oracle_db->fetch($stid)))
+		{
+			//there were no records returned by the query
+			$return_value = false;
+		}
+	}
+	else
+	{
+		//the query was unsuccessful
+		$return_value = false;
+
+	}
+
+	return $return_value;
+	
+}
+
+//function to retrieve and return the director's office information
+function get_do_org_info ($pifsc_org_id, &$do_org_info)
+{
+	global $oracle_db;
+	global $db_error_exists;
+
+	//initialize the $return_value, true indicates the function was successful, false indicates an error condition
+	$return_value = true;
+
+	$SQL = "SELECT org_id, org_name
+	FROM picadm.orgs_v
+	WHERE parent_org_id = :org_id
+	AND retired_yn = 'N'";
+
+	$bind_array = array(array(":org_id", $pifsc_org_id));
+
+	//execute the query
+	if ($oracle_db->query($SQL, $stid, $return_id, $bind_array))
+	{
+		//the query was successfully executed
+
+		//attempt to retrieve the first result row
+		if (!($do_org_info = $oracle_db->fetch($stid)))
+		{
+			//there were no records returned by the query
+			$return_value = false;
+		}
+	}
+	else
+	{
+		//the query was unsuccessful
+		$return_value = false;
+	}
+
+	return $return_value;
+}
+
+
+
 //function to generate HTML content for the director's office personnel section
 function display_do_personnel_content ()
 {
@@ -12,8 +90,8 @@ function display_do_personnel_content ()
 	$SQL = "SELECT pers_id
 				 , DECODE(mgt_position, 'Director', 1, 'Deputy Director', 2, 3) orderby
 				 , SUBSTR(firstname, 1, 1) firstname, lastname, NVL(mgt_position, position_name) position_abbr
-				 , DECODE(mgt_position, NULL, '', '<B>') bold
-				 , DECODE(mgt_position, NULL, '', '</B>') endbold
+				 , DECODE(mgt_position, NULL, '', '<span class=\"mgmt_position\">') bold
+				 , DECODE(mgt_position, NULL, '', '</span>') endbold
 				 , DECODE(employer, 'CIMAR', ' (CI)', 'AF', ' (AF)', 'MOP', ' (MOP)', '') employer
 				 , DECODE( perstype, 'PIC-Contracted', ' (c)', '') type_abbr
 			FROM picadm.vpub_staff_info_v
@@ -161,7 +239,7 @@ function org_person_content ($org_id)
 	global $oracle_db;
 	global $db_error_exists;
 	
-	$return_string = '';
+	$content_string = '';
 
 //	echo "running org_person_content($org_id)<BR>";
 
@@ -196,18 +274,18 @@ function org_person_content ($org_id)
 		{
 
 			//append the person row content for the current result set row
-			$return_string .= person_row_content($row);
+			$content_string .= person_row_content($row);
 		}
 	}
 	else
 	{
 		//there was a DB error:
-		$return_string = db_error_exists();
+		$content_string = db_error_exists();
 
 	}
 
 
-	return $return_string;
+	return $content_string;
 }
 
 //generate the HTML content for the person with information specified by $person_info
