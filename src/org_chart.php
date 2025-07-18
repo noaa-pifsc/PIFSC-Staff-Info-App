@@ -71,7 +71,16 @@ echo $pifsc_org_info['ORG_NAME'];
 							<TABLE>
 <?php
 if (!$db_error_exists)
-	echo display_do_personnel_content();
+{
+	//generate the director's office content
+	if (display_do_personnel_content($content_string))
+	{
+		//add the content to the HTML page:
+		echo $content_string;
+	}
+	else	//there was a DB error
+		echo db_error_exists();
+}
 ?>
 							</TABLE>
 						</TD>
@@ -88,8 +97,18 @@ if (!$db_error_exists)
 									<TD CLASS="program display_header">CIMAR</TD>
 								</TR>
 <?php
+
 if (!$db_error_exists)
-	echo cimar_admin_personnel_content();
+{
+	//generate the director's office content
+	if (cimar_admin_personnel_content($content_string))
+	{
+		//add the content to the HTML page:
+		echo $content_string;
+	}
+	else	//there was a DB error
+		echo db_error_exists();
+}
 ?>
 							</TABLE>
 						</TD>
