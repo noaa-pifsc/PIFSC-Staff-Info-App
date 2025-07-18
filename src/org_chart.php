@@ -4,11 +4,9 @@
 	include("/usr/src/app/staff-directory/include_path.php");
 
 	//include the php file that connects to the Oracle database
-	include(INCLUDE_PATH."staff-directory/db_connect.php");
-
-	//include the php file that supports the org_chart application
-	include(INCLUDE_PATH."staff-directory/org_chart_functions.php");
-
+	include(INCLUDE_PATH."staff-directory/org_chart_class.php");
+	$org_chart = new org_chart();
+	
 
 
 ?>
@@ -23,22 +21,13 @@
 <BODY>
 <?php
 
-	//initialize a variable to track if there are database errors
-	$db_error_exists = false;
-
-	//connect to the database
-	if ($conn = db_connect($oracle_db))
+	//check if there are any database errors
+	if (!$org_chart->get_db_error_exists())
 	{
-		//retrieve the pifsc information
-		if (!get_PIFSC_org_info($pifsc_org_info))
-			echo db_error_exists();
+		//retrieve the PIFSC organization information
+		if (!$org_chart->get_PIFSC_org_info($pifsc_org_info))
+			echo $org_chart->show_db_error_message();	//there was a database error
 	}
-	else
-	{
-		//could not successfully connect to the DB
-		echo db_error_exists();
-	}
-		
 ?>
 	<TABLE class="layout_table">
 		<TR>
@@ -51,12 +40,11 @@ echo $pifsc_org_info['ORG_NAME'];
 <?php
 
 	//query for the director's office information:
-
-	if (!$db_error_exists)
+	if (!$org_chart->get_db_error_exists())
 	{
 		//retrieve the director's office organization info
-		if (!get_do_org_info($pifsc_org_info['ORG_ID'], $do_org_info))
-			echo db_error_exists();
+		if (!$org_chart->get_do_org_info($pifsc_org_info['ORG_ID'], $do_org_info))
+			echo $org_chart->show_db_error_message();	//there was a database error
 	}
 
 ?>
@@ -70,16 +58,13 @@ echo $pifsc_org_info['ORG_NAME'];
 						<TD class="center align_top">
 							<TABLE>
 <?php
-if (!$db_error_exists)
+if (!$org_chart->get_db_error_exists())
 {
-	//generate the director's office content
-	if (display_do_personnel_content($content_string))
-	{
-		//add the content to the HTML page:
+	//generate the director's office personnel content
+	if ($org_chart->display_do_personnel_content($content_string))
 		echo $content_string;
-	}
-	else	//there was a DB error
-		echo db_error_exists();
+	else
+		echo $org_chart->show_db_error_message();	//there was a database error
 }
 ?>
 							</TABLE>
@@ -98,16 +83,16 @@ if (!$db_error_exists)
 								</TR>
 <?php
 
-if (!$db_error_exists)
+if (!$org_chart->get_db_error_exists())
 {
 	//generate the director's office content
-	if (cimar_admin_personnel_content($content_string))
+	if ($org_chart->cimar_admin_personnel_content($content_string))
 	{
 		//add the content to the HTML page:
 		echo $content_string;
 	}
 	else	//there was a DB error
-		echo db_error_exists();
+		echo $org_chart->show_db_error_message();
 }
 ?>
 							</TABLE>
@@ -133,8 +118,14 @@ if (!$db_error_exists)
 		</TR>
 		<TR>
 <?php
-	if (!$db_error_exists)
-		echo div_prog_personnel_content($do_org_info['ORG_ID']);
+	if (!$org_chart->get_db_error_exists())
+	{
+		//generate the HTML for the org chart for the divisions/programs:
+		if ($org_chart->div_prog_personnel_content($do_org_info['ORG_ID'], $content_string))
+			echo $content_string;
+		else	//there was a DB error
+			echo $org_chart->show_db_error_message();
+	}
 ?>
 		</TR>
 	</TABLE>

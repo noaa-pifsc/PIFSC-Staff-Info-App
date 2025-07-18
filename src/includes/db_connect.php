@@ -6,7 +6,8 @@ include(INCLUDE_PATH."php-shared-library/oracle_db.php");
 
 function db_connect(&$oracle_db) {
   
-	$oracle_db = new oracle_db(ORACLE_USERNAME, ORACLE_PASSWORD, ORACLE_HOST."/".ORACLE_INSTANCE);
+	//connect to the database, do not exit on failure
+	$oracle_db = new oracle_db(ORACLE_USERNAME, ORACLE_PASSWORD, ORACLE_HOST."/".ORACLE_INSTANCE, false);
   
   
 	if (!($conn = $oracle_db->is_connected($error_info))) {
