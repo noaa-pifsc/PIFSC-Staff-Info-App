@@ -8,7 +8,7 @@ class org_chart
 	//private class properties
 	private $oracle_db;
 	private $db_error_exists;
-	private $tooltip_content;	
+	private $tooltip_data = array();	
 		
 	//constructor method
 	function __construct ()
@@ -20,9 +20,6 @@ class org_chart
 		if (db_connect($oracle_db))
 		{
 			$this->oracle_db = $oracle_db;
-
-			//initialize the $tooltip_content that will be used to generate the HTML for the specific tooltips for each person
-			$this->tooltip_content = '';
 		}		
 		else
 		{
@@ -37,7 +34,7 @@ class org_chart
 		//unset the class properties
 		unset ($this->oracle_db);
 		unset ($this->db_error_exists);
-		unset ($this->tooltip_content);
+		unset ($this->tooltip_data);
 	}
 
 	//accessor method
@@ -118,18 +115,25 @@ class org_chart
 	//the function returns the HTML content
 	function generate_person_row_content($person_info)
 	{
-		//generate the tooltip content for the current person and append to the tooltip_string class property
-		$this->tooltip_content .= "<div id=\"pers_id_".$person_info['PERS_ID']."\" class=\"tooltip_string\">
-            <p><strong>Name:</strong> ".$person_info['FIRSTNAME']." ".$person_info['LASTNAME']."</p>
-            <p><strong>Email:</strong> <a href=\"mailto:".$person_info['EMAIL_ADDR']."\">".$person_info['EMAIL_ADDR']."</a></p>
-            <p><strong>Phone:</strong> ".$person_info['WORKPH1']."</p>
-            <p><strong>Role:</strong> ".$person_info['POSITION']."</p>
-		</div>";
 		
-		
-		return "				<TR><TD class=\"nowrap person-tooltip-trigger\" data-tooltip-id=\"pers_id_".$person_info['PERS_ID']."\">\n
+		//generate the html to display the person in the org chart:
+		$return_string = "				<TR><TD class=\"nowrap person-tooltip-trigger\" data-tooltip-id=\"".$person_info['PERS_ID']."\">\n
 	".$person_info['START_MGMT_CLASS_STYLE']." ".$person_info['FIRST_INITIAL'].". ".$person_info['LASTNAME'].", ".$person_info['POSITION']." ".$person_info['EMPLOYER']." ".$person_info['TYPE_ABBR'].$person_info['END_MGMT_CLASS_STYLE']."\n
 					</TD></TR>\n";
+					
+		//remove unnecessary information not needed in the tooltips:
+		unset ($person_info['FIRST_INITIAL']);
+		unset ($person_info['EMPLOYER']);
+		unset ($person_info['START_MGMT_CLASS_STYLE']);
+		unset ($person_info['END_MGMT_CLASS_STYLE']);
+		unset ($person_info['TYPE_ABBR']);
+		unset ($person_info['POSITION']);
+
+					
+		//append the current person_info array to the tooltip_data property 
+		$this->tooltip_data[] = $person_info;
+					
+		return $return_string;
 	}
 
 	//general function that generates personnel content based on the specified $where_clause and $bind_array values.  The $order_by_clause is used to specify a sort order for the result set
@@ -148,6 +152,7 @@ class org_chart
 		workph1,
 		--if this is the director's office or this is a director then include them in the director's office
 		(CASE WHEN program = 'Dir' OR mgt_position = 'Director' THEN NVL(mgt_position, position_name) ELSE position_abbr END) position,
+		(CASE WHEN program = 'Dir' OR mgt_position = 'Director' THEN NVL(mgt_position, position_name) ELSE position_name END) full_position_name,
 		DECODE(employer, 'CIMAR', ' (CI)', 'AF', ' (AF)', 'MOP', ' (MOP)', '') employer,
 		DECODE(mgt_position, NULL, '', '<span class=\"mgmt_position\">') start_mgmt_class_style,
 		DECODE(mgt_position, NULL, '', '</span>') end_mgmt_class_style,
@@ -519,9 +524,6 @@ class org_chart
 								</P>";
 								
 								
-								//append the tooltip content:
-								$content_string .= "<div class=\"tooltip-hidden-content\">\n".$this->tooltip_content."\n</div>";
-								
 								//release the string variables from memory
 								unset ($division_content_string);
 								unset ($cimar_content_string);
@@ -548,12 +550,16 @@ class org_chart
 		<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\"><META HTTP-EQUIV=\"Expires\" CONTENT=\"-1\">
 		<TITLE>PIFSC Organization Hierarchy</TITLE>
 		<link rel=\"stylesheet\" href=\"style/org_chart.css\">
+		<script src=\"./js/popper.min.js\"></script>
+		<script src=\"./js/tippy.min.js\"></script>
 	</HEAD>
 	<BODY>".
 $content_string."
-		<script src=\"./js/popper.min.js\"></script>
-		<script src=\"./js/tippy.min.js\"></script>
-		<script src=\"./js/initialize_tooltips.js\"></script>
+		<script>
+		//personnelData contains the information for all personnel displayed in the organization chart:
+		const personnelData = ".json_encode($this->tooltip_data, JSON_PRETTY_PRINT).";\n
+		</script>
+		<script src=\"./js/tooltips.js\"></script>
 	</BODY>";
 		
 	}
