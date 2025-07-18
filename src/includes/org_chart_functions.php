@@ -173,7 +173,7 @@ function div_prog_personnel_content ($do_org_id)
 
 
 				//recursively call the generate the child organizations to generate the content:
-				$content_string .= generate_child_orgs ($division_row['ORG_ID']);
+				$content_string .= generate_child_orgs ($division_row['ORG_ID'], 1);
 			}
 			else	//there was a DB error:
 				$content_string = db_error_exists();
@@ -228,7 +228,8 @@ function person_row_content($person_info)
 }
 
 //recursive function that generates the child organizations for the specified parent organization ($parent_org_id)
-function generate_child_orgs ($parent_org_id)
+//$org_depth is a positive integer that indicates how many levels of parent records are above the current $parent_org_id
+function generate_child_orgs ($parent_org_id, $org_depth)
 {
 	global $oracle_db;
 	global $db_error_exists;
@@ -257,31 +258,35 @@ function generate_child_orgs ($parent_org_id)
 		{
 //			echo "The current org_name is: ".$row['ORG_NAME']."<BR>";
 			
-			//check which type of organization this is:
-			switch ($row['ORG_LEVEL'])
+			//this is a child record of a division, style this as a program
+			if ($org_depth == 1)
 			{
-				case "PIC Program":
+				$content_string .= "				<TR><TD>&nbsp;</TD></TR>\n
+				<TR><TD CLASS=\"program display_header\">".$row['ORG_NAME']."</TD></TR>\n";
 				
+			}
+			else if ($org_depth == 2)
+			{
+				//check what the org level of the current organization record is:
+				if ($row['ORG_LEVEL'] == "PIC Program")
+				{
+					//style this as a program
 					$content_string .= "				<TR><TD>&nbsp;</TD></TR>\n
 					<TR><TD CLASS=\"program display_header\">".$row['ORG_NAME']."</TD></TR>\n";
-				
-				break;
-				
-				case "PIC Subdivision":
-
-					$content_string .= "			<TR><TD>&nbsp;</TD></TR>\n
-				<TR><TD CLASS=\"program display_header\">".$row['ORG_NAME']."\n				</TD></TR>\n";
-
-		
-				break;
-				
-				case "PIC Subprogram":
+				}
+				else 
+				{
+					//style this as a subprogram
 					$content_string .= "				<TR><TD>&nbsp;</TD></TR>\n
-					<TR><TD CLASS=\"subprogram display_header\">".$row['ORG_NAME']."</TD></TR>\n";
-
-
-				break;
-
+					<TR><TD CLASS=\"subprogram display_header\">".$row['ORG_NAME']."</TD></TR>\n";					
+				}					
+			}
+			else
+			{
+				//this has 3 or more levels of parent records, style this as a subprogram
+			
+				$content_string .= "				<TR><TD>&nbsp;</TD></TR>\n
+				<TR><TD CLASS=\"subprogram display_header\">".$row['ORG_NAME']."</TD></TR>\n";				
 			}
 
 			//attempt to generate HTML content for the organization's personnel
@@ -291,8 +296,8 @@ function generate_child_orgs ($parent_org_id)
 				$content_string .= $return_string;
 
 
-				//recursively call the generate the child organizations to generate the content:
-				$content_string .= generate_child_orgs ($row['ORG_ID']);
+				//recursively call the generate the child organizations to generate the content, increment the $org_depth since the child records are being processed:
+				$content_string .= generate_child_orgs ($row['ORG_ID'], ($org_depth + 1));
 			}
 			else	//there was a DB error:
 				$content_string = db_error_exists();
