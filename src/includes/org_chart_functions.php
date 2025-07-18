@@ -256,11 +256,14 @@ function generate_child_orgs ($parent_org_id, $org_depth)
 		//loop through the result rows and generate the table row content
 		while ($row = $oracle_db->fetch($stid))
 		{
-//			echo "The current org_name is: ".$row['ORG_NAME']."<BR>";
-			
-			//this is a child record of a division, style this as a program
+
+			//the following logic was implemented as-is from the legacy web app that was converted
+
+			//style the current org's HTML based on the $org_depth and ORG_LEVEL
 			if ($org_depth == 1)
 			{
+				//this is a child record of a division, style this as a program
+
 				$content_string .= "				<TR><TD>&nbsp;</TD></TR>\n
 				<TR><TD CLASS=\"program display_header\">".$row['ORG_NAME']."</TD></TR>\n";
 				
