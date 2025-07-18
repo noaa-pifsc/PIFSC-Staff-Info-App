@@ -46,7 +46,7 @@ class org_chart
 		$this->db_error_exists = true;
 
 		//return the HTML content to indicate there is an error
-		return "<span class=\"page_content_on_background\">Error: we're experiencing technical difficulties, please try again later</span>";
+		return "<p class=\"error_message\"><span class=\"error_bold\">Error:</span> we're experiencing technical difficulties, please try again later</p>";
 	}
 	
 
@@ -125,7 +125,7 @@ class org_chart
 		//generate the select query to retrieve the personnel records
 		$SQL = "SELECT pers_id,
 		SUBSTR(firstname, 1, 1) firstname, 
-		lastname, 
+		lastname,
 		--if this is the director's office or this is a director then include them in the director's office
 		(CASE WHEN program = 'Dir' OR mgt_position = 'Director' THEN NVL(mgt_position, position_name) ELSE position_abbr END) position,
 		DECODE(employer, 'CIMAR', ' (CI)', 'AF', ' (AF)', 'MOP', ' (MOP)', '') employer,
@@ -393,5 +393,141 @@ class org_chart
 		//return true if the method was successful and false if it was not
 		return $return_value;
 	}
+	
+	//function that generates the HTML page content and displays an error if there are any DB errors
+	function generate_html_page_content ()
+	{
+		//initialize the content string that is used to generate the org chart HTML page content
+		$content_string = '';
+		
+		//check if there are any database errors
+		if (!$this->get_db_error_exists())
+		{
+			//retrieve the PIFSC organization information
+			if (!$this->get_PIFSC_org_info($pifsc_org_info))
+				$content_string = $this->show_db_error_message();	//there was a database error
+			else
+			{
+				//the PIFSC organization info was retrieved successfully
+				
+				//retrieve the director's office organization info
+				if (!$this->get_do_org_info($pifsc_org_info['ORG_ID'], $do_org_info))
+					echo $this->show_db_error_message();	//there was a database error
+				else
+				{
+					//the director's office organization info was retrieved successfully
+					
+					//generate the director's office personnel content
+					if ($this->generate_do_personnel_content($do_content_string))
+					{
+						//the director's office personnel was generated successfully
+
+						//generate the director's office content
+						if ($this->generate_cimar_admin_personnel_content($cimar_content_string))
+						{
+							//the CIMAR admin personnel was generated successfully
+
+							//generate the HTML for the org chart for the divisions/programs:
+							if ($this->generate_division_personnel_content($do_org_info['ORG_ID'], $division_content_string))
+							{
+								//all of the database queries were successful and the HTML content for each data entity was generated successfully, construct the HTML for the web page:
+								
+
+								$content_string = "
+								<TABLE class=\"layout_table\">
+									<TR>
+										<TD COLSPAN=8 class=\"main_layout_cell\">".$pifsc_org_info['ORG_NAME']."
+										</TD>
+									</TR>
+									<TR>
+										<TD COLSPAN=2>&nbsp;</TD>
+										<!-- DO box begin -->
+										<TD COLSPAN=4 CLASS=\"program\">
+											<TABLE class=\"center\">
+												<TR><TD COLSPAN=2 class=\"display_header\">".$do_org_info['ORG_NAME']."
+												</TD></TR>
+												<TR>
+													<TD class=\"center align_top\">
+														<TABLE>
+														".$do_content_string."
+														</TABLE>
+													</TD>
+												</TR>
+											</TABLE>
+										</TD>
+										<!-- DO box end -->
+										<!-- CIMAR box begin -->
+										<TD COLSPAN=2 class=\"align_top\">
+											<TABLE class=\"center\">
+												<TR>
+													<TD CLASS=\"program\">
+														<TABLE>
+															<TR>
+																<TD CLASS=\"program display_header\">CIMAR</TD>
+															</TR>
+															".$cimar_content_string."
+														</TABLE>
+													</TD>
+												</TR>
+											</TABLE>
+										</TD>
+										<!-- CIMAR box end -->
+									</TR>
+									<TR>
+										<TD COLSPAN=4>&nbsp;</TD>
+										<TD CLASS=\"lineleft\">&nbsp;</TD>
+									</TR>
+									<TR>
+										<TD>&nbsp;</TD>
+										<TD CLASS=\"linetopleft\">&nbsp;</TD>
+										<TD CLASS=\"linetop\">&nbsp;</TD>
+										<TD CLASS=\"linetopleft\">&nbsp;</TD>
+										<TD CLASS=\"linetop\">&nbsp;</TD>
+										<TD CLASS=\"linetopleft\">&nbsp;</TD>
+										<TD CLASS=\"linetop\">&nbsp;</TD>
+										<TD CLASS=\"lineleft\">&nbsp;</TD>
+									</TR>
+									<TR>
+									".$division_content_string."
+									</TR>
+								</TABLE>
+								<P>
+									<FONT SIZE=-2>Generated on ".date("m/d/Y H:i")."</FONT>
+								</P>";
+								
+								//release the string variables from memory
+								unset ($division_content_string);
+								unset ($cimar_content_string);
+								unset ($do_content_string);
+								
+							}
+							else	//there was a DB error
+								$content_string = $this->show_db_error_message();
+
+						}
+						else	//there was a DB error
+							$content_string = $this->show_db_error_message();
+					}
+					else
+						$content_string = $this->show_db_error_message();	//there was a database error
+				}
+			}
+		}
+		
+	
+		//wrap the $content_string in the html for the page regardless if it's an error or the org chart content:
+		return "<!DOCTYPE html>
+	<HEAD>
+		<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\"><META HTTP-EQUIV=\"Expires\" CONTENT=\"-1\">
+		<TITLE>PIFSC Organization Hierarchy</TITLE>
+		<link rel=\"stylesheet\" href=\"style/org_chart.css\">
+	</HEAD>
+	<BODY>".
+$content_string."
+	</BODY>";
+		
+	}
+	
+	
 }
 ?>
