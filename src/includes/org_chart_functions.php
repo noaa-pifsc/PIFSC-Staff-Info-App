@@ -223,7 +223,7 @@ function org_person_content ($org_id, &$content_string)
 function person_row_content($person_info)
 {
 	return "				<TR><TD class=\"nowrap\">\n
-".$person_info['BOLD']." ".$person_info['FIRSTNAME'].". ".$person_info['LASTNAME'].", ".$person_info['POSITION_ABBR']." ".$person_info['EMPLOYER']." ".$person_info['TYPE_ABBR'].$person_info['ENDBOLD']."\n
+".$person_info['START_MGMT_CLASS_STYLE']." ".$person_info['FIRSTNAME'].". ".$person_info['LASTNAME'].", ".$person_info['POSITION_ABBR']." ".$person_info['EMPLOYER']." ".$person_info['TYPE_ABBR'].$person_info['END_MGMT_CLASS_STYLE']."\n
 				</TD></TR>\n";
 }
 
@@ -235,12 +235,12 @@ function generate_child_orgs ($parent_org_id)
 
 //	echo "running generate_child_orgs ($parent_org_id)<BR>";
 
-	//query for all child organizations
+	//query for all child organizations, the DECODE statement maintains the sorting that was implemented in the production application when the conversion to PHP was performed
 	$SQL = "SELECT org_id, org_name, org_level
 			FROM picadm.orgs_v
 			WHERE retired_yn = 'N'
 			AND parent_org_id = :org_id
-			ORDER BY org_name";
+			ORDER BY DECODE(abbr, 'AGF', 1, 'BUD', 2, 'HR Admin', 3, 'ITS', 4, 'OPT', 5, 'SSS', 6, 'ARB', 7, 'LHP', 8, 'IFA', 9, 'OFA', 10, 'BYC', 11, 'IFCP', 12, 'MSE', 13, 'MB', 14, 'E-Tech', 15, 'D-GOV', 16, 'D-IN', 17, 'D-OUT', 18, 'ARP', 19, 'PRP', 20, 'SEES', 21, 'CRP', 22, 'HMSRP', 23, 'PAEG', 24, 'MTBAP', 25, 'PSaSP', 26, 99)";
 	
 	$bind_array = array(array(":org_id", $parent_org_id));
 	
@@ -337,8 +337,8 @@ function generate_person_content ($where_clause, $order_by_clause, $bind_array, 
 	lastname, 
 	position_abbr,
 	DECODE(employer, 'CIMAR', ' (CI)', 'AF', ' (AF)', 'MOP', ' (MOP)', '') employer,
-	DECODE(mgt_position, NULL, '', '<B>') bold,
-	DECODE(mgt_position, NULL, '', '</B>') endbold,
+	DECODE(mgt_position, NULL, '', '<span class=\"mgmt_position\">') start_mgmt_class_style,
+	DECODE(mgt_position, NULL, '', '</span>') end_mgmt_class_style,
 	DECODE( perstype, 'PIC-Contracted', ' (c)', 'PIC-Associate', ' (a)','PIC-Volunteer', ' (v)', '') type_abbr
 	FROM picadm.view_persons_v
 	WHERE $where_clause
