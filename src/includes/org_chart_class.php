@@ -8,6 +8,7 @@ class org_chart
 	//private class properties
 	private $oracle_db;
 	private $db_error_exists;
+	private $tooltip_content;	
 		
 	//constructor method
 	function __construct ()
@@ -17,7 +18,12 @@ class org_chart
 
 		//connect to the Oracle DB
 		if (db_connect($oracle_db))
+		{
 			$this->oracle_db = $oracle_db;
+
+			//initialize the $tooltip_content that will be used to generate the HTML for the specific tooltips for each person
+			$this->tooltip_content = '';
+		}		
 		else
 		{
 			//the DB connection could not be established
@@ -31,6 +37,7 @@ class org_chart
 		//unset the class properties
 		unset ($this->oracle_db);
 		unset ($this->db_error_exists);
+		unset ($this->tooltip_content);
 	}
 
 	//accessor method
@@ -111,21 +118,34 @@ class org_chart
 	//the function returns the HTML content
 	function generate_person_row_content($person_info)
 	{
-		return "				<TR><TD class=\"nowrap\">\n
-	".$person_info['START_MGMT_CLASS_STYLE']." ".$person_info['FIRSTNAME'].". ".$person_info['LASTNAME'].", ".$person_info['POSITION']." ".$person_info['EMPLOYER']." ".$person_info['TYPE_ABBR'].$person_info['END_MGMT_CLASS_STYLE']."\n
+		//generate the tooltip content for the current person and append to the tooltip_string class property
+		$this->tooltip_content .= "<div id=\"pers_id_".$person_info['PERS_ID']."\" class=\"tooltip_string\">
+            <p><strong>Name:</strong> ".$person_info['FIRSTNAME']." ".$person_info['LASTNAME']."</p>
+            <p><strong>Email:</strong> <a href=\"mailto:".$person_info['EMAIL_ADDR']."\">".$person_info['EMAIL_ADDR']."</a></p>
+            <p><strong>Phone:</strong> ".$person_info['WORKPH1']."</p>
+            <p><strong>Role:</strong> ".$person_info['POSITION']."</p>
+		</div>";
+		
+		
+		return "				<TR><TD class=\"nowrap person-tooltip-trigger\" data-tooltip-id=\"pers_id_".$person_info['PERS_ID']."\">\n
+	".$person_info['START_MGMT_CLASS_STYLE']." ".$person_info['FIRST_INITIAL'].". ".$person_info['LASTNAME'].", ".$person_info['POSITION']." ".$person_info['EMPLOYER']." ".$person_info['TYPE_ABBR'].$person_info['END_MGMT_CLASS_STYLE']."\n
 					</TD></TR>\n";
 	}
 
 	//general function that generates personnel content based on the specified $where_clause and $bind_array values.  The $order_by_clause is used to specify a sort order for the result set
+	//the $content_string variable contains the HTML content for the specified organization's personnel
 	function generate_personnel_content ($where_clause, $order_by_clause, $bind_array, &$content_string)
 	{
 		//initialize the $content_string that will be used to generate the HTML content
 		$content_string = '';
-
+		
 		//generate the select query to retrieve the personnel records
 		$SQL = "SELECT pers_id,
-		SUBSTR(firstname, 1, 1) firstname, 
+		firstname,
+		SUBSTR(firstname, 1, 1) first_initial, 
 		lastname,
+		email_addr,
+		workph1,
 		--if this is the director's office or this is a director then include them in the director's office
 		(CASE WHEN program = 'Dir' OR mgt_position = 'Director' THEN NVL(mgt_position, position_name) ELSE position_abbr END) position,
 		DECODE(employer, 'CIMAR', ' (CI)', 'AF', ' (AF)', 'MOP', ' (MOP)', '') employer,
@@ -156,7 +176,7 @@ class org_chart
 	}
 
 	//function to generate the HTML content for the people within the specified organization ($org_id)
-	//the $content_string variable contains the HTML content for the  
+	//the $content_string variable contains the HTML content for the specified organization's personnel
 	//the function returns true when the function was executed successfully and false when it was not successful
 	function generate_org_personnel_content ($org_id, &$content_string)
 	{
@@ -180,7 +200,7 @@ class org_chart
 
 
 	//function to generate HTML content for the director's office personnel section
-	//the $content_string variable contains the HTML content for the personnel 
+	//the $content_string variable contains the HTML content for the specified organization's personnel
 	//the function returns true when the function was executed successfully and false when it was not successful
 	function generate_do_personnel_content (&$content_string)
 	{		
@@ -203,7 +223,7 @@ class org_chart
 
 
 	//function to generate HTML content for the CIMAR admin personnel section
-	//the $content_string variable contains the HTML content for the  
+	//the $content_string variable contains the HTML content for the specified organization's personnel
 	//the function returns true when the function was executed successfully and false when it was not successful
 	function generate_cimar_admin_personnel_content (&$content_string)
 	{
@@ -255,8 +275,6 @@ class org_chart
 			//loop through the result rows and generate the table row content
 			while ($row = $this->oracle_db->fetch($stid))
 			{
-
-
 				//style the current org's HTML based on the $org_depth and ORG_LEVEL
 				//the following logic was implemented as-is from the legacy web app that was converted
 				if ($org_depth == 1)
@@ -303,6 +321,7 @@ class org_chart
 					{
 						//append the generated content
 						$content_string .= $return_string;
+
 					}
 					else
 					{
@@ -323,7 +342,7 @@ class org_chart
 	}
 
 	//function to generate HTML content for all the PIFSC divisions and corresponding child organizations recursively
-	//the $content_string variable contains the HTML content for the  
+	//the $content_string variable contains the HTML content for the division's personnel and headings and all child organization's personnel and headings
 	//the function returns true when the function was executed successfully and false when it was not successful
 	function generate_division_personnel_content ($do_org_id, &$content_string)
 	{
@@ -369,6 +388,7 @@ class org_chart
 					{
 						//append the child organization HTML
 						$content_string .= $return_string;
+						
 					}
 					else
 					{
@@ -421,6 +441,9 @@ class org_chart
 					if ($this->generate_do_personnel_content($do_content_string))
 					{
 						//the director's office personnel was generated successfully
+
+						//append the tooltip content:
+						
 
 						//generate the director's office content
 						if ($this->generate_cimar_admin_personnel_content($cimar_content_string))
@@ -495,6 +518,10 @@ class org_chart
 									<FONT SIZE=-2>Generated on ".date("m/d/Y H:i")."</FONT>
 								</P>";
 								
+								
+								//append the tooltip content:
+								$content_string .= "<div class=\"tooltip-hidden-content\">\n".$this->tooltip_content."\n</div>";
+								
 								//release the string variables from memory
 								unset ($division_content_string);
 								unset ($cimar_content_string);
@@ -524,6 +551,9 @@ class org_chart
 	</HEAD>
 	<BODY>".
 $content_string."
+		<script src=\"./js/popper.min.js\"></script>
+		<script src=\"./js/tippy.min.js\"></script>
+		<script src=\"./js/initialize_tooltips.js\"></script>
 	</BODY>";
 		
 	}

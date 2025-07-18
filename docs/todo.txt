@@ -14,6 +14,7 @@ near term:
 		X replace inline css styles with classes and .css declarations
 	
 	_ implement tooltips
+		_ sanitize content from DB
 
 	_ add links between org chart and staff directory
 
@@ -22,10 +23,11 @@ near term:
 	X implement org_chart class
 	_ implement error handling
 	
-	
 	_ update documentation
 	
-	_ generate all HTML content in a org_chart method
+	
+	
+	X generate all HTML content in a org_chart method
 
 	X rename methods
 		X comment code
