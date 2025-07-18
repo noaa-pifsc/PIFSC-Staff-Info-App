@@ -61,7 +61,7 @@ echo $pifsc_org_info['ORG_NAME'];
 if (!$org_chart->get_db_error_exists())
 {
 	//generate the director's office personnel content
-	if ($org_chart->display_do_personnel_content($content_string))
+	if ($org_chart->generate_do_personnel_content($content_string))
 		echo $content_string;
 	else
 		echo $org_chart->show_db_error_message();	//there was a database error
@@ -86,7 +86,7 @@ if (!$org_chart->get_db_error_exists())
 if (!$org_chart->get_db_error_exists())
 {
 	//generate the director's office content
-	if ($org_chart->cimar_admin_personnel_content($content_string))
+	if ($org_chart->generate_cimar_admin_personnel_content($content_string))
 	{
 		//add the content to the HTML page:
 		echo $content_string;
@@ -121,7 +121,7 @@ if (!$org_chart->get_db_error_exists())
 	if (!$org_chart->get_db_error_exists())
 	{
 		//generate the HTML for the org chart for the divisions/programs:
-		if ($org_chart->div_prog_personnel_content($do_org_info['ORG_ID'], $content_string))
+		if ($org_chart->generate_division_personnel_content($do_org_info['ORG_ID'], $content_string))
 			echo $content_string;
 		else	//there was a DB error
 			echo $org_chart->show_db_error_message();

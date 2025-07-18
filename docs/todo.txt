@@ -7,80 +7,32 @@ near term:
 	X allow parameters? No, there were no parameters implemented in the current version
 
 	consolidate queries where feasible (division/program query can be a nested loop that processes each division separately
-		_ recursive call for divisions/programs/subprograms that has awareness of the type of heading it will use (ORG_LEVEL)
-		See if we can consolidate all of the queries including CIMAR and DO, if it's not feasible that's ok
+		X recursive call for divisions/programs/subprograms that has awareness of the type of heading it will use (ORG_LEVEL)
+		X See if we can consolidate all of the queries including CIMAR and DO, if it's not feasible that's ok
 
 	X implement html5
 		X replace inline css styles with classes and .css declarations
-
+	
 	_ implement tooltips
 
 	_ add links between org chart and staff directory
 
-	_ maintain sort order (hardcode the sorting within the query)
+	X maintain sort order (hardcode the sorting within the query)
+
+	X implement org_chart class
+	_ implement error handling
+	
+	
+	_ update documentation
+	
+	_ generate all HTML content in a org_chart method
+
+	X rename methods
+		X comment code
+		X error handling
+		
 
 
 
 	staff directory
 		_ convert to HTML5 and external css files
-
-
-
-process each division
-	query the database for all divisions
-	loop through result set
-		print out the heading
-		print out the people
-		call the recursive function to generate the html for all child org records:
-
-
-
-recursive function
-	query the database for all child orgs for the specified parent org
-	print out the heading
-	print out the people
-	call the recursive function to generate the html for all child org records:
-
-
-
-
-
-OMI
-	Grants
-	budget
-	ITS
-	Ops
-	S3
-FRMD
-	ARB
-		LHP
-		IFA
-		OFA
-	Bycatch
-	IFCP
-	MSE
-	FMB
-		ET
-		DG
-		DI
-		DO
-ESD
-PSD
-
-calls generate_child_orgs (OMI)
-	returns all subdivisions/programs, loop through result set:
-
-	calls generate_child_orgs (Grants)
-		no children, do nothing, return blank string
-	calls generate_child_orgs (budget)
-		no children, do nothing, return blank string
-	calls generate_child_orgs (ITS)
-		no children, do nothing, return blank string
-	calls generate_child_orgs (Ops)
-		no children, do nothing, return blank string
-	calls generate_child_orgs (S3)
-		no children, do nothing, return blank string
-
-
-
-calls
