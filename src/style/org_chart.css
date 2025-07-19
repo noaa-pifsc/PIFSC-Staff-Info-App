@@ -26,7 +26,7 @@ table.center, td.center {margin-left: auto; margin-right: auto;}
 
 td.align_top {vertical-align: top;}
 
-span.mgmt_position, span.error_bold {font-weight: bold;}
+span.mgmt_position, span.error_bold, span.tooltip_label {font-weight: bold;}
 
 p.error_message {font-size: large;}
 
