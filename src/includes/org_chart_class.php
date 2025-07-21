@@ -2,6 +2,9 @@
 //include the php file that connects to the Oracle database
 include(INCLUDE_PATH."staff-directory/db_connect.php");
 
+//include the php file that generates shared web elements
+include(INCLUDE_PATH."staff-directory/shared_web_elements.php");
+
 //class to provide the functionality required for the PIFSC organization chart
 class org_chart
 {
@@ -464,7 +467,7 @@ class org_chart
 								$content_string = "
 								<TABLE class=\"layout_table\">
 									<TR>
-										<TD COLSPAN=8 class=\"main_layout_cell\">".$pifsc_org_info['ORG_NAME']."
+										<TD COLSPAN=8 class=\"main_layout_cell\">\n<div class=\"page_heading\">\n".$pifsc_org_info['ORG_NAME']."\n</div>
 										</TD>
 									</TR>
 									<TR>
@@ -550,10 +553,13 @@ class org_chart
 		<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\"><META HTTP-EQUIV=\"Expires\" CONTENT=\"-1\">
 		<TITLE>PIFSC Organization Hierarchy</TITLE>
 		<link rel=\"stylesheet\" href=\"style/org_chart.css\">
+		<link rel=\"stylesheet\" href=\"style/shared_styles.css\">
+		<link rel=\"SHORTCUT ICON\" href=\"./img/noaa_sm.jpg\" />
 		<script src=\"./js/popper.min.js\"></script>
 		<script src=\"./js/tippy.min.js\"></script>
 	</HEAD>
-	<BODY>".
+	<BODY>
+	".generate_navigation_bar ("org-chart").
 $content_string."
 		<script>
 		//personnelData contains the information for all personnel displayed in the organization chart:
