@@ -1,3 +1,25 @@
+//declare an event listener when the DOM content has been loaded so the Directors Office element can be resized to accommodate the tooltips (before this fix it caused a slight shift each time a tooltip is rendered and again when it disappears)
+document.addEventListener('DOMContentLoaded', () => {
+    const directorOfficeTable = document.getElementById('do_program_id');
+	
+    if (directorOfficeTable) {
+        // Measure the initial computed width of the table
+        const initialWidth = directorOfficeTable.offsetWidth; // Includes padding/border
+		
+		console.log ("the value of initialWidth is: "+initialWidth);
+
+        // Calculate the target width (initial + the 2px shift observed)
+        const targetWidth = initialWidth + 2;
+
+		console.log ("the value of targetWidth is: "+targetWidth);
+
+        // Apply the new width
+        directorOfficeTable.style.width = `${targetWidth}px`;
+    }
+});
+
+
+
 // Initialize Tippy.js for all elements with the 'person-tooltip-trigger' class
 tippy('.person-tooltip-trigger', {
 	interactive: true,

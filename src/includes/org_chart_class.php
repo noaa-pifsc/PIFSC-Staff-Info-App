@@ -478,7 +478,7 @@ class org_chart
 												<TR><TD COLSPAN=2 class=\"display_header\">".$do_org_info['ORG_NAME']."
 												</TD></TR>
 												<TR>
-													<TD class=\"center align_top\">
+													<TD class=\"center align_top\" id=\"do_program_id\">
 														<TABLE>
 														".$do_content_string."
 														</TABLE>
