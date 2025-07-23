@@ -13,10 +13,10 @@ near term:
 	X implement html5
 		X replace inline css styles with classes and .css declarations
 	
-	_ implement tooltips
-		_ sanitize content from DB
+	X implement tooltips
+		X sanitize content from DB
 
-	_ add links between org chart and staff directory
+	X add links between org chart and staff directory
 
 	X maintain sort order (hardcode the sorting within the query)
 
@@ -24,6 +24,8 @@ near term:
 	_ implement error handling
 	
 	_ update documentation
+	
+	
 	
 	
 	
@@ -38,3 +40,18 @@ near term:
 
 	staff directory
 		_ convert to HTML5 and external css files
+			_ convert html attributes to css styles
+			_ center column headings
+			_ disable the column link when the column sorting is active
+			
+			_ update styles to match org chart (e.g. headings)
+				_ font should match
+				_ 
+			
+			
+		
+
+
+
+
+
