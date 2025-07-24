@@ -1,7 +1,8 @@
 // Initialize Tippy.js for all elements with the 'person-tooltip-trigger' class
 const personnelTooltips = tippy('.person-tooltip-trigger', {
     interactive: true, // Allows the user to click and select content within the tooltip
-    allowHTML: true,   // Allows rendering of HTML content inside the tooltip
+    interactiveBorder: 10, //sets an invisible buffer zone around the tooltip to avoid closing it too quickly when the mouse moves from the trigger to the tooltip
+	allowHTML: true,   // Allows rendering of HTML content inside the tooltip
     placement: 'auto', // Automatically determines the best placement (top, bottom, left, right) to keep the tooltip on-screen
     theme: 'custom-tooltip', // Applies the custom CSS theme defined for the tooltips
     // This function dynamically gets the content for the tooltip based on the triggered element's data-tooltip-id
@@ -15,7 +16,11 @@ const personnelTooltips = tippy('.person-tooltip-trigger', {
     // Sets the delay for showing and hiding the tooltip in milliseconds.
     // set 100ms delay before showing, and 300ms delay before hiding.
     delay: [100, 300],
-    // Defines how the tooltip is triggered and dismissed.
+	// animation duration: 200ms in, 300ms out
+	duration: [100, 300],
+    //smoothens tooltip motion as user moves cursor towards it
+	moveTransition: 'transform 0.2s ease-out',
+	// Defines how the tooltip is triggered and dismissed.
     // 'mouseenter': Shows on mouse hover.
     // 'focus': Shows when the element is focused (e.g., via keyboard navigation).
     // 'click': Shows on click, and will usually persist until clicked outside or the trigger is clicked again.
