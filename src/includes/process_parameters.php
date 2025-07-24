@@ -5,16 +5,16 @@
 	{
 		if (isset($_REQUEST[$name]))
 		{
+			//the request parameter is defined
 			if (!is_null($_REQUEST[$name]))
-				$var = $_REQUEST[$name];
+				$var = $_REQUEST[$name];	//the request parameter value is not null, return the request parameter value
 			else
-				$var = null;
+				$var = null;	//the request parameter value is null, return null
 		}
 		else
-			$var = null;
+			$var = null;	//the request parameter is not defined, return null
 		
 		return $var;
 	}
-
 
 ?>

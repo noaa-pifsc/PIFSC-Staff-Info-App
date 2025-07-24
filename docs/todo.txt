@@ -21,7 +21,7 @@ near term:
 	X maintain sort order (hardcode the sorting within the query)
 
 	X implement org_chart class
-	_ implement error handling
+	X implement error handling
 	
 	_ update documentation
 	
@@ -39,16 +39,17 @@ near term:
 
 
 	staff directory
-		_ convert to HTML5 and external css files
-			_ convert html attributes to css styles
-			_ center column headings
-			_ disable the column link when the column sorting is active
-			
-			_ update styles to match org chart (e.g. headings)
-				_ font should match
-				_ 
+		X convert to HTML5 and external css files
+			X convert html attributes to css styles
+			X center column headings
 			
 			
+			X allow 2-way sorting
+				X implement sorting icons (font awesome)
+			X update styles to match org chart (e.g. headings)
+				X font should match
+			
+			X add padding to cell values
 		
 
 
