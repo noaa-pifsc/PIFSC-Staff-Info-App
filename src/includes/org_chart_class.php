@@ -523,7 +523,7 @@ class org_chart
 									</TR>
 								</TABLE>
 								<P>
-									<FONT SIZE=-2>Generated on ".date("m/d/Y H:i")."</FONT>
+									<FONT SIZE=-2>Generated on ".date("m/d/Y g:i A")." (HST)</FONT>
 								</P>";
 								
 								
