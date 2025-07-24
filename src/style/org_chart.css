@@ -83,3 +83,4 @@ td.person-tooltip-trigger {cursor: help;}
 	color: #0056b3; /* Darker blue on hover */
 }
 
+p.tooltip_heading {font-weight: bold; text-align: center;}
