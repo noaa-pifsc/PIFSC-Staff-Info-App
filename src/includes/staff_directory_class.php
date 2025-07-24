@@ -16,11 +16,14 @@ class staff_directory
 	private $oracle_db;
 	private $db_error_exists;
 	private $sort_column;
+	private $sort_direction;
 	
 	//constructor method
-	function __construct ($sort_column)
+	function __construct ($sort_column, $sort_direction)
 	{
 		$this->sort_column = $sort_column;
+		$this->sort_direction = $sort_direction;
+		
 		
 		//initialize the variable to track if a database error occurred
 		$this->db_error_exists = false;
@@ -44,6 +47,7 @@ class staff_directory
 		unset ($this->oracle_db);
 		unset ($this->db_error_exists);
 		unset ($this->sort_column);
+		unset ($this->sort_direction);
 	}
 
 	//accessor method
@@ -55,7 +59,7 @@ class staff_directory
 
 	//function to generate the staff directory HTML content based on the $type parameter 
 	// $type:
-	//    alpha - sort by staff name
+	//    lastname - sort by staff name
 	//    div - sort by division
 	//    loc - sort by staff location
 	//    email - sort by email
@@ -70,28 +74,50 @@ class staff_directory
 		//initialize the $return_value, true indicates the function was successful, false indicates an error condition
 		$return_value = true;
 
-		//define the sort order of the result set based on the $type parameter value
-		if (!isset($this->sort_column))
-			$order_by = "lastname asc";
-		else if ($this->sort_column == "loc")
-			$order_by = "worksite, lastname asc";
-		else if ($this->sort_column == "div")
-			$order_by = "div_abbr, program, lastname asc";
-		else if ($this->sort_column == "alpha")
-			$order_by = "lastname desc";
-		else if ($this->sort_column == "email")
-			$order_by = "email_addr asc";
-		else if ($this->sort_column == "phone")
-			$order_by = "workph1 asc, lastname asc";
-		else if ($this->sort_column == "title")
-			$order_by = "position_name, lastname asc";
-		else
+		
+		if (is_null($this->sort_direction))	//if sort_direction is null then default to ascending
+			$this->sort_direction = "asc";
+		else if (($this->sort_direction != 'asc') && ($this->sort_direction != 'desc'))
 		{
-			$content_string = "<span class=\"page_content_on_background\">Error: You used an invalid link, you can access the PIFSC Staff Directory by following <a class=\"mail_link\" href=\"./staff-directory.php\">this link</a></span>";
+			//there is an invalid sort direction:
+			echo "this is an invalid sort direction<BR>";
+			
+			$content_string = "<span class=\"page_content_on_background\">Error: You used an invalid link, you can access the PIFSC Staff Directory by following <a class=\"static_link\" href=\"./staff-directory.php\">this link</a></span>";
 			
 			//a valid sort order argument was not specified
 			$return_value = false;
 		}
+			
+		if ($return_value)
+		{
+			
+			//store the column headers in an array so it can easily be used to generate the html string
+			$column_header_array = array();
+			
+			
+			//define the sort order of the result set based on the $type parameter value
+			if ((!isset($this->sort_column)) || ($this->sort_column == "lastname"))	//the sort order is not defined or the sort order is lastname
+				$order_by = "UPPER(lastname) ".$this->sort_direction;
+			else if ($this->sort_column == "loc")
+				$order_by = "UPPER(worksite) ".$this->sort_direction.", UPPER(lastname) ".$this->sort_direction;
+			else if ($this->sort_column == "div")
+				$order_by = "UPPER(DIV_PROG) ".$this->sort_direction.", UPPER(lastname) ".$this->sort_direction;
+			else if ($this->sort_column == "email")
+				$order_by = "UPPER(email_addr) ".$this->sort_direction;
+			else if ($this->sort_column == "phone")
+				$order_by = "UPPER(workph1) ".$this->sort_direction.", UPPER(lastname) ".$this->sort_direction;
+			else if ($this->sort_column == "title")
+				$order_by = "UPPER(position_name) ".$this->sort_direction.", UPPER(lastname) ".$this->sort_direction;
+			else
+			{
+				$content_string = "<span class=\"page_content_on_background\">Error: You used an invalid link, you can access the PIFSC Staff Directory by following <a class=\"static_link\" href=\"./staff-directory.php\">this link</a></span>";
+				
+				//a valid sort order argument was not specified
+				$return_value = false;
+			}
+		
+		}
+		
 		
 		if ($return_value)
 		{
@@ -102,7 +128,7 @@ class staff_directory
 			workph2,
 			--calculated field to display division/program if they are defined
 			(CASE 
-			WHEN div_abbr IS NOT NULL AND program IS NOT NULL THEN div_abbr||' -'||program 
+			WHEN div_abbr IS NOT NULL AND program IS NOT NULL THEN div_abbr||' - '||program 
 			WHEN div_abbr IS NULL AND program IS NOT NULL THEN program
 			WHEN div_abbr IS NOT NULL AND program IS NULL THEN div_abbr
 			ELSE NULL END) DIV_PROG
@@ -119,22 +145,53 @@ class staff_directory
 				//the query was successful
 	//				print "The select query was successful<BR>";
 				
+				
 				$content_string .= "<span class=\"page_content_on_background\">Click the given column header to sort the staff directory by the corresponding column values.</span>";
 				
-				$content_string .= "<span class=\"page_content_on_background\">For corrections, contact <a class=\"mail_link\" href=\"mailto:Jeffrey.Jones@noaa.gov\">Jeffrey.Jones@noaa.gov</a></span>";
+				$content_string .= "<span class=\"page_content_on_background\">For corrections, contact <a class=\"static_link\" href=\"mailto:Jeffrey.Jones@noaa.gov\">Jeffrey.Jones@noaa.gov</a></span>";
 				$content_string .= "<span class=\"spacer\"></span>";
+
+
 
 				
 				//construct the HTML table header:
 				$table_string = "<table class=\"staff_directory display\">";
-				$table_string .= "<thead><tr>
-				<th class=\"column_heading\"><a href=\"./staff-directory.php?type=alpha\">NAME</a></th>
-				<th class=\"column_heading\"><a href=\"./staff-directory.php?type=email\">EMAIL</a></th>
-				<th class=\"column_heading\"><a href=\"./staff-directory.php?type=phone\">PHONE</a></th>
-				<th class=\"column_heading\"><a href=\"./staff-directory.php?type=div\">DIVISION</a></th>
-				<th class=\"column_heading\"><a href=\"./staff-directory.php?type=loc\">LOCATION</a></th>
-				<th class=\"column_heading\"><a href=\"./staff-directory.php?type=title\">POSITION TITLE</a></th></tr>
-				</thead><tbody>\n";
+				$table_string .= "<thead><tr>";
+								
+				if ((!isset($this->sort_column)) || ($this->sort_column == "lastname"))	//the name sort option is used, determine which sort direction is being used and show the corresponding icon, also set the opposite direction for the sort icon
+					$table_string .= "<th class=\"column_heading\"><a href=\"./staff-directory.php?sort_type=lastname&sort_direction=".($this->sort_direction == 'asc' ? 'desc' : 'asc')."\">NAME <i class=\"fas fa-sort-".($this->sort_direction == 'asc' ? 'up' : 'down')."\"></i></a></th>";
+				else	//the name sort option is not used
+					$table_string .= "<th class=\"column_heading\"><a href=\"./staff-directory.php?sort_type=lastname&sort_direction=asc\">NAME <i class=\"fas fa-sort\"></i></a></th>";
+				
+				if ($this->sort_column == "email")
+					$table_string .= "<th class=\"column_heading\"><a href=\"./staff-directory.php?sort_type=email&sort_direction=".($this->sort_direction == 'asc' ? 'desc' : 'asc')."\">EMAIL <i class=\"fas fa-sort-".($this->sort_direction == 'asc' ? 'up' : 'down')."\"></i></a></th>";
+				else
+					$table_string .= "<th class=\"column_heading\"><a href=\"./staff-directory.php?sort_type=email&sort_direction=asc\">EMAIL <i class=\"fas fa-sort\"></i></a></th>";
+					
+				if ($this->sort_column == "phone")
+					$table_string .= "<th class=\"column_heading\"><a href=\"./staff-directory.php?sort_type=phone&sort_direction=".($this->sort_direction == 'asc' ? 'desc' : 'asc')."\">PHONE <i class=\"fas fa-sort-".($this->sort_direction == 'asc' ? 'up' : 'down')."\"></i></a></th>";
+				else
+					$table_string .= "<th class=\"column_heading\"><a href=\"./staff-directory.php?sort_type=phone&sort_direction=asc\">PHONE <i class=\"fas fa-sort\"></i></a></th>";
+
+				if ($this->sort_column == "div")
+					$table_string .= "<th class=\"column_heading\"><a href=\"./staff-directory.php?sort_type=div&sort_direction=".($this->sort_direction == 'asc' ? 'desc' : 'asc')."\">DIVISION <i class=\"fas fa-sort-".($this->sort_direction == 'asc' ? 'up' : 'down')."\"></i></a></th>";
+				else
+					$table_string .= "<th class=\"column_heading\"><a href=\"./staff-directory.php?sort_type=div&sort_direction=asc\">DIVISION <i class=\"fas fa-sort\"></i></a></th>";
+
+				
+				
+				if ($this->sort_column == "loc")
+					$table_string .= "<th class=\"column_heading\"><a href=\"./staff-directory.php?sort_type=loc&sort_direction=".($this->sort_direction == 'asc' ? 'desc' : 'asc')."\">LOCATION <i class=\"fas fa-sort-".($this->sort_direction == 'asc' ? 'up' : 'down')."\"></i></a></th>";
+				else
+					$table_string .= "<th class=\"column_heading\"><a href=\"./staff-directory.php?sort_type=loc&sort_direction=asc\">LOCATION <i class=\"fas fa-sort\"></i></a></th>";
+
+
+				if ($this->sort_column == "title")
+					$table_string .= "<th class=\"column_heading\"><a href=\"./staff-directory.php?sort_type=title&sort_direction=".($this->sort_direction == 'asc' ? 'desc' : 'asc')."\">POSITION TITLE <i class=\"fas fa-sort-".($this->sort_direction == 'asc' ? 'up' : 'down')."\"></i></a></th>";
+				else
+					$table_string .= "<th class=\"column_heading\"><a href=\"./staff-directory.php?sort_type=title&sort_direction=asc\">POSITION TITLE <i class=\"fas fa-sort\"></i></a></th>";
+					
+				$table_string .= "</tr></thead><tbody>\n";
 					
 				while ($row = $this->oracle_db->fetch($stid)) 
 				{
@@ -188,10 +245,10 @@ class staff_directory
 		//wrap the $content_string in the html for the page regardless if it's an error or the org chart content:
 		return "<!DOCTYPE html>
 	<HEAD>
-		<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\"><META HTTP-EQUIV=\"Expires\" CONTENT=\"-1\">
 		<TITLE>PIFSC Staff Directory</TITLE>
 		<link rel=\"stylesheet\" href=\"style/staff_dir.css\">
 		<link rel=\"stylesheet\" href=\"style/shared_styles.css\">
+		<link rel=\"stylesheet\" href=\"style/fa.min.css\">
 		<link rel=\"SHORTCUT ICON\" href=\"./img/noaa_sm.jpg\" />
 	</HEAD>
 	<BODY>

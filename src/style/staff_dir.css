@@ -30,12 +30,12 @@ span.spacer {margin-bottom: 20px; display: block;}
 a.top_link {padding: 10px; display: block;}
 
 
-a.mail_link {color: orange;}
+a.static_link {color: orange;}
 
 
-table.display td {color: #336699; font-size: 12px; font-weight:bold; }
+table.display td {color: #336699; font-size: 12px; font-weight:bold; padding: 0px 5px;}
 
-table.display th {color: black; font-size: 12px; font-weight:bold;}
+table.display th {color: black; font-size: 12px; font-weight:bold; padding: 0px 5px;}
 
 
 
