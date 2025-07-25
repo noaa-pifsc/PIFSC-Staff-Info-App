@@ -35,18 +35,9 @@ echo "clone the project dependencies"
 git clone $php_lib_git_url $project_folder_path/tmp/php-shared-library
 
 
-# copy the php-shared-library (.php and .inc files only)
+# copy the php-shared-library (oracle .php files only)
 echo "copy the php-shared-library backend directory"
-cp -r $project_folder_path/tmp/php-shared-library/*.php  $project_folder_path/backend/php-shared-library
-cp -r $project_folder_path/tmp/php-shared-library/*.inc  $project_folder_path/backend/php-shared-library
-
-# copy the php-shared library client-side files
-echo "copy the php-shared-library client-side directory"
-cp -r $project_folder_path/tmp/php-shared-library/css/*  $project_folder_path/www/php-shared-library/css
-cp -r $project_folder_path/tmp/php-shared-library/js/*  $project_folder_path/www/php-shared-library/js
-cp -r $project_folder_path/tmp/php-shared-library/img/*  $project_folder_path/www/php-shared-library/img
-
-
+cp -r $project_folder_path/tmp/php-shared-library/oracle*.php  $project_folder_path/backend/php-shared-library
 
 echo "clone the project repository"
 

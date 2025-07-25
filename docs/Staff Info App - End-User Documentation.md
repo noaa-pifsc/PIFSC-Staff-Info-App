@@ -24,4 +24,4 @@ The Staff Information Application (SIA) is a web app that provides access to the
         -   The Divisions are shown below along with all Subdivisions, Programs and Subprograms nested below the corresponding Divisions.  
     -   Each individual is shown below their corresponding organizational unit with their abbreviated position with indicators based on their employer (e.g. (c) for contractors, (CI) for cooperative institute employees)
     -   Features:
-        -   Tooltips are implemented for personnel, when defined links for email and phone numbers are available.  
+        -   Tooltips are implemented for all personnel.  When a given person's email or phone numbers are stored in the database, links for each are available in the tooltip.  

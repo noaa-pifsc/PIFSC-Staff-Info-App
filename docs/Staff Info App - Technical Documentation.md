@@ -42,7 +42,7 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
         -   The Divisions are shown below along with all Subdivisions, Programs and Subprograms nested below the corresponding Divisions.  
     -   Each individual is shown below their corresponding organizational unit with their abbreviated position with indicators based on their employer (e.g. (c) for contractors, (CI) for cooperative institute employees)
     -   Features:
-        -   Tooltips are implemented for personnel, when defined links for email and phone numbers are available.  
+        -   Tooltips are implemented for all personnel.  When a given person's email or phone numbers are stored in the database, links for each are available in the tooltip.  
 
 ## Repository Folder Structure
 -   The [httpd](../docker/config/httpd) folder contains the Apache configuration 
@@ -92,8 +92,7 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
             -   Open the credentials file (backend/staff-info-app/db_credentials.php) in the preparation folder and specify the database connection information for the database instance the given application will use
             -   When the docker project is prepared it will copy files/folders from the repository folder structure to the appropriate locations in the docker folder structure:
                 -   #### PHP Shared Library:
-                    -   The backend PHP shared library .php files are copied to backend/php-shared-library folder
-                    -   The frontend PHP shared library client-side files are copied to the www/php-shared-library into the appropriate subdirectories (e.g. www/php-shared-library/js)
+                    -   The backend PHP shared library .php files needed for oracle database interactions are copied to backend/php-shared-library folder
                 -   #### SIA:
                     -   The backend SIA .php files are copied from the [backend](../src/backend) repository folder to backend/staff-info-app folder in the prepared project folder structure
                     -   The frontend SIA .php files are copied from the [frontent](../src/frontend) repository folder to the www folder in the prepared project folder structure
@@ -113,10 +112,6 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
             |--- www 
             |    |--- img
             |    |--- js
-            |    |--- php-shared-library
-            |    |    |--- css
-            |    |    |--- img
-            |    |    |--- js
             |    |--- style
             |    |--- webfonts
             |    |--- *.php
@@ -134,10 +129,6 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
             |--- /var/www/html
             |    |--- img
             |    |--- js
-            |    |--- php-shared-library
-            |         |--- css
-            |         |--- img
-            |         |--- js
             |    |--- style
             |    |--- webfonts
             |    |--- *.php
@@ -150,6 +141,8 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
         -   ##### Local Docker Desktop
             -   Execute the deployment_scripts/build_deploy_project.sh script in the prepared project folder to build and run the docker container
         -   ##### Docker Host Server (via PuTTY)
+            -   Open Pageant
+                -   Click "Add CAPI Cert" and choose your CAC credentials
             -   Open PuTTY
                 -   login to the specific docker host with your CAC username
                 -   Make the temporary directory used to transfer files and grant permissions to read the directory by executing the following commands
