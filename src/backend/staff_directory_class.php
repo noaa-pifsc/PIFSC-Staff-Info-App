@@ -198,12 +198,12 @@ class staff_directory
 	//					echo "the value of the current row is: " . var_export($row, true)."<BR>\n";
 					//loop through the results and format/add them to the display table
 				
-					$table_string .= "<tr><td><span>".$row['LASTNAME'].", ".$row['FIRSTNAME']."</span></td>
-					<td><span><a href=\"mailto:".$row['EMAIL_ADDR']."\">".$row['EMAIL_ADDR']."</a></span></td>
-					<td><span>".((!is_null($row['WORKPH1'])) ? "<a href=\"tel:".$row['WORKPH1']."\">".$row['WORKPH1']."</a>": '')."<br>".((!is_null($row['WORKPH2'])) ? "<a href=\"tel:".$row['WORKPH2']."\">".$row['WORKPH2']."</a>": '')."</span></td>
-					<TD><span>".$row['DIV_PROG']."</span></td>
-					<td><span>".$row['WORKSITE']."<br>".$row['ROOM_NUM']."</span></td>
-					<td><span>".$row['POSITION_NAME']."</span></td> </tr>";
+					$table_string .= "<tr><td><span>".htmlspecialchars($row['LASTNAME']).", ".htmlspecialchars($row['FIRSTNAME'])."</span></td>
+					<td><span><a href=\"mailto:".htmlspecialchars($row['EMAIL_ADDR'])."\">".htmlspecialchars($row['EMAIL_ADDR'])."</a></span></td>
+					<td><span>".((!is_null($row['WORKPH1'])) ? "<a href=\"tel:".htmlspecialchars($row['WORKPH1'])."\">".htmlspecialchars($row['WORKPH1'])."</a>": '')."<br>".((!is_null($row['WORKPH2'])) ? "<a href=\"tel:".htmlspecialchars($row['WORKPH2'])."\">".htmlspecialchars($row['WORKPH2'])."</a>": '')."</span></td>
+					<TD><span>".htmlspecialchars($row['DIV_PROG'])."</span></td>
+					<td><span>".htmlspecialchars($row['WORKSITE'])."<br>".htmlspecialchars($row['ROOM_NUM'])."</span></td>
+					<td><span>".htmlspecialchars($row['POSITION_NAME'])."</span></td> </tr>";
 				}
 
 				//end the html table:

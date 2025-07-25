@@ -120,15 +120,14 @@ class org_chart
 	{
 		
 		//generate the html to display the person in the org chart:
-		$return_string = "				<TR><TD class=\"nowrap person-tooltip-trigger\" data-tooltip-id=\"".$person_info['PERS_ID']."\">\n
-	".$person_info['START_MGMT_CLASS_STYLE']." ".$person_info['FIRST_INITIAL'].". ".$person_info['LASTNAME'].", ".$person_info['POSITION']." ".$person_info['EMPLOYER']." ".$person_info['TYPE_ABBR'].$person_info['END_MGMT_CLASS_STYLE']."\n
+		$return_string = "				<TR><TD class=\"nowrap person-tooltip-trigger\" data-tooltip-id=\"".htmlspecialchars($person_info['PERS_ID'])."\">\n
+	".($person_info['MGMT_POSITION_YN'] == 'Y' ? "<span class=\"mgmt_position\">": '').htmlspecialchars($person_info['FIRST_INITIAL']).". ".htmlspecialchars($person_info['LASTNAME']).", ".htmlspecialchars($person_info['POSITION'])." ".htmlspecialchars($person_info['EMPLOYER'])." ".htmlspecialchars($person_info['TYPE_ABBR']).($person_info['MGMT_POSITION_YN'] == 'Y' ? "</span>": '')."\n
 					</TD></TR>\n";
 					
 		//remove unnecessary information not needed in the tooltips:
 		unset ($person_info['FIRST_INITIAL']);
 		unset ($person_info['EMPLOYER']);
-		unset ($person_info['START_MGMT_CLASS_STYLE']);
-		unset ($person_info['END_MGMT_CLASS_STYLE']);
+		unset ($person_info['MGMT_POSITION_YN']);
 		unset ($person_info['TYPE_ABBR']);
 		unset ($person_info['POSITION']);
 
@@ -157,8 +156,7 @@ class org_chart
 		(CASE WHEN program = 'Dir' OR mgt_position = 'Director' THEN NVL(mgt_position, position_name) ELSE position_abbr END) position,
 		(CASE WHEN program = 'Dir' OR mgt_position = 'Director' THEN NVL(mgt_position, position_name) ELSE position_name END) full_position_name,
 		DECODE(employer, 'CIMAR', ' (CI)', 'AF', ' (AF)', 'MOP', ' (MOP)', '') employer,
-		DECODE(mgt_position, NULL, '', '<span class=\"mgmt_position\">') start_mgmt_class_style,
-		DECODE(mgt_position, NULL, '', '</span>') end_mgmt_class_style,
+		(CASE WHEN mgt_position IS NULL THEN 'N' ELSE 'Y' END) mgmt_position_yn,
 		DECODE( perstype, 'PIC-Contracted', ' (c)', 'PIC-Associate', ' (a)','PIC-Volunteer', ' (v)', '') type_abbr
 		FROM picadm.view_persons_v
 		WHERE $where_clause
@@ -290,7 +288,7 @@ class org_chart
 					//this is a child record of a division, style this as a program
 
 					$content_string .= "				<TR><TD>&nbsp;</TD></TR>\n
-					<TR><TD CLASS=\"program display_header\">".$row['ORG_NAME']."</TD></TR>\n";
+					<TR><TD CLASS=\"program display_header\">".htmlspecialchars($row['ORG_NAME'])."</TD></TR>\n";
 					
 				}
 				else if ($org_depth == 2)
@@ -300,13 +298,13 @@ class org_chart
 					{
 						//style this as a program
 						$content_string .= "				<TR><TD>&nbsp;</TD></TR>\n
-						<TR><TD CLASS=\"program display_header\">".$row['ORG_NAME']."</TD></TR>\n";
+						<TR><TD CLASS=\"program display_header\">".htmlspecialchars($row['ORG_NAME'])."</TD></TR>\n";
 					}
 					else 
 					{
 						//style this as a subprogram
 						$content_string .= "				<TR><TD>&nbsp;</TD></TR>\n
-						<TR><TD CLASS=\"subprogram display_header\">".$row['ORG_NAME']."</TD></TR>\n";					
+						<TR><TD CLASS=\"subprogram display_header\">".htmlspecialchars($row['ORG_NAME'])."</TD></TR>\n";					
 					}					
 				}
 				else
@@ -314,7 +312,7 @@ class org_chart
 					//this has 3 or more levels of parent records, style this as a subprogram
 				
 					$content_string .= "				<TR><TD>&nbsp;</TD></TR>\n
-					<TR><TD CLASS=\"subprogram display_header\">".$row['ORG_NAME']."</TD></TR>\n";				
+					<TR><TD CLASS=\"subprogram display_header\">".htmlspecialchars($row['ORG_NAME'])."</TD></TR>\n";				
 				}
 
 				//attempt to generate HTML content for the organization's personnel
@@ -383,7 +381,7 @@ class org_chart
 				//generate the start of the division table content
 				$content_string .= "		<TD COLSPAN=2 CLASS=\"divisionouter align_top\">
 				<TABLE class=\"layout_table\">\n
-					<TR><TD CLASS=\"division display_header\">".$division_row['ORG_NAME']."\n				</TD></TR>\n";
+					<TR><TD CLASS=\"division display_header\">".htmlspecialchars($division_row['ORG_NAME'])."\n				</TD></TR>\n";
 
 				//attempt to generate HTML content for the organization's personnel
 				if ($return_value = $this->generate_org_personnel_content($division_row['ORG_ID'], $return_string))
@@ -467,7 +465,7 @@ class org_chart
 								$content_string = "
 								<TABLE class=\"layout_table\">
 									<TR>
-										<TD COLSPAN=8 class=\"main_layout_cell\">\n<div class=\"page_heading\">\n".$pifsc_org_info['ORG_NAME']."\n</div>
+										<TD COLSPAN=8 class=\"main_layout_cell\">\n<div class=\"page_heading\">\n".htmlspecialchars($pifsc_org_info['ORG_NAME'])."\n</div>
 										</TD>
 									</TR>
 									<TR>
@@ -475,7 +473,7 @@ class org_chart
 										<!-- DO box begin -->
 										<TD COLSPAN=4 CLASS=\"program\">
 											<TABLE class=\"center\">
-												<TR><TD COLSPAN=2 class=\"display_header\">".$do_org_info['ORG_NAME']."
+												<TR><TD COLSPAN=2 class=\"display_header\">".htmlspecialchars($do_org_info['ORG_NAME'])."
 												</TD></TR>
 												<TR>
 													<TD class=\"center align_top\" id=\"do_program_id\">

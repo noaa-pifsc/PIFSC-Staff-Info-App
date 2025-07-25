@@ -197,10 +197,11 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
                 # cleanup the container source files in the temporary directory
                 rm -rf /tmp/staff-info-app/*
                 ```
+
 ## Security Features
 -   Global Security Features:
     -   SQL queries use prepared statements and bind variables to prevent SQL Injection Attacks
-    -   _ Database values are sanitized before being displayed in the web pages to prevent Cross Site Scripting (XSS) attacks
+    -   Database values are sanitized using [htmlspecialchars()](https://www.php.net/manual/en/function.htmlspecialchars.php) before being included in the HTML web page content to prevent Cross Site Scripting (XSS) attacks
 -   Organization Chart:
     -   Tooltip content is retrieved from the database and stored in a javascript array of objects, when a given tooltip is activated the content in the corresponding object variable is sanitized before it is displayed
 -   Staff Directory:
