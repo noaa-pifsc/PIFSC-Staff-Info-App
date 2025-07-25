@@ -1,7 +1,7 @@
 # Staff Information App Technical Documentation
 
 ## Overview
-The Staff Information Application (SIA) is a web app that provides access to the PIFSC Oracle personnel database for information that does not contain sensitive information of PII.  There are two web pages; one provides a sortable tabular staff directory listing and the other shows a formatted organization hierarchy chart.  The web app is implemented as a docker container.  
+The Staff Information Application (SIA) is a web app that provides access to the PIFSC Oracle personnel database for information that does not contain sensitive information or PII.  There are two web pages; one provides a sortable tabular staff directory listing and the other shows a formatted organization hierarchy chart.  The web app is implemented as a docker container.  
 
 ## Resources
 -   Version Control Information:
@@ -182,13 +182,13 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
                 rsync -aP /tmp/staff-info-app/* .
 
                 # build and run the container:
-                docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d  --build
+                docker compose -f docker-compose.yml up -d  --build
 
                 # revert to user account
                 exit
 
                 # cleanup the container source files in the temporary directory
-                rm -rf /tmp/staff-info-app/*
+                rm -rf /tmp/staff-info-app
                 ```
 
 ## Security Features

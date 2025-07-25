@@ -17,10 +17,6 @@ mkdir $project_folder_path/tmp
 
 echo "create the web folder structure"
 mkdir $project_folder_path/www
-mkdir $project_folder_path/www/php-shared-library
-mkdir $project_folder_path/www/php-shared-library/css
-mkdir $project_folder_path/www/php-shared-library/js
-mkdir $project_folder_path/www/php-shared-library/img
 
 echo "create the backend folder structure"
 mkdir $project_folder_path/backend

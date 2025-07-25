@@ -1,7 +1,7 @@
 # Staff Information App End-User Documentation
 
 ## Overview
-The Staff Information Application (SIA) is a web app that provides access to the PIFSC Oracle personnel database for information that does not contain sensitive information of PII.  There are two web pages; one provides a sortable tabular staff directory listing and the other shows a formatted organization hierarchy chart.  The web app is implemented as a docker container.  
+The Staff Information Application (SIA) is a web app that provides access to the PIFSC Oracle personnel database for information that does not contain sensitive information or PII.  There are two web pages; one provides a sortable tabular staff directory listing and the other shows a formatted organization hierarchy chart.    
 
 ## Application Access
 -   Test: https://picapps-test.nmfs.local/staff-directory/
@@ -12,7 +12,6 @@ The Staff Information Application (SIA) is a web app that provides access to the
 -   PIFSC network connection 
 
 ## Implementation
--   There are two PHP pages that are accessed directly via web browser, one for the staff directory (staff-directory.php) and one for the organization chart (org-chart.php)
 -   ### Shared Elements
     -   There is a navigation menu at the top of both web pages that provides links to the two pages, the link for the current page is grayed out and the corresponding link is not enabled
 -   ### Staff Directory
