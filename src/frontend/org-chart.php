@@ -1,13 +1,12 @@
 <?php
 
-	$project_folder = 'staff-info-app';
-
-
 	//include the php file that defines the includes directory path:
-	include("/usr/src/app/$project_folder/include_path.php");
+	include("/usr/src/app/staff-info-app/include_path.php");
 
 	//include the php file that connects to the Oracle database
-	include(INCLUDE_PATH."$project_folder/org_chart_class.php");
+	include(PROJECT_FOLDER_PATH."org_chart_class.php");
+
+	//create the new org_chart class object
 	$org_chart = new org_chart();
 
 	//generate and display the HTML page content

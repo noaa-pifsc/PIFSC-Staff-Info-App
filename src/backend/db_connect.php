@@ -1,8 +1,8 @@
 <?php
 //include the DB credentials file
-include(INCLUDE_PATH."staff-directory/db_credentials.php");
+include(PROJECT_FOLDER_PATH."db_credentials.php");
 
-include(INCLUDE_PATH."php-shared-library/oracle_db.php");
+include(SHARED_LIBRARY_FOLDER_PATH."oracle_db.php");
 
 function db_connect(&$oracle_db) {
   

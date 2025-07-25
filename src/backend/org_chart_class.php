@@ -1,9 +1,9 @@
 <?php
 //include the php file that connects to the Oracle database
-include(INCLUDE_PATH."staff-info-app/db_connect.php");
+include(PROJECT_FOLDER_PATH."db_connect.php");
 
 //include the php file that generates shared web elements
-include(INCLUDE_PATH."staff-info-app/shared_web_elements.php");
+include(PROJECT_FOLDER_PATH."shared_web_elements.php");
 
 //class to provide the functionality required for the PIFSC organization chart
 class org_chart

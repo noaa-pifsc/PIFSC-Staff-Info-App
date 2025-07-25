@@ -67,7 +67,7 @@ mv $project_folder_path/backend/$project_folder/db_credentials.template.php $pro
 
 # remove the working directories where the files in the export folder were prepared from
 echo "remove all temporary files"
-# rm -rf $project_folder_path/tmp
+rm -rf $project_folder_path/tmp
 
 echo "the docker project files are now ready for configuration and image building/deployment"
 
