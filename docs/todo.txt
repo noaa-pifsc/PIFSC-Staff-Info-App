@@ -23,7 +23,16 @@ near term:
 	X implement org_chart class
 	X implement error handling
 	
-	_ update documentation
+	X update documentation
+		X technical
+		X end user
+		
+	deploy to OCI
+		_ dev 
+		_ test	
+		
+	send documentation and link to OMI so they can delegate the review and feedback process
+	
 	
 	
 	

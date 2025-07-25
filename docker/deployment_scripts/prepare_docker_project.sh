@@ -6,7 +6,7 @@ echo "running Staff Directory deployment script"
 # load the project configuration script to set the runtime variable values
 . ./sh_script_config/project_config.sh
 
-project_folder="staff-directory"
+project_folder="staff-info-app"
 
 project_folder_path="$project_directory/$project_folder"
 
@@ -51,22 +51,22 @@ cp -r $project_folder_path/tmp/php-shared-library/img/*  $project_folder_path/ww
 echo "clone the project repository"
 
 #checkout the git projects into the same temporary docker directory
-git clone $sd_git_url $project_folder_path/tmp/staff-directory
+git clone $sia_git_url $project_folder_path/tmp/$project_folder
 
 echo "copy source code/docker files"
-cp -R $project_folder_path/tmp/staff-directory/docker/* $project_folder_path
+cp -R $project_folder_path/tmp/$project_folder/docker/* $project_folder_path
 
 # copy the source files to the www directory:
-cp -R $project_folder_path/tmp/staff-directory/src/* $project_folder_path/www 
+cp -R $project_folder_path/tmp/$project_folder/src/frontend/* $project_folder_path/www 
 
 # rename the db_credentials.template.php to the active db_credentials.php file
 mv $project_folder_path/www/includes/db_credentials.template.php $project_folder_path/www/includes/db_credentials.php
 
 # move the includes files out of the web root folder
-mv $project_folder_path/www/includes/* $project_folder_path/backend/staff-directory
+mv $project_folder_path/www/backend/* $project_folder_path/backend/$project_folder
 
 # remove the includes subfolder
-rmdir $project_folder_path/www/includes/
+rmdir $project_folder_path/www/backend/
 
 
 
