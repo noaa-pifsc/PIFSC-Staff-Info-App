@@ -24,7 +24,7 @@ mkdir $project_folder_path/www/php-shared-library/img
 
 echo "create the backend folder structure"
 mkdir $project_folder_path/backend
-mkdir $project_folder_path/backend/staff-directory
+mkdir $project_folder_path/backend/$project_folder
 mkdir $project_folder_path/backend/php-shared-library
 
 
@@ -59,27 +59,15 @@ cp -R $project_folder_path/tmp/$project_folder/docker/* $project_folder_path
 # copy the source files to the www directory:
 cp -R $project_folder_path/tmp/$project_folder/src/frontend/* $project_folder_path/www 
 
+# copy the backend source files to the backend/$project_folder directory:
+cp -R $project_folder_path/tmp/$project_folder/src/backend/* $project_folder_path/backend/$project_folder
+
 # rename the db_credentials.template.php to the active db_credentials.php file
-mv $project_folder_path/www/includes/db_credentials.template.php $project_folder_path/www/includes/db_credentials.php
-
-# move the includes files out of the web root folder
-mv $project_folder_path/www/backend/* $project_folder_path/backend/$project_folder
-
-# remove the includes subfolder
-rmdir $project_folder_path/www/backend/
-
-
-
-
-
-
-
-
-
+mv $project_folder_path/backend/$project_folder/db_credentials.template.php $project_folder_path/backend/$project_folder/db_credentials.php
 
 # remove the working directories where the files in the export folder were prepared from
 echo "remove all temporary files"
-rm -rf $project_folder_path/tmp
+# rm -rf $project_folder_path/tmp
 
 echo "the docker project files are now ready for configuration and image building/deployment"
 

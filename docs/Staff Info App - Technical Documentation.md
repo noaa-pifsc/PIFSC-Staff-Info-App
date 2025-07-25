@@ -63,19 +63,19 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
     |    |--- docker-compose.yml
     |    |--- Dockerfile
     |    |--- config
-    |    |   |--- httpd
-    |    |   |--- php
+    |    |    |--- httpd
+    |    |    |--- php
     |    |--- deployment_scripts
     |--- docs
     |--- src 
     |    |--- backend
-    |    |   |--- \*.php
+    |    |    |--- *.php
     |    |--- frontend
-    |    |   |--- \*.php
-    |    |   |--- img
-    |    |   |--- js
-    |    |   |--- style
-    |    |   |--- webfonts
+    |    |    |--- *.php
+    |    |    |--- img
+    |    |    |--- js
+    |    |    |--- style
+    |    |    |--- webfonts
     ```
 
 ## Setup
@@ -114,12 +114,12 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
             |    |--- img
             |    |--- js
             |    |--- php-shared-library
-            |    |      |--- css
-            |    |      |--- img
-            |    |      |--- js
+            |    |    |--- css
+            |    |    |--- img
+            |    |    |--- js
             |    |--- style
             |    |--- webfonts
-            |    |--- \*.php
+            |    |--- *.php
             ```
     -   #### Docker Deployment
         -   #### Docker folder structure
@@ -131,19 +131,19 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
         -   #### Docker Folder Diagram:
             ```
             .
-            |--- var/www/html
+            |--- /var/www/html
             |    |--- img
             |    |--- js
             |    |--- php-shared-library
-            |           |--- css
-            |           |--- img
-            |           |--- js
+            |         |--- css
+            |         |--- img
+            |         |--- js
             |    |--- style
             |    |--- webfonts
-            |    |--- \*.php
-            |--- usr/src/app
-            |   |--- staff-info-app
-            |   |--- php-shared-library
+            |    |--- *.php
+            |--- /usr/src/app
+            |    |--- staff-info-app
+            |    |--- php-shared-library
             |--- /etc/php.d
             |--- /etc/httpd/conf.d
             ```
