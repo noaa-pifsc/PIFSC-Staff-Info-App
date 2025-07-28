@@ -150,7 +150,7 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
                     mkdir /tmp/staff-info-app
                     chmod -R 755 /tmp/staff-info-app
                     ```
-            -   Open a Command Prompt and change to the prepared folder
+            -   Open a Command Prompt and "cd" into the prepared folder
                 -   Recursively copy the prepared folder contents using the following command (where  [server host] is the hostname/IP address of the docker host server):
                     ```
                     pscp -r ./ [username]@[server host]:/tmp/staff-info-app/
