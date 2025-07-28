@@ -34,7 +34,6 @@ near term:
 	_ send documentation and link to OMI so they can delegate the review and feedback process
 	
 	
-	_ dynamically calculate the number of columns needed for the layout based on the number of divisions so the colspan can be set and the td classes that connect the lines will line up properly
 	
 	
 	Each division is 2 columns, 2 columns on each end for a spacer
@@ -42,33 +41,35 @@ near term:
 	
 	_ replace cells with &nbsp; with classes (standard_spacer)
 	
-	Current configuration:
-		Top row:
-			colspan = 8 (num_divisions * 2)
-		
-		DO row:
-			colspan = 2 (spacer)
-			Colspan = 4 (DO box)	(num_divisions * 2) - 4
-			Colspan = 2 (CIMAR box)
-
-		Org chart line row (from under DO box)
-			colspan = 4 (spacer) - num_divisions
-			td (lineleft class)
+	X dynamically calculate the number of columns needed for the layout based on the number of divisions so the colspan can be set and the td classes that connect the lines will line up properly
+		Current configuration:
+			Top row:
+				colspan = 8 (num_divisions * 2)
 			
-		connecting lines:
-			td nbsp
+			DO row:
+				colspan = 2 (spacer)
+				Colspan = 4 (DO box)	(num_divisions * 2) - 4
+				Colspan = 2 (CIMAR box)
 
-			// alternate the topleft and linetop	(num_divisions * 2) - 1
-			td linetopleft
-			td linetop
-			td linetopleft
-			td linetop
-			td linetopleft
-			td linetop
-			td linetopleft
-	
-		division row:
-			colspan = 2 for each division returned by the query
+			Org chart line row (from under DO box)
+				colspan = 4 (spacer) - num_divisions
+				td (lineleft class)
+				
+			connecting lines:
+				td nbsp
+
+				// alternate the topleft and linetop cells	(num_divisions * 2) - 1
+				td linetopleft
+				td linetop
+				td linetopleft
+				td linetop
+				td linetopleft
+				td linetop
+				td linetopleft
+				td lineleft
+		
+			division row:
+				colspan = 2 for each division returned by the query
 			
 			
 	

@@ -287,7 +287,7 @@ class org_chart
 				{
 					//this is a child record of a division, style this as a program
 
-					$content_string .= "				<TR><TD>&nbsp;</TD></TR>\n
+					$content_string .= "				<TR><TD></TD></TR>\n
 					<TR><TD CLASS=\"program display_header\">".htmlspecialchars($row['ORG_NAME'])."</TD></TR>\n";
 					
 				}
@@ -297,13 +297,13 @@ class org_chart
 					if ($row['ORG_LEVEL'] == "PIC Program")
 					{
 						//style this as a program
-						$content_string .= "				<TR><TD>&nbsp;</TD></TR>\n
+						$content_string .= "				<TR><TD></TD></TR>\n
 						<TR><TD CLASS=\"program display_header\">".htmlspecialchars($row['ORG_NAME'])."</TD></TR>\n";
 					}
 					else 
 					{
 						//style this as a subprogram
-						$content_string .= "				<TR><TD>&nbsp;</TD></TR>\n
+						$content_string .= "				<TR><TD></TD></TR>\n
 						<TR><TD CLASS=\"subprogram display_header\">".htmlspecialchars($row['ORG_NAME'])."</TD></TR>\n";					
 					}					
 				}
@@ -311,7 +311,7 @@ class org_chart
 				{
 					//this has 3 or more levels of parent records, style this as a subprogram
 				
-					$content_string .= "				<TR><TD>&nbsp;</TD></TR>\n
+					$content_string .= "				<TR><TD></TD></TR>\n
 					<TR><TD CLASS=\"subprogram display_header\">".htmlspecialchars($row['ORG_NAME'])."</TD></TR>\n";				
 				}
 
@@ -477,7 +477,7 @@ class org_chart
 										</TD>
 									</TR>
 									<TR>
-										<TD COLSPAN=2 class=\"blank_cell\">&nbsp;</TD>
+										<TD COLSPAN=2 class=\"blank_cell\"></TD>
 										<!-- DO box begin -->
 										<TD COLSPAN=".(($num_divisions * 2) - 4)." CLASS=\"program\">
 											<TABLE class=\"center\">
@@ -512,11 +512,11 @@ class org_chart
 									</TR>
 									<TR>
 										<!-- connecting line from the DO box to the divisions -->
-										<TD COLSPAN=".$num_divisions.">&nbsp;</TD>
-										<TD CLASS=\"lineleft\">&nbsp;</TD>
+										<TD COLSPAN=".$num_divisions."></TD>
+										<TD CLASS=\"lineleft\"></TD>
 									</TR>
 									<TR>
-										<TD>&nbsp;</TD>";
+										<TD></TD>";
 										
 										//generate the connecting lines for the different divisions based on the number of divisions
 										for ($i = 1; $i < (($num_divisions * 2) - 1); $i ++)
@@ -524,9 +524,9 @@ class org_chart
 											//loop through the cells in this row to generate the connecting lines for the org chart
 											
 											if (($i % 2) == 1)	//if this is an odd number cell then use linetopleft class
-												$content_string .= "<TD CLASS=\"linetopleft\">&nbsp;</TD>";
+												$content_string .= "<TD CLASS=\"linetopleft\"></TD>";
 											else	//if this is an even number cell then use linetop class
-												$content_string .= "<TD CLASS=\"linetop\">&nbsp;</TD>";
+												$content_string .= "<TD CLASS=\"linetop\"></TD>";
 										}
 $content_string .= "									<TD class=\"lineleft\"></TD></TR>
 									<TR>

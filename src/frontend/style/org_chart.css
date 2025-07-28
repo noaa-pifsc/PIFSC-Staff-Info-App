@@ -88,3 +88,9 @@ p.tooltip_heading {font-weight: bold; text-align: center;}
 
 td.blank_cell {}
 span.generated_timestamp {font-size: x-small;}
+
+table {empty-cells: show;}
+
+td:empty:before {
+	content: "\00A0"; /* Inserts a non-breaking space */
+}
