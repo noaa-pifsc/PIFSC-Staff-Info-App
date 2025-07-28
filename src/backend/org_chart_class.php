@@ -121,7 +121,7 @@ class org_chart
 		
 		//generate the html to display the person in the org chart:
 		$return_string = "				<TR><TD class=\"nowrap person-tooltip-trigger\" data-tooltip-id=\"".htmlspecialchars($person_info['PERS_ID'])."\">\n
-	".($person_info['MGMT_POSITION_YN'] == 'Y' ? "<span class=\"mgmt_position\">": '').htmlspecialchars($person_info['FIRST_INITIAL']).". ".htmlspecialchars($person_info['LASTNAME']).", ".htmlspecialchars($person_info['POSITION'])." ".htmlspecialchars($person_info['EMPLOYER'])." ".htmlspecialchars($person_info['TYPE_ABBR']).($person_info['MGMT_POSITION_YN'] == 'Y' ? "</span>": '')."\n
+	".($person_info['MGMT_POSITION_YN'] == 'Y' ? "<span class=\"mgmt_position\">": '').htmlspecialchars($person_info['FIRST_INITIAL'] ?? '').". ".htmlspecialchars($person_info['LASTNAME'] ?? '').", ".htmlspecialchars($person_info['POSITION'] ?? '')." ".htmlspecialchars($person_info['EMPLOYER'] ?? '')." ".htmlspecialchars($person_info['TYPE_ABBR'] ?? '').($person_info['MGMT_POSITION_YN'] == 'Y' ? "</span>": '')."\n
 					</TD></TR>\n";
 					
 		//remove unnecessary information not needed in the tooltips:
@@ -350,13 +350,17 @@ class org_chart
 	//function to generate HTML content for all the PIFSC divisions and corresponding child organizations recursively
 	//the $content_string variable contains the HTML content for the division's personnel and headings and all child organization's personnel and headings
 	//the function returns true when the function was executed successfully and false when it was not successful
-	function generate_division_personnel_content ($do_org_id, &$content_string)
+	//$num_divisions will have the number of divisions to aid with calculating the table layout
+	function generate_division_personnel_content ($do_org_id, &$content_string, &$num_divisions)
 	{
 		//initialize the $return_value, true indicates the function was successful, false indicates an error condition
 		$return_value = true;
 
 		//initialize the content string variable
 		$content_string = '';
+		
+		//initialize the counter for the number of divisions
+		$num_divisions = 0;
 
 		//query for all top-level divisions, exclude the ones with persons already listed under Director's Office
 		//define the sort order: OMI, FRMD, ESD, PSD
@@ -413,6 +417,8 @@ class org_chart
 					break;
 				}
 
+				//increment the number of divisions
+				$num_divisions ++;
 			}
 		}
 
@@ -457,21 +463,23 @@ class org_chart
 							//the CIMAR admin personnel was generated successfully
 
 							//generate the HTML for the org chart for the divisions/programs:
-							if ($this->generate_division_personnel_content($do_org_info['ORG_ID'], $division_content_string))
+							if ($this->generate_division_personnel_content($do_org_info['ORG_ID'], $division_content_string, $num_divisions))
 							{
 								//all of the database queries were successful and the HTML content for each data entity was generated successfully, construct the HTML for the web page:
 								
 
+								//generate the layout based on the number of divisions (main table has a colspan of $num_divisions * 2
+								//DO box has a colspan of (($num_divisions * 2) - 4) to center the DO box and account for the two column spacer on the left and the CIMAR box on the right (colspan = 2)
 								$content_string = "
 								<TABLE class=\"layout_table\">
 									<TR>
-										<TD COLSPAN=8 class=\"main_layout_cell\">\n<div class=\"page_heading\">\n".htmlspecialchars($pifsc_org_info['ORG_NAME'])."\n</div>
+										<TD COLSPAN=".($num_divisions * 2)." class=\"main_layout_cell\">\n<div class=\"page_heading\">\n".htmlspecialchars($pifsc_org_info['ORG_NAME'])."\n</div>
 										</TD>
 									</TR>
 									<TR>
-										<TD COLSPAN=2>&nbsp;</TD>
+										<TD COLSPAN=2 class=\"blank_cell\">&nbsp;</TD>
 										<!-- DO box begin -->
-										<TD COLSPAN=4 CLASS=\"program\">
+										<TD COLSPAN=".(($num_divisions * 2) - 4)." CLASS=\"program\">
 											<TABLE class=\"center\">
 												<TR><TD COLSPAN=2 class=\"display_header\">".htmlspecialchars($do_org_info['ORG_NAME'])."
 												</TD></TR>
@@ -503,25 +511,30 @@ class org_chart
 										<!-- CIMAR box end -->
 									</TR>
 									<TR>
-										<TD COLSPAN=4>&nbsp;</TD>
+										<!-- connecting line from the DO box to the divisions -->
+										<TD COLSPAN=".$num_divisions.">&nbsp;</TD>
 										<TD CLASS=\"lineleft\">&nbsp;</TD>
 									</TR>
 									<TR>
-										<TD>&nbsp;</TD>
-										<TD CLASS=\"linetopleft\">&nbsp;</TD>
-										<TD CLASS=\"linetop\">&nbsp;</TD>
-										<TD CLASS=\"linetopleft\">&nbsp;</TD>
-										<TD CLASS=\"linetop\">&nbsp;</TD>
-										<TD CLASS=\"linetopleft\">&nbsp;</TD>
-										<TD CLASS=\"linetop\">&nbsp;</TD>
-										<TD CLASS=\"lineleft\">&nbsp;</TD>
-									</TR>
+										<TD>&nbsp;</TD>";
+										
+										//generate the connecting lines for the different divisions based on the number of divisions
+										for ($i = 1; $i < (($num_divisions * 2) - 1); $i ++)
+										{
+											//loop through the cells in this row to generate the connecting lines for the org chart
+											
+											if (($i % 2) == 1)	//if this is an odd number cell then use linetopleft class
+												$content_string .= "<TD CLASS=\"linetopleft\">&nbsp;</TD>";
+											else	//if this is an even number cell then use linetop class
+												$content_string .= "<TD CLASS=\"linetop\">&nbsp;</TD>";
+										}
+$content_string .= "									<TD class=\"lineleft\"></TD></TR>
 									<TR>
 									".$division_content_string."
 									</TR>
 								</TABLE>
 								<P>
-									<FONT SIZE=-2>Generated on ".date("m/d/Y g:i A")." (HST)</FONT>
+									<span class=\"generated_timestamp\">Generated on ".date("m/d/Y g:i A")." (HST)</span>
 								</P>";
 								
 								

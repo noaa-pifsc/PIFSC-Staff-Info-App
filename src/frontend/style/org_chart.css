@@ -84,3 +84,7 @@ td.person-tooltip-trigger {cursor: help;}
 }
 
 p.tooltip_heading {font-weight: bold; text-align: center;}
+
+
+td.blank_cell {}
+span.generated_timestamp {font-size: x-small;}
