@@ -1,3 +1,5 @@
+#! /bin/sh
+
 # define the project folder name
 sia_project_folder="staff-info-app"
 

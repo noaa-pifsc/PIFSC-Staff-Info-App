@@ -1,5 +1,8 @@
 #! /bin/sh
 
+# change to the directory the script is running in
+cd "$(dirname "$(realpath "$0")")"
+
 # deployment script
 echo "running Staff Directory deployment script"
 

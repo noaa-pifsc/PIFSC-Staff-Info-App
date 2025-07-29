@@ -84,7 +84,9 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
     -   \*Note: the steps shown here were developed and tested on a Windows computer
     -   #### Project Preparation
         -   \*Note: the reason there is a project preparation step is to omit unnecessary files/folders from the docker container and from the docker host the docker container is deployed to
-        -   Clone the [SIA repository](https://picgitlab.nmfs.local/omi-apps/staff-info-app) on the docker host where the container will be deployed
+        -   Clone the [SIA repository](https://picgitlab.nmfs.local/omi-apps/staff-info-app) on the docker host where the container will be deployed:
+
+            `git clone git@picgitlab.nmfs.local:omi-apps/staff-info-app.git`
         -   Run the project preparation script ([prepare_docker_project.sh](./docker/deployment_scripts/prepare_docker_project.sh)) to generate a preparation folder based on the $project_folder variable with the code for the corresponding application instance.
             -   The [project_config.sh](./docker/deployment_scripts/sh_script_config/project_config.sh) file declares bash variables that define the preparation's script behavior.  
                 -   The preparation folder is within the parent folder of the SIA repository (../../docker_projects/$sia_project_folder)

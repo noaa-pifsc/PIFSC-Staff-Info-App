@@ -40,6 +40,9 @@ near term:
 		deployment within docker host
 			git clone --branch branch_v1.2 git@picgitlab.nmfs.local:omi-apps/staff-info-app.git
 			
+			
+			
+			
 		deployment from windows machine
 		
 		
