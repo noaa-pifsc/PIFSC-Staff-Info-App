@@ -1,6 +1,6 @@
 Future updates:
-	Remove the hardcoding for the person ids
-		add flags to the DB table
+	_ Remove the hardcoding for the person ids or just filter by other database attributes for CIMAR admin
+		_ add flags to the DB table
 
 near term:
 	X refactor the functions
@@ -36,10 +36,14 @@ near term:
 	
 	
 	
+	
+	
+	
+	
 	Each division is 2 columns, 2 columns on each end for a spacer
 	
 	
-	_ replace cells with &nbsp; with classes (standard_spacer)
+	X replace cells with &nbsp; with classes (standard_spacer)
 	
 	X dynamically calculate the number of columns needed for the layout based on the number of divisions so the colspan can be set and the td classes that connect the lines will line up properly
 		Current configuration:

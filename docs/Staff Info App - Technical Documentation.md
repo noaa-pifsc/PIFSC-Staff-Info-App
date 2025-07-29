@@ -18,7 +18,8 @@ The Staff Information Application (SIA) is a web app that provides access to the
 ## Requirements
 -   System:
     -   Docker
-        - Apache 2.x, PHP 8.x
+        -   Apache 2.x, PHP 8.x
+        -   Docker host and reverse proxy configured to allow web requests to the docker host via port 80 to the web application on port 5006
 -   User:
     -   Any modern web browser
     -   PIFSC network connection 
@@ -84,10 +85,11 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
     -   #### Project Preparation
         -   \*Note: the reason there is a project preparation step is to omit unnecessary files/folders from the docker container and from the docker host the docker container is deployed to
         -   Clone the [SIA repository](https://picgitlab.nmfs.local/omi-apps/staff-info-app) on the docker host where the container will be deployed
-        -   Open the [project_config.sh](./docker/deployment_scripts/sh_script_config/project_config.sh) and set the $root_directory to an appropriate folder path on the computer you are using.
         -   Run the project preparation script ([prepare_docker_project.sh](./docker/deployment_scripts/prepare_docker_project.sh)) to generate a preparation folder based on the $project_folder variable with the code for the corresponding application instance.
-            -   The script will clone the SIA and PHP Shared Library repositories in the tmp/ subdirectory of the specified preparation folder and copy the files from each repository to the appropriate folders in the preparation folder.  
-            -   Once the project folder is prepared the tmp/ folder will be deleted
+            -   The [project_config.sh](./docker/deployment_scripts/sh_script_config/project_config.sh) file declares bash variables that define the preparation's script behavior.  
+                -   The preparation folder is within the parent folder of the SIA repository (../../docker_projects/$sia_project_folder)
+            -   The script will clone the PHP Shared Library repository within the tmp/ subdirectory of the specified preparation folder and copy the necessary files from both repositories to the appropriate folders in the preparation folder.  
+                -   Once the project folder is prepared the tmp/ folder will be deleted
         -   ### Prepared Project Folder
             -   Open the credentials file (backend/staff-info-app/db_credentials.php) in the preparation folder and specify the database connection information for the database instance the given application will use
             -   When the docker project is prepared it will copy files/folders from the repository folder structure to the appropriate locations in the docker folder structure:
