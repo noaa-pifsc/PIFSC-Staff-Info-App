@@ -31,13 +31,19 @@ near term:
 		X dev 
 		X test	
 		
-	_ send documentation and link to OMI so they can delegate the review and feedback process
+	X send documentation and link to OMI so they can delegate the review and feedback process
 	
 	
 	
 	
-	
-	
+	_ documentation
+		deployment within docker host
+			git clone --branch branch_v1.2 git@picgitlab.nmfs.local:omi-apps/staff-info-app.git
+			
+		deployment from windows machine
+		
+		
+		
 	
 	
 	Each division is 2 columns, 2 columns on each end for a spacer
