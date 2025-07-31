@@ -12,3 +12,15 @@ services:
       options:
         max-size: "100m"
         max-file: "1"
+    environment:
+      DB_USERNAME_FILE: /run/secrets/sia_db_username_secret
+      DB_PASSWORD_FILE: /run/secrets/sia_db_password_secret
+    secrets:
+      - sia_db_username_secret
+      - sia_db_password_secret
+
+secrets:
+  sia_db_username_secret:
+    external: true
+  sia_db_password_secret:
+    external: true
