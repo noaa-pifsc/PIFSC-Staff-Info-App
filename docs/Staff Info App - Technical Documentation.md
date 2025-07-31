@@ -85,16 +85,26 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
     -   #### Project Preparation
         -   \*Note: the reason there is a project preparation step is to omit unnecessary files/folders from the docker container and from the docker host the docker container is deployed to
         -   Clone the [SIA repository](https://picgitlab.nmfs.local/omi-apps/staff-info-app) on the docker host where the container will be deployed:
+            ```
+            # cd to a temporary directory where the project can be cloned:
+            cd /tmp
 
-            `git clone git@picgitlab.nmfs.local:omi-apps/staff-info-app.git`
+            # clone the SIA project repository
+            git clone git@picgitlab.nmfs.local:omi-apps/staff-info-app.git
+            ```
         -   Run the project preparation script ([prepare_docker_project.sh](./docker/deployment_scripts/prepare_docker_project.sh)) to generate a preparation folder based on the $project_folder variable with the code for the corresponding application instance.
+            ```
+            # run the preparation script
+
+
+            ```
             -   The [project_config.sh](./docker/deployment_scripts/sh_script_config/project_config.sh) file declares bash variables that define the preparation's script behavior.  
-                -   The preparation folder is within the parent folder of the SIA repository (../../docker_projects/$sia_project_folder)
+                -   The preparation folder is within the parent folder of the SIA repository: ../../docker-$sia_project_folder (e.g. ../../docker-staff-info-app)
             -   The script will clone the PHP Shared Library repository within the tmp/ subdirectory of the specified preparation folder and copy the necessary files from both repositories to the appropriate folders in the preparation folder.  
                 -   Once the project folder is prepared the tmp/ folder will be deleted
         -   ### Prepared Project Folder
             -   Open the credentials file (backend/staff-info-app/db_credentials.php) in the preparation folder and specify the database connection information for the database instance the given application will use
-            -   When the docker project is prepared it will copy files/folders from the repository folder structure to the appropriate locations in the docker folder structure:
+            -   When the docker project is prepared it will copy files/folders from each of the repositories' folder structure to the appropriate locations in the docker folder structure:
                 -   #### PHP Shared Library:
                     -   The backend PHP shared library .php files needed for oracle database interactions are copied to backend/php-shared-library folder
                 -   #### SIA:
@@ -145,24 +155,10 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
         -   ##### Local Docker Desktop
             -   Execute the deployment_scripts/build_deploy_project.sh script in the prepared project folder to build and run the docker container
         -   ##### Docker Host Server (via PuTTY)
-            -   Open Pageant
-                -   Click "Add CAPI Cert" and choose your CAC credentials
-            -   Open PuTTY
-                -   login to the specific docker host with your CAC username
-                -   Make the temporary directory used to transfer files and grant permissions to read the directory by executing the following commands
-                    ```
-                    mkdir /tmp/staff-info-app
-                    chmod -R 755 /tmp/staff-info-app
-                    ```
-            -   Open a Command Prompt and "cd" into the prepared folder
-                -   Recursively copy the prepared folder contents using the following command (where  [server host] is the hostname/IP address of the docker host server):
-                    ```
-                    pscp -r ./ [username]@[server host]:/tmp/staff-info-app/
-                    ```
-            -   In PuTTY, run the following commands to move the prepared files into the specified directory on the docker host server:
+            -   In an SSH session, run the following commands to move the prepared files into the specified directory on the docker host server:
                 ```
                 # switch to the directory containing the prepared folder contents
-                cd /tmp/staff-info-app
+                cd /tmp/docker-staff-info-app
 
                 # update the permissions on the prepared folder's files
                 chmod -R 755 *
@@ -170,7 +166,7 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
                 # switch to the docker user
                 sudo su - docker-user
 
-                # create the target docker folder where [container folder] is the name of the folder where the docker container will be run from
+                # create the target docker folder where [container folder] is the name of the folder where the docker container will be run from (e.g. staff-directory)
                 mkdir containers/[container folder]
 
                 # switch to the target docker folder where the docker container will be run from
@@ -183,15 +179,16 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
                 rm -rf *
 
                 # copy the files from the prepared folder to the
-                rsync -aP /tmp/staff-info-app/* .
+                rsync -aP /tmp/docker-staff-info-app/* .
 
                 # build and run the container:
-                docker compose -f docker-compose.yml up -d  --build
+                sh ./deployment_scripts/build_deploy_project.sh
 
                 # revert to user account
                 exit
 
-                # cleanup the container source files in the temporary directory
+                # cleanup the container source files and project repository in the temporary directory
+                rm -rf /tmp/docker-staff-info-app
                 rm -rf /tmp/staff-info-app
                 ```
 
