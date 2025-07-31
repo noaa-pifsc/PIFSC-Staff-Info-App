@@ -34,7 +34,52 @@ near term:
 	X send documentation and link to OMI so they can delegate the review and feedback process
 	
 	
-	
+	sh_script_config.sh
+
+		The variable name project_directory sounds to me like it will be the root folder for the project but that folder turns out to be project_folder_path.  Based on the names, I can't tell the difference between the two folders.
+
+		Why do we need to set the root_directory?  
+			X using relative path so there is no root directory
+
+			The current default ("/c") will only work on windows.  Consider using a default that works on Windows and Linux such as a user's home directory.  While testing, I cloned and ran the prepare script directly on pifsc-test-docker-01-as.
+
+
+	prepare_docker_project.sh
+
+		Why mkdir $root_directory/docker instead of $project_directory?
+
+			$project_directory = $root_directory/docker
+			If you changed $project_directory to not equal $root_directory/docker, I'm not sure the script would work.
+			
+			_ working on this now, making it cross-platform
+			
+
+		Why do you clone the project repo?
+
+			The script is called from the repo therefore every file you need has already been cloned.
+			
+			X this step has been removed
+			
+		Why do you end the script with read?
+
+			This requires the user to type a key which is not something I'm used to seeing.  I'm used to scripts that require no user interaction once started.
+			
+			X removed this, it used to be there when I was developing the process and I ran it like a batch file by double-clicking it
+
+	build_deploy_project.sh
+
+		The first time I tried to run the script I tried to run it directly from the parent folder but it didn't work because it assumed I started the script from the deployment_scripts folder.  I try to make my scripts work no matter where they are called from.
+
+		
+		
+	dev setup
+		docker swarm init
+		
+
+
+	Docker Host Server (via PuTTY)
+
+		The docker deployment could be turned into a single script instead of running so many commands manually.	
 	
 	_ documentation
 		deployment within docker host

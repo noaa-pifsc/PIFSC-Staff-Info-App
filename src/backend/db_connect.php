@@ -21,7 +21,9 @@ function db_connect(&$oracle_db) {
 
 function get_secret ($secret_name)
 {
-	$filePath = '/run/secrets/' . $secretName;
+	echo "running get_secret($secret_name)<BR>";
+	
+	$filePath = '/run/secrets/' . $secret_name;
     if (file_exists($filePath)) {
         return trim(file_get_contents($filePath));
     }
