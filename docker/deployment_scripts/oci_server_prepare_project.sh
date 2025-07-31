@@ -2,8 +2,6 @@
 
 echo "preparing the docker project on the docker host"
 
-# remove the docker preparation folder
-rm -rf /tmp/docker-staff-info-app
 
 # make the staff-info-app folder for the repository
 mkdir -p /tmp/staff-info-app
@@ -26,3 +24,5 @@ sudo su - docker-user bash /tmp/staff-info-app/docker/deployment_scripts/oci_ser
 
 
 
+# remove the docker preparation folder
+rm -rf /tmp/docker-staff-info-app

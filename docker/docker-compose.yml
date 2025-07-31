@@ -1,9 +1,6 @@
 services:
   staff-info-app:
-    build:
-      context: .
     image: pifsc/staff-info-app:latest
-    container_name: staff-info-app
     restart: always
     ports:
       - "0.0.0.0:5006:80"
