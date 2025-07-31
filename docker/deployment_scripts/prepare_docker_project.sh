@@ -20,19 +20,22 @@ mkdir -p $project_folder_path/backend/$sia_project_folder
 mkdir $project_folder_path/backend/$shared_library_folder
 
 
+
+
 echo "clone the project dependencies"
-
 git clone $php_lib_git_url $project_folder_path/tmp/$shared_library_folder
-
 
 # copy the php-shared-library (oracle .php files only)
 echo "copy the php-shared-library backend directory"
 cp -r $project_folder_path/tmp/php-shared-library/oracle*.php  $project_folder_path/backend/$shared_library_folder
 
-
 # remove the working directories where the files in the export folder were prepared from
 echo "remove all temporary files"
 rm -rf $project_folder_path/tmp
+
+
+
+
 
 echo "copy source code/docker files for the SIA from the current repo"
 
