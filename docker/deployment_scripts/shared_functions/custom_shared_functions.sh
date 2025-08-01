@@ -4,7 +4,7 @@
 # this function accepts no parameters
 function parse_config_data()
 {
-	echo "running parse_config_data()"
+#	echo "running parse_config_data()"
 
 
 	while IFS='=' read -r key value; do
@@ -17,9 +17,6 @@ function parse_config_data()
 				;;
 		esac
 	done < /dev/stdin
-	
-	echo "The value of DB_USERNAME is: $DB_USERNAME"
-
 }
 
 # this function encodes the standard configuration data stored in bash variables so it can be passed to bash scripts via stdin
@@ -34,13 +31,7 @@ function encode_config_data ()
 # function to unset bash variables specified by STDIN:
 function unset_config_variables()
 {
-	echo "The value of DB_USERNAME before it is unset is: $DB_USERNAME"
-
-	echo "running unset_config_variables()"
-
+#	echo "running unset_config_variables()"
 
 	unset DB_USERNAME DB_PASSWORD
-
-	echo "after unsetting it, the value of DB_USERNAME is: $DB_USERNAME"
-
 }
