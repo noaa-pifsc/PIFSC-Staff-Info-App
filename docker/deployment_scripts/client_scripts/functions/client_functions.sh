@@ -191,23 +191,3 @@ function exec_remote_cmd_with_stdin ()
 	echo "$passed_stdin_content" | plink "$DOCKER_USERNAME"@"$DOCKER_HOSTNAME" "$passed_cmd"
 
 }
-
-
-# function to transfer files to/from the remote host:
-# the first parameter is the source directory/file
-# the second parameter is the target directory/file
-# Usage:
-# transfer_files "$1" "$2"
-function transfer_files ()
-{
-#	echo "running transfer_files ($1, $2)"
-
-	# store the parameters in local variables
-	local passed_source="$1"
-	local passed_target="$2"
-
-#	echo "pscp $passed_source $DOCKER_USERNAME@$DOCKER_HOSTNAME:$passed_target"
-
-	# transfer folder/files from passed_source to passed_target using pscp
-	pscp -r $passed_source "$DOCKER_USERNAME"@"$DOCKER_HOSTNAME":$passed_target
-}
