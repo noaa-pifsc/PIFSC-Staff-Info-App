@@ -11,7 +11,7 @@ SHARED_LIBRARY_FOLDER="php-shared-library"
 DOCKER_SOURCE_DIR="/tmp/$SIA_PROJECT_FOLDER"
 
 # define the project folder path where the prepared project files will be located (next to the project repository in the docker_projects folder)
-DOCKER_REPO_FOLDER_PATH="DOCKER_SOURCE_DIR/repository"
+DOCKER_REPO_FOLDER_PATH="$DOCKER_SOURCE_DIR/repository"
 DOCKER_PREP_FOLDER_PATH="$DOCKER_SOURCE_DIR/docker"
 
 

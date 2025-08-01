@@ -19,7 +19,7 @@ convert_dos2unix "../"
 
 
 # load the project configuration script to set the runtime variable values
-. ./config/docker_host_config.sh
+. ../config/docker_host_config.sh
 
 # prepre the docker preparation folder
 prepare_docker_prep_folder
