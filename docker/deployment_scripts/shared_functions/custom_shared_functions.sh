@@ -37,5 +37,8 @@ function encode_config_data ()
 function unset_config_variables()
 {
 	echo "running unset_config_variables()"
+
+	echo "The value of DB_USERNAME is: $DB_USERNAME"
+
 	unset DB_USERNAME, DB_PASSWORD
 }
