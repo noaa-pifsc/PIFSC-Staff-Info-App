@@ -23,7 +23,7 @@ parse_config_data
 echo "stop the container if it's running so the secrets can be defined/updated"
 
 # stop the container if it's running so the secrets can be defined/updated
-docker stack rm pifsc/staff-info-app
+docker stack rm SIA_stack
 
 
 # set the docker secrets for the database information based on the parsed configuration data from STDIN

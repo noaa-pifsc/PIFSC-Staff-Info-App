@@ -91,7 +91,7 @@ function initialize_run_docker_project ()
 	docker save pifsc/staff-info-app:latest | docker load
 
 	# Deploy the stack
-	docker stack deploy -c docker-compose.yml staff-info-app
+	docker stack deploy -c docker-compose.yml SIA_stack
 
 }
 
