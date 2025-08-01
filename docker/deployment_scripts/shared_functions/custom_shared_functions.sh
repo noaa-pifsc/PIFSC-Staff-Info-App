@@ -16,7 +16,7 @@ function parse_config_data()
 				echo "Warning: unknown configuration key '$key' ignored" >&2
 				;;
 		esac
-	done < /dev/stdin
+	done < /dev/stdin	# ensure the loop runs in the current shell instead of a subshell
 }
 
 # this function encodes the standard configuration data stored in bash variables so it can be passed to bash scripts via stdin

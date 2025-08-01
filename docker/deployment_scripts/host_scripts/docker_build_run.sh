@@ -3,6 +3,8 @@
 # change to the directory the script is running in
 cd "$(dirname "$(realpath "$0")")"
 
+echo "running docker_build_run.sh"
+
 # include the host functions
 source ./functions/host_functions.sh
 source ./functions/custom_host_functions.sh
