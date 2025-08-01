@@ -16,7 +16,7 @@ function parse_config_data()
 				echo "Warning: unknown configuration key '$key' ignored" >&2
 				;;
 		esac
-	done
+	done < /dev/stdin
 	
 	echo "The value of DB_USERNAME is: $DB_USERNAME"
 
@@ -39,7 +39,7 @@ function unset_config_variables()
 	echo "running unset_config_variables()"
 
 
-	unset DB_USERNAME, DB_PASSWORD
+	unset DB_USERNAME DB_PASSWORD
 
 	echo "after unsetting it, the value of DB_USERNAME is: $DB_USERNAME"
 

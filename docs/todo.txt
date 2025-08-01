@@ -115,13 +115,25 @@ near term:
 				delete the temporary folders
 				
 	
+	
+	
+	
+	
 		Other improvements:
+			
+			_ update the repo itself to be the prepared directory to make it easier to implement? YES
+				For development we would want to create a clean copy and not accidentally use the development working copy
+				
+				
+				_ Rearrange the repository so src is in the docker folder so it is easier to prepare the docker project
+
+
 			separate bash scripts for dev/test/prod instead of typing it in?
 			Also, user needs to specify the SSH username in a custom .sh config file?
-				No, do this with script parameters env: dev, username: XX
+				X No, do this with script parameters env: dev, username: XX
 				
 				bash client_deploy_container.sh dev jesse.abdul
-
+				_ document usage, if it's not specified as parameters the user will be prompted for values
 
 
 			_ ** add the cloning to the Dockerfile to simplify the deployment

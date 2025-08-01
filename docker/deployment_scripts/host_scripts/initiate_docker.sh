@@ -12,10 +12,6 @@ source ./functions/host_functions.sh
 # initialize the docker environment variables
 initialize_docker_env_var "$0"
 
-# initialize the docker source folder
-initialize_docker_source_folder
-
-
 # define the absolute path to the deployment script that will run as docker-user.
 SCRIPT_PATH="${DOCKER_REPO_FOLDER_PATH}/docker/deployment_scripts/host_scripts/docker_build_run.sh"
 
