@@ -3,6 +3,7 @@
 # change to the directory the script is running in
 cd "$(dirname "$(realpath "$0")")"
 
+echo "running define secrets script"
 
 # include the shell script functions
 source ../shared_functions/shared_functions.sh

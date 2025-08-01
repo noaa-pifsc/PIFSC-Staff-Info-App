@@ -105,7 +105,7 @@ function set_env_and_user_vars() {
   esac
 
 	# construct the path to the appropriate oracle_credentials.sh file
-  local oracle_credentials_path="../../docker/container_scripts/config/oracle_credentials.$ENV_NAME.sh"
+  local oracle_credentials_path="../../secrets/$ENV_NAME/secrets.sh"
 
   if [[ ! -f "$oracle_credentials_path" ]]; then
 	echo "ERROR: Required file '$oracle_credentials_path' not found.  Exiting script"

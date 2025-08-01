@@ -34,12 +34,3 @@ function unset_config_variables()
 {
 	unset DB_USERNAME, DB_PASSWORD
 }
-
-
-function set_secret ()
-{
-	
-
-
-
-}
