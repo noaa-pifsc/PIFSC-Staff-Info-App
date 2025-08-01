@@ -16,7 +16,7 @@ rsync -aP /tmp/docker-staff-info-app/* ~/containers/staff-directory
 docker build -t pifsc/staff-info-app:latest -f ./Dockerfile .
 
 # save and reload image to ensure the latest image is being used in docker swarm
-docker save pifsc/staff-info-app:latest | docker load
+# docker save pifsc/staff-info-app:latest | docker load
 
 # Deploy the stack
 docker stack deploy -c docker-compose.yml staff-info-app

@@ -15,14 +15,18 @@ sh /tmp/staff-info-app/docker/deployment_scripts/prepare_docker_project.sh
 # update the permissions so the docker-user can copy the files from the preparation folder into the docker project directory
 chmod -R 755 /tmp/docker-staff-info-app
 
-# clean up the files from the cloned repository 
-rm -rf /tmp/staff-info-app
 
+DEPLOY_SCRIPT="/tmp/staff-info-app/docker/deployment_scripts/oci_server_deploy_project.sh"
 
 # run the deployment script as docker-user
-sudo su - docker-user bash /tmp/staff-info-app/docker/deployment_scripts/oci_server_deploy_project.sh
+sudo su - docker-user <<EOF
+echo "Running deployment script as user: \$(whoami)"
+bash ${DEPLOY_SCRIPT}
+EOF
 
 
+# clean up the files from the cloned repository 
+rm -rf /tmp/staff-info-app
 
 # remove the docker preparation folder
 rm -rf /tmp/docker-staff-info-app

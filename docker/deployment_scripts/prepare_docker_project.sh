@@ -45,6 +45,8 @@ cp -R ../* $project_folder_path
 ## remove the unnecessary deployment_scripts files
 rm -rf $project_folder_path/deployment_scripts/sh_script_config
 rm $project_folder_path/deployment_scripts/prepare_docker_project.sh
+rm $project_folder_path/deployment_scripts/oci_server_deploy_project.sh
+rm $project_folder_path/deployment_scripts/oci_server_prepare_project.sh
 
 # copy the source files to the www directory:
 cp -R ../../src/frontend/* $project_folder_path/www 
