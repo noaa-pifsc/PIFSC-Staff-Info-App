@@ -20,6 +20,7 @@ initialize_docker_env_var "$0"
 # read the key/value pairs from STDIN and store them in bash variables
 parse_config_data
 
+echo "stop the container if it's running so the secrets can be defined/updated"
 
 # stop the container if it's running so the secrets can be defined/updated
 docker stack rm pifsc/staff-info-app

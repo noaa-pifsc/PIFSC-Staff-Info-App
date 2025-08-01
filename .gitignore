@@ -1,2 +1,3 @@
 /src/backend/db_credentials.php
 /docker/secrets
+/docker/deployment_script_logs/*.log
