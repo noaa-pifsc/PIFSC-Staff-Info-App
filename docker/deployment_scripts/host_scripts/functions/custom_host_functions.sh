@@ -32,7 +32,7 @@ function prepare_docker_prep_folder ()
 
 
 	echo "clone the project dependencies"
-	git clone $php_lib_git_url $DOCKER_PREP_FOLDER_PATH/tmp/$SHARED_LIBRARY_FOLDER
+	git clone $PHP_LIB_GIT_URL $DOCKER_PREP_FOLDER_PATH/tmp/$SHARED_LIBRARY_FOLDER
 
 	# copy the php-shared-library (oracle .php files only)
 	echo "copy the php-shared-library backend directory"

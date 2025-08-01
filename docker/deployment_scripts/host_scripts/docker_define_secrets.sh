@@ -32,3 +32,6 @@ set_db_secrets
 
 # unset bash variables specified by STDIN
 unset_config_variables
+
+echo "docker_define_secrets.sh has stopped running"
+
