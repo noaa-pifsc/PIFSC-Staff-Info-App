@@ -81,6 +81,89 @@ near term:
 
 		The docker deployment could be turned into a single script instead of running so many commands manually.	
 	
+	
+	_ update openssh so it can use the CAC to authenticate
+	
+	
+	_ provide multiple methods for building/deploying staff-info-app
+		1) from client machine run a script that uses plink/ssh to execute commands 
+			connect to the docker host, define the docker secrets
+			clone the repo, run the preparation script
+			run the build/deploy script
+		
+		2) from client machine connect to the server
+			connect to the docker host
+			define the docker secrets (from local file or some other method)
+			clone the repo, run the preparation script
+			run the build/deploy script
+			
+	
+	
+	
+	
+	7/30/25:
+		
+		client:
+			plink - bash: create the directory, clone the repository
+			plink - bash with stdin: set the docker secrets (set_secrets.sh within repo)
+				do this separately even though it could be done when the docker commands are run and built (that would cause the secrets to be in bash variables longer than they need to be)
+				
+			plink - bash: prepare_docker_project
+				ssh - docker-user: 
+					copy code files to docker folder 
+					build/run the image using docker stack
+				delete the temporary folders
+				
+	
+		Other improvements:
+			separate bash scripts for dev/test/prod instead of typing it in?
+			Also, user needs to specify the SSH username in a custom .sh config file?
+
+			_ ** add the cloning to the Dockerfile to simplify the deployment
+	
+	
+	
+			_ folder path on the server should be /tmp/staff-info-app
+				subfolders: repository, docker
+					docker will contain the files that will be used to transfer to docker-user and then build/run the image
+					
+					a folder convention like this will keep the directory structure separate from any other temporary project folders and allow it to be run for any SSH user with sudo rights to docker-user
+					
+					
+					if docker-user runs the scripts in the repo folder then the docker_prep_folder_path will point to the correct location so the rsync will work
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	CAC setup for openSSH:
+	
+		Start-Service ssh-agent
+	
+		ssh-add -s "C:\Program Files\HID Global\ActivClient\acpkcs211.dll"
+	
+	
+	
+	To do:
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	_ documentation
 		deployment within docker host
 			git clone --branch branch_v1.2 git@picgitlab.nmfs.local:omi-apps/staff-info-app.git

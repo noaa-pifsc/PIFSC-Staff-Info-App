@@ -19,46 +19,43 @@ function prepare_docker_prep_folder ()
 	echo "prepare the docker preparation folder"
 
 	# create the temporary folder that the repos will be copied to
-	mkdir -p $DOCKER_REPO_FOLDER_PATH/tmp
+	mkdir -p $DOCKER_PREP_FOLDER_PATH/tmp
 
 	echo "create the web folder structure"
-	mkdir $DOCKER_REPO_FOLDER_PATH/www
+	mkdir $DOCKER_PREP_FOLDER_PATH/www
 
 	echo "create the backend folder structure"
-	mkdir -p $DOCKER_REPO_FOLDER_PATH/backend/$SIA_PROJECT_FOLDER
-	mkdir $DOCKER_REPO_FOLDER_PATH/backend/$SHARED_LIBRARY_FOLDER
+	mkdir -p $DOCKER_PREP_FOLDER_PATH/backend/$SIA_PROJECT_FOLDER
+	mkdir $DOCKER_PREP_FOLDER_PATH/backend/$SHARED_LIBRARY_FOLDER
 
 
 
 
 	echo "clone the project dependencies"
-	git clone $php_lib_git_url $DOCKER_REPO_FOLDER_PATH/tmp/$SHARED_LIBRARY_FOLDER
+	git clone $php_lib_git_url $DOCKER_PREP_FOLDER_PATH/tmp/$SHARED_LIBRARY_FOLDER
 
 	# copy the php-shared-library (oracle .php files only)
 	echo "copy the php-shared-library backend directory"
-	cp -r $DOCKER_REPO_FOLDER_PATH/tmp/$SHARED_LIBRARY_FOLDER/oracle*.php  $DOCKER_REPO_FOLDER_PATH/backend/$SHARED_LIBRARY_FOLDER
+	cp -r $DOCKER_PREP_FOLDER_PATH/tmp/$SHARED_LIBRARY_FOLDER/oracle*.php  $DOCKER_PREP_FOLDER_PATH/backend/$SHARED_LIBRARY_FOLDER
 
 	# remove the working directories where the files in the export folder were prepared from
 	echo "remove all temporary files"
-	rm -rf $DOCKER_REPO_FOLDER_PATH/tmp
+	rm -rf $DOCKER_PREP_FOLDER_PATH/tmp
 
 
 	echo "copy source code/docker files for the SIA from the current repo"
 
 	## copy the files in the docker directory
-	cp -R ../* $DOCKER_REPO_FOLDER_PATH
+	cp -R ../* $DOCKER_PREP_FOLDER_PATH
 
 	## remove the unnecessary deployment_scripts files
-	rm -rf $DOCKER_REPO_FOLDER_PATH/deployment_scripts/sh_script_config
-	rm $DOCKER_REPO_FOLDER_PATH/deployment_scripts/prepare_docker_project.sh
-	rm $DOCKER_REPO_FOLDER_PATH/deployment_scripts/oci_server_deploy_project.sh
-	rm $DOCKER_REPO_FOLDER_PATH/deployment_scripts/oci_server_prepare_project.sh
-
+	rm -rf $DOCKER_PREP_FOLDER_PATH/deployment_scripts
+	
 	# copy the source files to the www directory:
-	cp -R ../../src/frontend/* $DOCKER_REPO_FOLDER_PATH/www 
+	cp -R ../../src/frontend/* $DOCKER_PREP_FOLDER_PATH/www 
 
 	# copy the backend source files to the backend/$project_folder directory:
-	cp -R ../../src/backend/* $DOCKER_REPO_FOLDER_PATH/backend/$sia_project_folder
+	cp -R ../../src/backend/* $DOCKER_PREP_FOLDER_PATH/backend/$SIA_PROJECT_FOLDER
 
 	# grant permissions so docker-user can copy/execute files from the repo/docker preparation folders
 	chmod -R 755 "$DOCKER_SOURCE_DIR"
