@@ -13,7 +13,7 @@ source ./functions/host_functions.sh
 initialize_docker_env_var "$0"
 
 # define the absolute path to the deployment script that will run as docker-user.
-SCRIPT_PATH="${DOCKER_REPO_FOLDER_PATH}/docker/deployment_scripts/host_scripts/docker_build_run.sh"
+DEPLOY_SCRIPT="${DOCKER_REPO_FOLDER_PATH}/docker/deployment_scripts/host_scripts/docker_build_run.sh"
 
 # run the docker deployment script as docker-user
 sudo su - docker-user <<EOF
