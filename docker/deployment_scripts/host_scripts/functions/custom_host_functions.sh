@@ -56,7 +56,7 @@ function prepare_docker_prep_folder ()
 	# copy the backend source files to the backend/$project_folder directory:
 	cp -R $DOCKER_REPO_FOLDER_PATH/src/backend/* $DOCKER_PREP_FOLDER_PATH/backend/$SIA_PROJECT_FOLDER
 
-	# grant permissions so docker-user can copy/execute files from the repo/docker preparation folders
+	# grant permissions so $DOCKER_ACCOUNT_NAME can copy/execute files from the repo/docker preparation folders
 	chmod -R 755 "$DOCKER_SOURCE_DIR"
 
 }

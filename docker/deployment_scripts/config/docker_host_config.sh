@@ -1,5 +1,7 @@
 #! /bin/sh
 
+# docker user account
+DOCKER_ACCOUNT_NAME="docker-user"
 
 # define the project folder name
 SIA_PROJECT_FOLDER="staff-info-app"
@@ -19,7 +21,7 @@ DOCKER_PREP_FOLDER_PATH="$DOCKER_SOURCE_DIR/docker"
 PHP_LIB_GIT_URL="--branch branch_v1.16 git@picgitlab.nmfs.local:centralized-data-tools/php-shared-library.git"
 
 
-DOCKER_TARGET_DIR="~/containers/staff-directory"
+DOCKER_TARGET_DIR="/home/$DOCKER_ACCOUNT_NAME/containers/staff-directory"
 
 DOCKER_GIT_URL="--branch branch_v1.2_docker_secrets git@picgitlab.nmfs.local:omi-apps/staff-info-app.git"
 

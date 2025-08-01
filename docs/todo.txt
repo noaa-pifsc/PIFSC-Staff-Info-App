@@ -127,6 +127,9 @@ near term:
 				
 				_ Rearrange the repository so src is in the docker folder so it is easier to prepare the docker project
 
+				_ make docker-user a variable so it can be run with other accounts when the docker configuration changes? YES
+				
+
 
 			separate bash scripts for dev/test/prod instead of typing it in?
 			Also, user needs to specify the SSH username in a custom .sh config file?
