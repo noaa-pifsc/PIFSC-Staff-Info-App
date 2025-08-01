@@ -118,10 +118,12 @@ near term:
 		Other improvements:
 			separate bash scripts for dev/test/prod instead of typing it in?
 			Also, user needs to specify the SSH username in a custom .sh config file?
+				No, do this with script parameters env: dev, username: XX
 
 			_ ** add the cloning to the Dockerfile to simplify the deployment
 	
-	
+			_ update the script to grant only docker-user read/execute access to the repo files
+
 	
 			_ folder path on the server should be /tmp/staff-info-app
 				subfolders: repository, docker
@@ -151,7 +153,6 @@ near term:
 	
 	To do:
 		
-	
 	
 	
 	
