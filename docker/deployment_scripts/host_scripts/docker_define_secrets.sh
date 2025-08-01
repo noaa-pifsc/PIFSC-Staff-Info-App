@@ -21,6 +21,10 @@ initialize_docker_env_var "$0"
 parse_config_data
 
 
+# stop the container if it's running so the secrets can be defined/updated
+docker stack rm pifsc/staff-info-app
+
+
 # set the docker secrets for the database information based on the parsed configuration data from STDIN
 set_db_secrets
 

@@ -77,8 +77,6 @@ function initialize_run_docker_project ()
 	# switch to the docker project's source directory
 	cd "$DOCKER_TARGET_DIR"
 
-	# stop the running container
-	docker stack rm pifsc/staff-info-app
 
 	# remove the files in the staff-directory container directory
 	rm -rf "$DOCKER_TARGET_DIR"/*
