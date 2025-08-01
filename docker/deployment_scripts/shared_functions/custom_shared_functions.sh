@@ -26,8 +26,6 @@ function parse_config_data()
 # this function accepts no parameters
 function encode_config_data ()
 {
-	echo "running encode_config_data()"
-	
 	printf 'DB_USERNAME=%s\n' "$DB_USERNAME"
 	printf 'DB_PASSWORD=%s\n' "$DB_PASSWORD"
 }
@@ -36,9 +34,13 @@ function encode_config_data ()
 # function to unset bash variables specified by STDIN:
 function unset_config_variables()
 {
+	echo "The value of DB_USERNAME before it is unset is: $DB_USERNAME"
+
 	echo "running unset_config_variables()"
 
-	echo "The value of DB_USERNAME is: $DB_USERNAME"
 
 	unset DB_USERNAME, DB_PASSWORD
+
+	echo "after unsetting it, the value of DB_USERNAME is: $DB_USERNAME"
+
 }
