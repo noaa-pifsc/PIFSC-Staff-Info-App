@@ -9,6 +9,7 @@ echo "running define secrets script"
 source ../shared_functions/shared_functions.sh
 source ../shared_functions/custom_shared_functions.sh
 source ./functions/host_functions.sh
+source ./functions/custom_host_functions.sh
 
 # initialize the docker environment variables
 initialize_docker_env_var "$0"
