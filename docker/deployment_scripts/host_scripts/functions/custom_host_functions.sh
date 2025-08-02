@@ -98,8 +98,6 @@ function initialize_run_docker_project ()
 # function to set the database secrets from bash variables:
 function set_db_secrets ()
 {
-	echo "running set_db_secrets()"
-
 	#set the database username secret value
 	create_secret "sia_db_username_secret" "$DB_USERNAME"
 

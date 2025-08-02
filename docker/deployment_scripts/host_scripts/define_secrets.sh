@@ -23,8 +23,6 @@ parse_config_data
 # encode the configuration variable data:
 CONFIG_DATA=$(encode_config_data)
 
-echo "$CONFIG_DATA"
-
 # unset bash variables specified by STDIN
 unset_config_variables
 
