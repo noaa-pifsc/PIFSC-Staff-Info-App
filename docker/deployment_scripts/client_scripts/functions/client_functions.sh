@@ -53,14 +53,14 @@ function prepare_execute_deployment_script ()
 
 
 	# define the secrets and specify the bash variable values as stdin
-	exec_remote_cmd_with_stdin "$CONFIG_DATA" "bash $DOCKER_REPO_FOLDER_PATH/docker/deployment_scripts/host_scripts/define_secrets.sh"
+	exec_remote_cmd_with_stdin "$CONFIG_DATA" "bash $DOCKER_SOURCE_DIR/docker/deployment_scripts/host_scripts/define_secrets.sh"
 
 	# unset the CONFIG_DATA now that the plink call has completed
 	unset CONFIG_DATA
 
 
 	# execute the deployment/upgrade script on the host server and pass the DB_SERVICE_NAME and DB_HOST bash variable values
-	exec_remote_cmd "DB_HOST=\"$DB_HOST\" DB_SERVICE_NAME=\"$DB_SERVICE_NAME\" bash $DOCKER_REPO_FOLDER_PATH/docker/deployment_scripts/host_scripts/initiate_docker.sh"
+	exec_remote_cmd "DB_HOST=\"$DB_HOST\" DB_SERVICE_NAME=\"$DB_SERVICE_NAME\" bash $DOCKER_SOURCE_DIR/docker/deployment_scripts/host_scripts/initiate_docker.sh"
 
 	echo "The $CURRENT_SCRIPT_NAME script finished executing"
 
@@ -145,11 +145,11 @@ function prepare_docker_host ()
 {
 	echo "create the directory path ('$DOCKER_SOURCE_DIR') for the initial deployment scripts"
 
-	# remove the temporary directory, create the directory path ('$DOCKER_SOURCE_DIR') for the initial deployment scripts, clone the repository, set permissions to allow read/execution of repo
-	exec_remote_cmd "rm -rf '$DOCKER_SOURCE_DIR' && mkdir -p '$DOCKER_SOURCE_DIR' && git clone $DOCKER_GIT_URL $DOCKER_REPO_FOLDER_PATH && chmod -R 755 $DOCKER_SOURCE_DIR"
+	# remove the temporary directory, create the directory path ('$DOCKER_SOURCE_DIR') for the initial deployment scripts, and clone the repository
+	exec_remote_cmd "rm -rf '$DOCKER_SOURCE_DIR' && mkdir -p '$DOCKER_SOURCE_DIR' && git clone $DOCKER_GIT_URL $DOCKER_SOURCE_DIR"
 	
-	# prepare the docker project (clone shared library and copy files into docker preparation folder:
-	exec_remote_cmd "bash $DOCKER_REPO_FOLDER_PATH/docker/deployment_scripts/host_scripts/prepare_docker_host.sh"
+	# prepare the docker project (clone shared library and copy files into designated folder in project repository):
+	exec_remote_cmd "bash $DOCKER_SOURCE_DIR/docker/deployment_scripts/host_scripts/prepare_docker_host.sh"
 
 }
 

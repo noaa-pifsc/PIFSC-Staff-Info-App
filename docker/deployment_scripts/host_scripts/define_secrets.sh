@@ -27,7 +27,7 @@ CONFIG_DATA=$(encode_config_data)
 unset_config_variables
 
 # define the absolute path to the deployment script that will run as $DOCKER_ACCOUNT_NAME.
-SCRIPT_PATH="${DOCKER_REPO_FOLDER_PATH}/docker/deployment_scripts/host_scripts/docker_define_secrets.sh"
+SCRIPT_PATH="${DOCKER_SOURCE_DIR}/docker/deployment_scripts/host_scripts/docker_define_secrets.sh"
 
 # Run the deployment script and pass in the key/value pairs stored in $CONFIG_DATA to stdin.
 # The outer heredoc (<<EOF) sends commands to 'sudo su - $DOCKER_ACCOUNT_NAME'.

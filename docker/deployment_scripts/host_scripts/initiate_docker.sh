@@ -17,7 +17,7 @@ echo "The value of DB_HOST is: $DB_HOST"
 echo "The value of DB_SERVICE_NAME is: $DB_SERVICE_NAME"
 
 # define the absolute path to the deployment script that will run as $DOCKER_ACCOUNT_NAME.
-DEPLOY_SCRIPT="${DOCKER_REPO_FOLDER_PATH}/docker/deployment_scripts/host_scripts/docker_build_run.sh"
+DEPLOY_SCRIPT="${DOCKER_SOURCE_DIR}/docker/deployment_scripts/host_scripts/docker_build_run.sh"
 
 # run the docker deployment script as $DOCKER_ACCOUNT_NAME
 sudo su - "${DOCKER_ACCOUNT_NAME}" <<EOF

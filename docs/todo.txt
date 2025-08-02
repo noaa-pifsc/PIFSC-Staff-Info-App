@@ -72,8 +72,6 @@ near term:
 
 		
 		
-	dev setup
-		docker swarm init
 		
 
 
@@ -115,6 +113,30 @@ near term:
 				delete the temporary folders
 				
 	
+	X pruning:
+		X We don't actually need to drop any folders, just grab the files we need
+
+	
+	_ remove the preparation script altogether, once it's cloned that's all we need.  
+		
+	_ clone and pull the files from php-shared-library within the dockerfile?
+		As long as it doesn't require separate ssh keys for docker-user
+	
+
+	_ ** have a small script clone into a tmp subdirectory, then copy the necessary files into the parent directory, then delete the temp directory
+		_ this can completely replace the preparation step
+		
+	_ update folder structure to just have the repository folder diagram with a brief description of how the PHP shared library clone happens
+		
+		
+
+
+
+	
+	development docker-compose.yml file
+		map docker/src/frontend to /var/www/html 
+		map docker/src/backend to /usr/arc/app/staff-info-app
+
 	
 	
 	
@@ -130,7 +152,31 @@ near term:
 				_ make docker-user a variable so it can be run with other accounts when the docker configuration changes? YES
 				
 			_ document the dependency on PHP shared library and the version it was last tested with
+			
+			_ document the required scripts in 
+				docker/secrets 
+				docker/deployment_scripts/deploy_config.x.sh
+				
+				_ provide a template for how the scripts should look?
+					yes
 
+				dev setup
+					docker swarm init
+					
+			_ create separate automated processes
+				local docker desktop deployment
+					run the preparation script to clone the repo somewhere and run the script to prune the unnecessary files/folders and then run the docker project
+						maybe have it bind the working directory too?
+					
+				docker host deployment
+					** the current collection of scripts
+					
+				** try to reuse scripts as much as possible
+					//just include the function definitions and then call them from another script
+
+				
+
+			
 
 			separate bash scripts for dev/test/prod instead of typing it in?
 			Also, user needs to specify the SSH username in a custom .sh config file?
@@ -154,7 +200,7 @@ near term:
 					
 					if docker-user runs the scripts in the repo folder then the docker_prep_folder_path will point to the correct location so the rsync will work
 
-
+			
 	
 	
 	

@@ -18,43 +18,14 @@ function prepare_docker_prep_folder ()
 {
 	echo "prepare the docker preparation folder"
 
-	# create the temporary folder that the repos will be copied to
-	mkdir -p $DOCKER_PREP_FOLDER_PATH/tmp
-
-	echo "create the web folder structure"
-	mkdir $DOCKER_PREP_FOLDER_PATH/www
-
-	echo "create the backend folder structure"
-	mkdir -p $DOCKER_PREP_FOLDER_PATH/backend/$SIA_PROJECT_FOLDER
-	mkdir $DOCKER_PREP_FOLDER_PATH/backend/$SHARED_LIBRARY_FOLDER
-
-
-
-
 	echo "clone the project dependencies"
-	git clone $PHP_LIB_GIT_URL $DOCKER_PREP_FOLDER_PATH/tmp/$SHARED_LIBRARY_FOLDER
+	git clone $PHP_LIB_GIT_URL $DOCKER_SOURCE_DIR/docker/src/backend/dependencies/tmp
 
-	# copy the php-shared-library (oracle .php files only)
-	echo "copy the php-shared-library backend directory"
-	cp -r $DOCKER_PREP_FOLDER_PATH/tmp/$SHARED_LIBRARY_FOLDER/oracle*.php  $DOCKER_PREP_FOLDER_PATH/backend/$SHARED_LIBRARY_FOLDER
+	# copy the required PHP shared library files into the dependencies directory
+	cp -r $DOCKER_SOURCE_DIR/docker/src/backend/dependencies/tmp/oracle*.php $DOCKER_SOURCE_DIR/docker/src/backend/dependencies
 
-	# remove the working directories where the files in the export folder were prepared from
-	echo "remove all temporary files"
-	rm -rf $DOCKER_PREP_FOLDER_PATH/tmp
-
-	echo "copy source code/docker files for the SIA from the current repo"
-
-	## copy the files in the docker directory
-	cp -R $DOCKER_REPO_FOLDER_PATH/docker/* $DOCKER_PREP_FOLDER_PATH
-
-	## remove the unnecessary deployment_scripts files
-	rm -rf $DOCKER_PREP_FOLDER_PATH/deployment_scripts
-	
-	# copy the source files to the www directory:
-	cp -R $DOCKER_REPO_FOLDER_PATH/src/frontend/* $DOCKER_PREP_FOLDER_PATH/www 
-
-	# copy the backend source files to the backend/$project_folder directory:
-	cp -R $DOCKER_REPO_FOLDER_PATH/src/backend/* $DOCKER_PREP_FOLDER_PATH/backend/$SIA_PROJECT_FOLDER
+	# remove the temporary directory
+	rm -rf $DOCKER_SOURCE_DIR/docker/src/backend/dependencies/tmp
 
 	# grant permissions so $DOCKER_ACCOUNT_NAME can copy/execute files from the repo/docker preparation folders
 	chmod -R 755 "$DOCKER_SOURCE_DIR"
@@ -82,7 +53,7 @@ function initialize_run_docker_project ()
 	rm -rf "$DOCKER_TARGET_DIR"/*
 
 	# copy the docker files from the preparation folder to the docker target source directory
-	rsync -aP "$DOCKER_PREP_FOLDER_PATH"/* "$DOCKER_TARGET_DIR"
+	rsync -aP "$DOCKER_SOURCE_DIR"/docker/* "$DOCKER_TARGET_DIR"
 
 	# build the docker container
 	docker build -t pifsc/staff-info-app:latest -f ./Dockerfile .

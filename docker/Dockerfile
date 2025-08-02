@@ -60,8 +60,8 @@ RUN sed -i 's/Options Indexes MultiViews FollowSymlinks/Options MultiViews Follo
 COPY ./config/php/*.ini /etc/php.d/
 
 # copy the application source files:
-COPY ./www/ /var/www/html/
-COPY ./backend/ /usr/src/app
+COPY ./src/frontend/ /var/www/html/
+COPY ./src/backend/ /usr/src/app/includes
 
 # Set WORKDIR to webroot to set default context for remaining commands
 WORKDIR /var/www/html

@@ -31,7 +31,7 @@ The Staff Information Application (SIA) is a web app that provides access to the
 The Docker image is built from the official Oracle InstantClient on OracleLinux 8 [Docker image](https://github.com/oracle/docker-images/blob/main/OracleInstantClient/oraclelinux8/21/Dockerfile). Apache and PHP are installed on the base image.
 
 ## Implementation
--   There are two PHP pages that are accessed directly via web browser, one for the staff directory ([staff-directory.php](../src/staff-directory.php)) and one for the organization chart ([org-chart.php](../src/org-chart.php))
+-   There are two PHP pages that are accessed directly via web browser, one for the staff directory ([staff-directory.php](../docker/src/staff-directory.php)) and one for the organization chart ([org-chart.php](../docker/src/org-chart.php))
 -   ### Shared Elements
     -   There is a navigation menu at the top of both web pages that provides links to the two pages, the link for the current page is grayed out and the corresponding link is not enabled
 -   ### Staff Directory
@@ -50,13 +50,13 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
 -   The [php](../docker/config/php) folder contains the PHP configuration 
 -   The [deployment_scripts](../docker/deployment_scripts) folder contains scripts to prepare and deploy the docker project
 -   The [docs](../docs) folder contains documentation for the project
--   The [src](../src) folder contains all source code for the project
--   The [backend](../src/backend) folder contains backend PHP include files for the project
--   The [frontend](../src/frontend) folder contains the PHP web pages that are directly requested via web browser
-    -   The [img](../src/frontend/img) folder contains the client-side images used in the web pages
-    -   The [js](../src/frontend/js) folder contains the client-side JavaScript code used in the web pages
-    -   The [style](../src/frontend/style) folder contains the client-side css used in the web pages
-    -   The [webfonts](../src/frontend/webfonts) folder contains the client-side web fonts used by the css in the web pages
+-   The [src](../docker/src) folder contains all source code for the project
+-   The [backend](../docker/src/backend) folder contains backend PHP include files for the project
+-   The [frontend](../docker/src/frontend) folder contains the PHP web pages that are directly requested via web browser
+    -   The [img](../docker/src/frontend/img) folder contains the client-side images used in the web pages
+    -   The [js](../docker/src/frontend/js) folder contains the client-side JavaScript code used in the web pages
+    -   The [style](../docker/src/frontend/style) folder contains the client-side css used in the web pages
+    -   The [webfonts](../docker/src/frontend/webfonts) folder contains the client-side web fonts used by the css in the web pages
 -   #### Repository Folder Diagram:
     ```
     .
@@ -67,16 +67,17 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
     |    |    |--- httpd
     |    |    |--- php
     |    |--- deployment_scripts
+    |    |--- src 
+    |    |    |--- backend
+    |    |    |    |--- dependencies
+    |    |    |    |--- *.php
+    |    |    |--- frontend
+    |    |    |    |--- *.php
+    |    |    |    |--- img
+    |    |    |    |--- js
+    |    |    |    |--- style
+    |    |    |    |--- webfonts
     |--- docs
-    |--- src 
-    |    |--- backend
-    |    |    |--- *.php
-    |    |--- frontend
-    |    |    |--- *.php
-    |    |    |--- img
-    |    |    |--- js
-    |    |    |--- style
-    |    |    |--- webfonts
     ```
 
 ## Setup
@@ -108,28 +109,34 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
                 -   #### PHP Shared Library:
                     -   The backend PHP shared library .php files needed for oracle database interactions are copied to backend/php-shared-library folder
                 -   #### SIA:
-                    -   The backend SIA .php files are copied from the [backend](../src/backend) repository folder to backend/staff-info-app folder in the prepared project folder structure
-                    -   The frontend SIA .php files are copied from the [frontent](../src/frontend) repository folder to the www folder in the prepared project folder structure
-                    -   The frontend SIA client-side folders/files are copied from the [frontent](../src/frontend) repository folder to the corresponding www folder's subdirectories in the prepared project folder structure
+                    -   The backend SIA .php files are copied from the [backend](../docker/src/backend) repository folder to backend/staff-info-app folder in the prepared project folder structure
+                    -   The frontend SIA .php files are copied from the [frontend](../docker/src/frontend) repository folder to the www folder in the prepared project folder structure
+                    -   The frontend SIA client-side folders/files are copied from the [frontent](../docker/src/frontend) repository folder to the corresponding www folder's subdirectories in the prepared project folder structure
                     -   The [deployment_scripts](../docker/deployment_scripts) repository folder/files are copied to the deployment_scripts folder in the prepared project folder structure
                     -   The [config](../docker/config) repository folder/files are copied to the config folder in the prepared project folder structure
         -   #### Prepared Folder Diagram:
-            ```
-            .
-            |--- backend
-            |    |--- staff-info-app
-            |    |--- php-shared-library
-            |--- config
-            |    |--- httpd
-            |    |--- php
-            |--- deployment_scripts
-            |--- www 
-            |    |--- img
-            |    |--- js
-            |    |--- style
-            |    |--- webfonts
-            |    |--- *.php
-            ```
+        ```
+        .
+        |--- docker
+        |    |--- docker-compose.yml
+        |    |--- Dockerfile
+        |    |--- config
+        |    |    |--- httpd
+        |    |    |--- php
+        |    |--- deployment_scripts
+        |    |--- src 
+        |    |    |--- backend
+        |    |    |    |--- *.php
+        |    |    |    |--- dependencies
+        |    |    |    |    |--- *.php
+        |    |    |--- frontend
+        |    |    |    |--- *.php
+        |    |    |    |--- img
+        |    |    |    |--- js
+        |    |    |    |--- style
+        |    |    |    |--- webfonts
+        |--- docs
+        ```
     -   #### Docker Deployment
         -   #### Docker folder structure
             -   When the docker image is built and the container is run it will copy files from the prepared directory into the docker container:
@@ -147,8 +154,9 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
             |    |--- webfonts
             |    |--- *.php
             |--- /usr/src/app
-            |    |--- staff-info-app
-            |    |--- php-shared-library
+            |    |--- *.php
+            |    |--- dependencies
+            |    |    |--- *.php
             |--- /etc/php.d
             |--- /etc/httpd/conf.d
             ```

@@ -1,7 +1,7 @@
 <?php
  
 	//include the php file that defines the includes directory path:
-	include("/usr/src/app/staff-info-app/include_path.php");
+	include("/usr/src/app/include_path.php");
 
 	//include the php file that connects to the Oracle database
 	include(PROJECT_FOLDER_PATH."staff_directory_class.php");
