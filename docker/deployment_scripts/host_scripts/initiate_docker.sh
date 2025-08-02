@@ -17,9 +17,14 @@ DEPLOY_SCRIPT="${DOCKER_REPO_FOLDER_PATH}/docker/deployment_scripts/host_scripts
 
 # run the docker deployment script as $DOCKER_ACCOUNT_NAME
 sudo su - "${DOCKER_ACCOUNT_NAME}" <<EOF
+#!/bin/bash
 echo "Running deployment script as user: \$(whoami)"
+# set the environment variable values for the DB host
+export DB_HOST="$DB_HOST"
+export DB_SERVICE_NAME="$DB_SERVICE_NAME"
+# run the deployment script
 bash ${DEPLOY_SCRIPT}
 EOF
 
 # clean up project folders/files that were used to build and run the docker container
-rm -rf "$DOCKER_SOURCE_DIR"
+# rm -rf "$DOCKER_SOURCE_DIR"

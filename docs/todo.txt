@@ -129,6 +129,7 @@ near term:
 
 				_ make docker-user a variable so it can be run with other accounts when the docker configuration changes? YES
 				
+			_ document the dependency on PHP shared library and the version it was last tested with
 
 
 			separate bash scripts for dev/test/prod instead of typing it in?

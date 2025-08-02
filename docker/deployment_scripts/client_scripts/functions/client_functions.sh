@@ -38,6 +38,11 @@ function prepare_execute_deployment_script ()
 	# load the bash variables for the runtime configuration
 	source ../config/deploy_config.$ENV_NAME.sh
 	source ../config/docker_host_config.sh
+	
+	# Make variables available to child processes (plink)
+	export DB_HOST
+	export DB_SERVICE_NAME
+	
 
 	# Prepare the docker host by creating directories and cloning the repository
 	prepare_docker_host
