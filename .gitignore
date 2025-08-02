@@ -1,5 +1,7 @@
-
 /docker/deployment_script_logs/*.log
 /docker/secrets/dev/secrets.sh
-/docker/secrets/qa/secrets.sh
+/docker/secrets/test/secrets.sh
 /docker/secrets/prod/secrets.sh
+/docker/deployment_scripts/config/deploy_config.test.sh
+/docker/deployment_scripts/config/deploy_config.dev.sh
+/docker/deployment_scripts/config/deploy_config.prod.sh

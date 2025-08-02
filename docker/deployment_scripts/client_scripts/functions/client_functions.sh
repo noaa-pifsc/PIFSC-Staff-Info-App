@@ -19,7 +19,7 @@ function initialize_deployment_script
 
 
 # this function prepares and executes the client deployment scripts
-# this function accepts 2 parameters: the environment name (dev, qa, prod), and the ssh username used to connect to the remote docker host
+# this function accepts 2 parameters: the environment name (dev, test, prod), and the ssh username used to connect to the remote docker host
 # Usage:
 #   prepare_deployment_script "$1" "$2"
 function prepare_execute_deployment_script ()
@@ -71,7 +71,7 @@ function prepare_execute_deployment_script ()
 
 
 # function that initializes the ENV_NAME and DOCKER_USERNAME variables for use in the script.
-# this function accepts two optional parameters: the environment name (dev, qa, prod) and the ssh username used to connect to the remote docker host
+# this function accepts two optional parameters: the environment name (dev, test, prod) and the ssh username used to connect to the remote docker host
 # Usage:
 #   set_env_and_user "$1" "$2"
 #   or with no arguments to trigger prompts:
@@ -88,7 +88,7 @@ function set_env_and_user_vars() {
   else
 
 	# prompt the user for an environment value
-	read -rp "Enter environment (dev, qa, prod): " ENV_NAME < /dev/tty
+	read -rp "Enter environment (dev, test, prod): " ENV_NAME < /dev/tty
 
 # 	echo "The value of ENV_NAME is: $ENV_NAME"
 
@@ -96,9 +96,9 @@ function set_env_and_user_vars() {
 
   # Validate that ENV_NAME is one of the accepted values
   case "$ENV_NAME" in
-    dev|qa|prod) ;;
+    dev|test|prod) ;;
     *)
-      echo "ERROR: Invalid environment name '$ENV_NAME'. Must be one of: dev, qa, prod."
+      echo "ERROR: Invalid environment name '$ENV_NAME'. Must be one of: dev, test, prod."
       exit 1
       ;;
   esac
