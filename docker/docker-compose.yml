@@ -1,9 +1,6 @@
 services:
   staff-info-app:
-    build:
-      context: .
     image: pifsc/staff-info-app:latest
-    container_name: staff-info-app
     restart: always
     ports:
       - "0.0.0.0:5006:80"
@@ -12,3 +9,24 @@ services:
       options:
         max-size: "100m"
         max-file: "1"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_SERVICE_NAME: ${DB_SERVICE_NAME}
+      DB_USERNAME_FILE: /run/secrets/sia_db_username_secret
+      DB_PASSWORD_FILE: /run/secrets/sia_db_password_secret
+    secrets:
+      - sia_db_username_secret
+      - sia_db_password_secret
+    deploy:
+      replicas: 1 
+      restart_policy:
+        condition: on-failure # Restart if the container crashes or exits with an error
+        delay: 5s             # Wait 5 seconds before attempting a restart
+        max_attempts: 3       # Try to restart up to 3 times
+        window: 120s          # If it fails multiple times within 120 seconds, stop trying
+
+secrets:
+  sia_db_username_secret:
+    external: true
+  sia_db_password_secret:
+    external: true

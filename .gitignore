@@ -1,1 +1,5 @@
-/src/backend/db_credentials.php
+
+/docker/deployment_script_logs/*.log
+/docker/secrets/dev/secrets.sh
+/docker/secrets/qav/secrets.sh
+/docker/secrets/prod/secrets.sh
