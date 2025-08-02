@@ -64,9 +64,8 @@ function prepare_execute_deployment_script ()
 	unset CONFIG_DATA
 
 
-	# execute the deployment/upgrade script on the host server
-	exec_remote_cmd "bash $DOCKER_REPO_FOLDER_PATH/docker/deployment_scripts/host_scripts/initiate_docker.sh"
-
+	# execute the deployment/upgrade script on the host server and pass the DB_SERVICE_NAME and DB_HOST bash variable values
+	exec_remote_cmd "DB_HOST=\"$DB_HOST\" DB_SERVICE_NAME=\"$DB_SERVICE_NAME\" bash $DOCKER_REPO_FOLDER_PATH/docker/deployment_scripts/host_scripts/initiate_docker.sh"
 
 	echo "The $CURRENT_SCRIPT_NAME script finished executing"
 
