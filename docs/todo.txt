@@ -116,6 +116,7 @@ near term:
 	X pruning:
 		X We don't actually need to drop any folders, just grab the files we need
 
+	_ test that if we delete the docker secrets they are set correctly
 	
 	_ remove the preparation script altogether, once it's cloned that's all we need.  
 		

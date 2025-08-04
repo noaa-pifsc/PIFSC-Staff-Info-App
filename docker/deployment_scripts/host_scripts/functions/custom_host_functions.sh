@@ -7,10 +7,10 @@
 function prepare_docker_target_dir ()
 {
 	# sync files to docker source directory:
-	echo "Copy the ${DOCKER_PREP_FOLDER_PATH} source files to the destination directory: ${DOCKER_TARGET_DIR} so they can used to build/deploy container"
+	echo "Copy the ${DOCKER_SOURCE_DIR}/docker source files to the destination directory: ${DOCKER_TARGET_DIR} so they can used to build/deploy container"
 
 	# copy the docker files to the root $DOCKER_TARGET_DIR
-	rsync -a "$DOCKER_PREP_FOLDER_PATH"/* "$DOCKER_TARGET_DIR"
+	rsync -a "$DOCKER_SOURCE_DIR"/docker/* "$DOCKER_TARGET_DIR"
 }
 
 # function to prepare the docker preparation folder that will be copied to 
