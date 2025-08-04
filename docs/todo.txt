@@ -129,7 +129,10 @@ near term:
 		
 	_ update folder structure to just have the repository folder diagram with a brief description of how the PHP shared library clone happens
 		
-		
+	
+	
+	_ should we create a copy of the repo on the local machine or just build and run directly from the working copy?
+		X Do it from the working copy
 
 
 
@@ -140,6 +143,18 @@ near term:
 
 	
 	
+	3 scenarios:
+		- docker host using docker secrets and swarm (docker stack deploy)
+		- docker desktop using docker secrets and swarm (docker stack deploy)
+		- docker desktop using environment variables and local mounted directories (docker compose build/run)
+	
+		_ how do we differentiate between the different scenarios?
+			client_deploy_container_to_host.sh for docker host deployments
+			client_deploy_container_to_local.sh for local docker desktop deployments
+				first parameter is 1 for local development with mounted directories to allow for rapid application development, first parameter is 0 for local testing with docker secrets
+	
+		_ document the runtime arguments for the different scenarios
+			
 	
 	
 		Other improvements:
@@ -187,7 +202,10 @@ near term:
 				_ document usage, if it's not specified as parameters the user will be prompted for values
 
 
-			_ ** add the cloning to the Dockerfile to simplify the deployment
+			_ ** add the cloning to the Dockerfile to simplify the deployment (requires additional setup since docker-user would need to be able to have SSH keys to the repo)
+				Maybe create an OCI docker host account and grant SSH keys to it?
+				
+			
 	
 			_ update the script to grant only docker-user read/execute access to the repo files
 

@@ -11,8 +11,12 @@ function deploy_container_locally ()
 	# save/prompt for environment name and SSH username
 	set_env_var "$2" 
 
+	# load the bash variables for the runtime configuration
+	source ../config/deploy_config.$ENV_NAME.sh
 	
-
+	# load the bash database variables as environment variables:
+	export DB_HOST
+	export DB_SERVICE_NAME
 
 	# clone the project dependencies into the current working copy where the script was executed from:
 	git clone $PHP_LIB_GIT_URL ../../src/backend/dependencies/tmp
@@ -26,6 +30,8 @@ function deploy_container_locally ()
 	# check if this is a development deployment or not:
     if [[ $IS_DEV_DEPLOYMENT -eq 1 ]]; then
 
+		echo "deploy the container with docker compose for development purposes"
+
 		# change directory into the docker folder that contains the Dockerfile and .yml files
 		cd ../../
 
@@ -37,6 +43,8 @@ function deploy_container_locally ()
 
     else
 		# use docker stack and secrets to test if the code is working for a secure docker host deployment
+
+		echo "deploy the container with docker swarm to test docker secrets"
 
 		# stop the container if it's running so the secrets can be defined/updated
 		docker stack rm SIA_stack
