@@ -32,6 +32,12 @@ function deploy_container_locally ()
 
 		echo "deploy the container with docker compose for development purposes"
 
+		# load the oracle credentials as environment variables for local development purposes
+		source ../../secrets/$ENV_NAME/secrets.sh
+		export DB_USERNAME
+		export DB_PASSWORD
+
+
 		# change directory into the docker folder that contains the Dockerfile and .yml files
 		cd ../../
 

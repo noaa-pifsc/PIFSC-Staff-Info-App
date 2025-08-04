@@ -1,6 +1,9 @@
 services:
   staff-info-app:
+    build:
+      context: .
     image: pifsc/staff-info-app:latest
+    container_name: staff-info-app
     ports:
       - "0.0.0.0:5006:80"
     logging:
@@ -11,6 +14,8 @@ services:
     environment:
       DB_HOST: ${DB_HOST}
       DB_SERVICE_NAME: ${DB_SERVICE_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - "/tmp/staff-info-app/docker/src/frontend:/var/www/html"
-      - "/tmp/staff-info-app/docker/src/backend:/usr/src/app"
+      - "./src/frontend:/var/www/html"
+      - "./src/backend:/usr/src/app"
