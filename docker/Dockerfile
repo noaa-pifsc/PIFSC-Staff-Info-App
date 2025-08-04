@@ -41,10 +41,11 @@ RUN dnf -y install oracle-instantclient-release-el8 && \
     rm -f /etc/httpd/conf.d/{userdir.conf,welcome.conf}
     
 # Set environment variables for Oracle Instant Client libraries
-ENV LD_LIBRARY_PATH=/usr/lib/oracle/21/client64/lib:$LD_LIBRARY_PATH
 ENV PATH=$PATH:/usr/lib/oracle/21/client64/bin
 ENV ORACLE_HOME=/usr/lib/oracle/21/client64
 ENV TNS_ADMIN=/usr/lib/oracle/21/network/admin
+ENV LD_LIBRARY_PATH=$ORACLE_HOME/lib
+
 
 # Install OCI8 PHP extension using PECL
 RUN echo instantclient,/usr/lib/oracle/21/client64/lib | pecl install oci8 \
