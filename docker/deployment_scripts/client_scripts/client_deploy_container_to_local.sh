@@ -43,7 +43,7 @@ docker build -t pifsc/staff-info-app:latest -f ./Dockerfile .
 docker save pifsc/staff-info-app:latest | docker load
 
 # Deploy the stack
-docker stack deploy -c docker-compose.yml SIA_stack
+docker stack deploy -c docker-compose.local.dev.yml SIA_stack
 
 
 
