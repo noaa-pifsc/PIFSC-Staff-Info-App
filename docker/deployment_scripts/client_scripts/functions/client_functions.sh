@@ -27,8 +27,9 @@ function prepare_execute_deployment_script ()
 	local passed_env_name="$1"
 	local passed_ssh_user="$2"
 
-	# save/prompt for environment name and ssh username variables
-	set_env_and_user_vars "$passed_env_name" "$passed_ssh_user"
+	# save/prompt for environment name and SSH username
+	set_env_var "$passed_env_name" 
+	set_user_var "$passed_ssh_user"
 
 #	echo "The value of ENV_NAME is: $ENV_NAME"
 
@@ -68,17 +69,16 @@ function prepare_execute_deployment_script ()
 
 
 
-
-
-# function that initializes the ENV_NAME and DOCKER_USERNAME variables for use in the script.
-# this function accepts two optional parameters: the environment name (dev, test, prod) and the ssh username used to connect to the remote docker host
-# Usage:
-#   set_env_and_user "$1" "$2"
+# function that initializes the ENV_NAME variable for use in the script.
+# this function accepts an optional parameter: the environment name (dev, test, prod) 
+# Usage: 
+#   set_env_var "$1"
 #   or with no arguments to trigger prompts:
-#   set_env_and_user
-function set_env_and_user_vars() {
+#   set_env_var
+
+function set_env_var ()
+{
   local passed_env_name="$1"
-  local passed_ssh_user="$2"
 
 #	echo "running set_env_and_user_vars($1, $2)"
 
@@ -103,14 +103,20 @@ function set_env_and_user_vars() {
       ;;
   esac
 
-	# construct the path to the appropriate oracle_credentials.sh file
-  local oracle_credentials_path="../../secrets/$ENV_NAME/secrets.sh"
 
-  if [[ ! -f "$oracle_credentials_path" ]]; then
-	echo "ERROR: Required file '$oracle_credentials_path' not found.  Exiting script"
-	exit 1
-  fi
+}
 
+
+# function that initializes the DOCKER_USERNAME variable for use in the script.
+# this function accepts an optional parameter: the ssh username used to connect to the remote docker host
+# Usage:
+#   set_user_var "$2"
+#   or with no arguments to trigger prompts:
+#   set_user_var
+
+function set_user_var ()
+{
+  local passed_ssh_user="$1"
 
   # Set DOCKER_USERNAME from argument or prompt the user
   if [[ -n "$passed_ssh_user" ]]; then
