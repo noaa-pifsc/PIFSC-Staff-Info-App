@@ -5,3 +5,4 @@
 /docker/deployment_scripts/config/deploy_config.test.sh
 /docker/deployment_scripts/config/deploy_config.dev.sh
 /docker/deployment_scripts/config/deploy_config.prod.sh
+/docker/src/backend/dependencies/*.php
