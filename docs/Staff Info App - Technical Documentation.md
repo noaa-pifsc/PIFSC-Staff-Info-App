@@ -20,9 +20,15 @@ The Staff Information Application (SIA) is a web app that provides access to the
     -   Docker
         -   Apache 2.x, PHP 8.x
         -   Docker host and reverse proxy configured to allow web requests to the docker host via port 80 to the web application on port 5006
+        - Docker secrets
 -   User:
     -   Any modern web browser
     -   PIFSC network connection 
+
+## Database Instances
+-   For the development docker and database instances the abbreviation used is "dev" 
+-   For the test/QA docker and database instances the abbreviation used is "test" 
+-   For the production docker and database instances the abbreviation used is "prod" 
 
 ## Dependencies
 -   The SIA utilizes the [PHP Shared Library](https://picgitlab.nmfs.local/centralized-data-tools/php-shared-library) for Oracle database interactions
@@ -81,129 +87,76 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
     ```
 
 ## Setup
--   ### Docker Application Setup
-    -   \*Note: the steps shown here were developed and tested on a Windows computer
-    -   #### Project Preparation
-        -   \*Note: the reason there is a project preparation step is to omit unnecessary files/folders from the docker container and from the docker host the docker container is deployed to
-        -   Clone the [SIA repository](https://picgitlab.nmfs.local/omi-apps/staff-info-app) on the docker host where the container will be deployed:
-            ```
-            # cd to a temporary directory where the project can be cloned:
-            cd /tmp
+-   \*Note: the steps shown here were developed and tested on a Windows computer
+-   Clone the [SIA repository](https://picgitlab.nmfs.local/omi-apps/staff-info-app)
+-   Within the project repository create the necessary bash files with the database credentials in each database instance (e.g. secrets.sh in the [dev folder](../docker/secrets/dev/) for the development database instance)
+	-   \*Note: There is a [secrets template](../docker/secrets/secrets.template.sh) file that can be used to create the secrets.sh file for each database instance 
+-   Within the project repository create the necessary configuration bash files with the database connection information for each database instance
+	-   \*Note: There is a [database instance configuration template](../docker/deployment_scripts/config/deploy_config.template.sh) file that can be used to create the deploy_config.[ENV].sh file (e.g. deploy_config.dev.sh for the development database instance)
+-   #### Development Machine (Docker Desktop)
+	-   (One-time setup) Setup docker swarm: `docker swarm init`
 
-            # clone the SIA project repository
-            git clone git@picgitlab.nmfs.local:omi-apps/staff-info-app.git
-            ```
-        -   Run the project preparation script ([prepare_docker_project.sh](./docker/deployment_scripts/prepare_docker_project.sh)) to generate a preparation folder based on the $project_folder variable with the code for the corresponding application instance.
-            ```
-            # run the preparation script
+## Docker Deployment
+-   The following instructions are intended for different deployment environments and use cases
+-   ### Local Docker Desktop 
+	-   #### Local Development
+		-   \*Note: this use case is intended for local docker desktop development that uses Docker Compose and maps local folders within the working copy of the repository to facilitate rapid application development
+		-   Execute the [client_deploy_container_to_local.sh](../docker/deployment_scripts/client_scripts/client_deploy_container_to_local.sh) script with the following arguments:
+			-   Argument 1: 1
+			-   Argument 2: the abbreviation for the given database instance listed in the [Database Instances](#database-instances) section (e.g. dev for development)
+		-   The script will perform the following high-level processes:
+			-   load the corresponding database credentials as environment variables within the docker container
+			-   Build and run the docker container
+	-   #### Local Testing
+		-   \*Note: this use case is intended for local docker desktop development/testing that uses docker swarm and docker secrets to help ensure that the application can be deployed to a remote docker host
+		-   Execute the [client_deploy_container_to_local.sh](../docker/deployment_scripts/client_scripts/client_deploy_container_to_local.sh) script with the following arguments:
+			-   Argument 1: 0
+			-   Argument 2: the abbreviation for the given database instance listed in the [Database Instances](#database-instances) section (e.g. test for test/QA)
+		-   The script will perform the following high-level processes:
+			-   Specify the docker secrets for the docker application
+			-   Build and run the docker container within the docker desktop swarm
+-   ### Remote Docker Host
+	-   \*Note: this use case is intended for deployment to a remote docker host that uses docker swarm and docker secrets to help ensure that the database credentials are secured against unauthorized access
+	-   Execute the [client_deploy_container_to_host.sh](../docker/deployment_scripts/client_scripts/client_deploy_container_to_host.sh) script with the following arguments:
+		-   Argument 1: the abbreviation for the given database instance listed in the [Database Instances](#database-instances) section (e.g. prod for production)
+		-   Argument 2: the SSH username for the user's personal account that is used to build and deploy the container to the docker host
+	-   The script will perform the following high-level processes:
+		-   Clone the repository within the docker host to a working directory
+		-   Clone the container dependencies and copy them into the designated folder in the working directory
+		-   Switch to the designated docker user that has permissions to run docker commands:
+			-   Copy the working repository into the designated docker folder
+			-   Specify the docker secrets for the docker application
+			-   Build and run the docker application
+		-   Delete the working copy of the repository
 
-
-            ```
-            -   The [project_config.sh](./docker/deployment_scripts/sh_script_config/project_config.sh) file declares bash variables that define the preparation's script behavior.  
-                -   The preparation folder is within the parent folder of the SIA repository: ../../docker-$sia_project_folder (e.g. ../../docker-staff-info-app)
-            -   The script will clone the PHP Shared Library repository within the tmp/ subdirectory of the specified preparation folder and copy the necessary files from both repositories to the appropriate folders in the preparation folder.  
-                -   Once the project folder is prepared the tmp/ folder will be deleted
-        -   ### Prepared Project Folder
-            -   Open the credentials file (backend/staff-info-app/db_credentials.php) in the preparation folder and specify the database connection information for the database instance the given application will use
-            -   When the docker project is prepared it will copy files/folders from each of the repositories' folder structure to the appropriate locations in the docker folder structure:
-                -   #### PHP Shared Library:
-                    -   The backend PHP shared library .php files needed for oracle database interactions are copied to backend/php-shared-library folder
-                -   #### SIA:
-                    -   The backend SIA .php files are copied from the [backend](../docker/src/backend) repository folder to backend/staff-info-app folder in the prepared project folder structure
-                    -   The frontend SIA .php files are copied from the [frontend](../docker/src/frontend) repository folder to the www folder in the prepared project folder structure
-                    -   The frontend SIA client-side folders/files are copied from the [frontent](../docker/src/frontend) repository folder to the corresponding www folder's subdirectories in the prepared project folder structure
-                    -   The [deployment_scripts](../docker/deployment_scripts) repository folder/files are copied to the deployment_scripts folder in the prepared project folder structure
-                    -   The [config](../docker/config) repository folder/files are copied to the config folder in the prepared project folder structure
-        -   #### Prepared Folder Diagram:
-        ```
-        .
-        |--- docker
-        |    |--- docker-compose.yml
-        |    |--- Dockerfile
-        |    |--- config
-        |    |    |--- httpd
-        |    |    |--- php
-        |    |--- deployment_scripts
-        |    |--- src 
-        |    |    |--- backend
-        |    |    |    |--- *.php
-        |    |    |    |--- dependencies
-        |    |    |    |    |--- *.php
-        |    |    |--- frontend
-        |    |    |    |--- *.php
-        |    |    |    |--- img
-        |    |    |    |--- js
-        |    |    |    |--- style
-        |    |    |    |--- webfonts
-        |--- docs
-        ```
-    -   #### Docker Deployment
-        -   #### Docker folder structure
-            -   When the docker image is built and the container is run it will copy files from the prepared directory into the docker container:
-                -   The www preparation folder is copied to the /var/www/html folder in the docker container
-                -   The backend preparation folder is copied to the /usr/src/app folder in the docker container
-                -   The config/httpd/*.conf preparation folder files are copied to the /etc/httpd/conf.d folder in the docker container to specify Apache configuration options
-                -   The config/php/*.ini preparation folder files are copied to the /etc/php.d folder in the docker container to specify PHP configuration options
-        -   #### Docker Folder Diagram:
-            ```
-            .
-            |--- /var/www/html
-            |    |--- img
-            |    |--- js
-            |    |--- style
-            |    |--- webfonts
-            |    |--- *.php
-            |--- /usr/src/app
-            |    |--- *.php
-            |    |--- dependencies
-            |    |    |--- *.php
-            |--- /etc/php.d
-            |--- /etc/httpd/conf.d
-            ```
-        -   ##### Local Docker Desktop
-            -   Execute the deployment_scripts/build_deploy_project.sh script in the prepared project folder to build and run the docker container
-        -   ##### Docker Host Server (via PuTTY)
-            -   In an SSH session, run the following commands to move the prepared files into the specified directory on the docker host server:
-                ```
-                # switch to the directory containing the prepared folder contents
-                cd /tmp/docker-staff-info-app
-
-                # update the permissions on the prepared folder's files
-                chmod -R 755 *
-
-                # switch to the docker user
-                sudo su - docker-user
-
-                # create the target docker folder where [container folder] is the name of the folder where the docker container will be run from (e.g. staff-directory)
-                mkdir containers/[container folder]
-
-                # switch to the target docker folder where the docker container will be run from
-                cd containers/[container folder]
-
-                # shutdown the container (if it is already running)
-                docker compose down
-
-                # remove any source files from the target directory:
-                rm -rf *
-
-                # copy the files from the prepared folder to the
-                rsync -aP /tmp/docker-staff-info-app/* .
-
-                # build and run the container:
-                sh ./deployment_scripts/build_deploy_project.sh
-
-                # revert to user account
-                exit
-
-                # cleanup the container source files and project repository in the temporary directory
-                rm -rf /tmp/docker-staff-info-app
-                rm -rf /tmp/staff-info-app
-                ```
+## Docker Folder Structure
+-   The docker folder structure closely mirrors the [Repository Folder Structure](#repository-folder-structure) except for a few notable differences:
+	-   The /var/www/html folder is populated with the contents of the [frontend](../docker/src/frontend) folder from the repository
+	-   The /usr/src/app folder is populated with the contents of the [backend](../docker/src/backend) folder from the repository
+	-   The /etc/php.d folder is populated with the contents of the [php](../docker/config/php) folder from the repository
+	-   The /etc/httpd/conf.d folder is populated with the contents of the [php](../docker/config/httpd) folder from the repository
+-   ### Docker Folder Diagram
+    ```
+    .
+    |--- /var/www/html
+    |    |--- img
+    |    |--- js
+    |    |--- style
+    |    |--- webfonts
+    |    |--- *.php
+    |--- /usr/src/app
+    |    |--- *.php
+    |    |--- dependencies
+    |    |    |--- *.php
+    |--- /etc/php.d
+    |--- /etc/httpd/conf.d
+    ```
 
 ## Security Features
 -   Global Security Features:
     -   SQL queries use prepared statements and bind variables to prevent SQL Injection Attacks
     -   Database values are sanitized using [htmlspecialchars()](https://www.php.net/manual/en/function.htmlspecialchars.php) before being included in the HTML web page content to prevent Cross Site Scripting (XSS) attacks
+	-   Database credentials are managed within the docker swarm using docker secrets to help ensure the credentials are secured against unauthorized access
 -   Organization Chart:
     -   Tooltip content is retrieved from the database and stored in a javascript array of objects, when a given tooltip is activated the content in the corresponding object variable is sanitized before it is displayed
 -   Staff Directory:
