@@ -101,7 +101,7 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
 -   ### Local Docker Desktop 
 	-   #### Local Development
 		-   \*Note: this use case is intended for local docker desktop development that uses Docker Compose and maps local folders within the working copy of the repository to facilitate rapid application development
-		-   Execute the [client_deploy_container_to_local.sh](../docker/deployment_scripts/client_scripts/client_deploy_container_to_local.sh) script with the following arguments:
+		-   Execute the [deploy_container_to_local.sh](../docker/deployment_scripts/client_scripts/deploy_container_to_local.sh) script with the following arguments:
 			-   Argument 1: 1
 			-   Argument 2: the abbreviation for the given database instance listed in the [Database Instances](#database-instances) section (e.g. dev for development)
 		-   The script will perform the following high-level processes:
@@ -109,7 +109,7 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
 			-   Build and run the docker container
 	-   #### Local Testing
 		-   \*Note: this use case is intended for local docker desktop development/testing that uses docker swarm and docker secrets to help ensure that the application can be deployed to a remote docker host
-		-   Execute the [client_deploy_container_to_local.sh](../docker/deployment_scripts/client_scripts/client_deploy_container_to_local.sh) script with the following arguments:
+		-   Execute the [deploy_container_to_local.sh](../docker/deployment_scripts/client_scripts/deploy_container_to_local.sh) script with the following arguments:
 			-   Argument 1: 0
 			-   Argument 2: the abbreviation for the given database instance listed in the [Database Instances](#database-instances) section (e.g. test for test/QA)
 		-   The script will perform the following high-level processes:
@@ -117,7 +117,7 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
 			-   Build and run the docker container within the docker desktop swarm
 -   ### Remote Docker Host
 	-   \*Note: this use case is intended for deployment to a remote docker host that uses docker swarm and docker secrets to help ensure that the database credentials are secured against unauthorized access
-	-   Execute the [client_deploy_container_to_host.sh](../docker/deployment_scripts/client_scripts/client_deploy_container_to_host.sh) script with the following arguments:
+	-   Execute the [deploy_container_to_host.sh](../docker/deployment_scripts/client_scripts/deploy_container_to_host.sh) script with the following arguments:
 		-   Argument 1: the abbreviation for the given database instance listed in the [Database Instances](#database-instances) section (e.g. prod for production)
 		-   Argument 2: the SSH username for the user's personal account that is used to build and deploy the container to the docker host
 	-   The script will perform the following high-level processes:

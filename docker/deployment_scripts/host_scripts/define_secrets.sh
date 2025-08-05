@@ -3,8 +3,6 @@
 # change to the directory the script is running in
 cd "$(dirname "$(realpath "$0")")"
 
-echo "running define secrets script"
-
 # include the shell script functions
 source ../shared_functions/shared_functions.sh
 source ../shared_functions/custom_shared_functions.sh
@@ -32,14 +30,14 @@ SCRIPT_PATH="${DOCKER_SOURCE_DIR}/docker/deployment_scripts/host_scripts/docker_
 # Run the deployment script and pass in the key/value pairs stored in $CONFIG_DATA to stdin.
 # The outer heredoc (<<EOF) sends commands to 'sudo su - $DOCKER_ACCOUNT_NAME'.
 # This command chain works passwordless due to specific sudoers configuration:
-# 1. 'sudo su - docker-user': Allowed via 'NOPASSWD: /bin/su - $DOCKER_ACCOUNT_NAME' in sudoers.
+# 1. 'sudo su - docker-user': Allowed via 'NOPASSWD: /bin/su - docker-user' in sudoers.
 # 2. Bypasses 'Defaults requiretty': This specific nested heredoc structure
 #    was designed to bypass sudo's 'requiretty' setting in non-interactive contexts,
 #    which would otherwise demand a terminal and cause the script to fail.
 # The inner heredoc (cat <<'CREDEND') passes CONFIG_DATA literally to the target script.
 # Single quotes around 'CREDEND' (e.g., 'CREDEND') are critical. They prevent Bash
 # from performing variable expansion, command substitution, or backslash escaping
-# on the \$CONFIG_DATA content, ensuring that special characters (like literal '$')
+# on the $CONFIG_DATA content, ensuring that special characters (like literal '$')
 # are preserved exactly as defined.
 sudo su - ${DOCKER_ACCOUNT_NAME} <<EOF
 cat <<'CREDEND' | bash "$SCRIPT_PATH"
@@ -49,3 +47,5 @@ EOF
 
 # unset the CONFIG_DATA variable
 unset CONFIG_DATA
+
+echo "$CURRENT_SCRIPT_NAME has finished running"

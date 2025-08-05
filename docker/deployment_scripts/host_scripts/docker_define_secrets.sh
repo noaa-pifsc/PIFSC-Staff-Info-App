@@ -3,8 +3,6 @@
 # change to the directory the script is running in
 cd "$(dirname "$(realpath "$0")")"
 
-echo "running docker define secrets script"
-
 # include the shell script functions
 source ../shared_functions/shared_functions.sh
 source ../shared_functions/custom_shared_functions.sh
@@ -20,8 +18,6 @@ initialize_docker_env_var "$0"
 # read the key/value pairs from STDIN and store them in bash variables
 parse_config_data
 
-echo "stop the container if it's running so the secrets can be defined/updated"
-
 # stop the container if it's running so the secrets can be defined/updated
 docker stack rm SIA_stack
 
@@ -33,5 +29,5 @@ set_db_secrets
 # unset bash variables specified by STDIN
 unset_config_variables
 
-echo "docker_define_secrets.sh has stopped running"
+echo "$CURRENT_SCRIPT_NAME has finished running"
 

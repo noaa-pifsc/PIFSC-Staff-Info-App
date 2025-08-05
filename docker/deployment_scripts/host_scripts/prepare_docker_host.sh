@@ -3,9 +3,6 @@
 # change to the directory the script is running in
 cd "$(dirname "$(realpath "$0")")"
 
-# deployment script
-echo "running Staff Info App preparation script"
-
 # include the host functions
 source ../shared_functions/shared_functions.sh
 source ./functions/host_functions.sh

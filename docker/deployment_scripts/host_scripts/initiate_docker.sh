@@ -12,14 +12,11 @@ source ./functions/host_functions.sh
 # initialize the docker environment variables
 initialize_docker_env_var "$0"
 
-
-echo "The value of DB_HOST is: $DB_HOST"
-echo "The value of DB_SERVICE_NAME is: $DB_SERVICE_NAME"
-
 # define the absolute path to the deployment script that will run as $DOCKER_ACCOUNT_NAME.
 DEPLOY_SCRIPT="${DOCKER_SOURCE_DIR}/docker/deployment_scripts/host_scripts/docker_build_run.sh"
 
 # run the docker deployment script as $DOCKER_ACCOUNT_NAME
+# define the DB_HOST and DB_SERVICE_NAME environment variables
 sudo su - "${DOCKER_ACCOUNT_NAME}" <<EOF
 #!/bin/bash
 echo "Running deployment script as user: \$(whoami)"
@@ -32,3 +29,5 @@ EOF
 
 # clean up project folders/files that were used to build and run the docker container
 rm -rf "$DOCKER_SOURCE_DIR"
+
+echo "$CURRENT_SCRIPT_NAME has finished running"
