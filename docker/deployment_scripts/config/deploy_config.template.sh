@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # define the docker hostname configuration information
 DOCKER_HOSTNAME="[DOCKER HOSTNAME]"
 

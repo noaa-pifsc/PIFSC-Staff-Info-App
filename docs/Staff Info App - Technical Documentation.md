@@ -7,7 +7,7 @@ The Staff Information Application (SIA) is a web app that provides access to the
 -   Version Control Information:
     -   URL: https://picgitlab.nmfs.local/omi-apps/staff-directory.git
     -   Application: 1.2 (Git tag: staff_info_app_v1.2)
--   [End-User Documentation](./docs/Staff%20Info%20App%20-%20End-User%20Documentation.md)
+-   [End-User Documentation](./Staff%20Info%20App%20-%20End-User%20Documentation.md)
 
 ## Application Access
 -   \*Note: by default the staff directory web page is loaded when the application URLs are loaded
@@ -37,7 +37,7 @@ The Staff Information Application (SIA) is a web app that provides access to the
 The Docker image is built from the official Oracle InstantClient on OracleLinux 8 [Docker image](https://github.com/oracle/docker-images/blob/main/OracleInstantClient/oraclelinux8/21/Dockerfile). Apache and PHP are installed on the base image.
 
 ## Implementation
--   There are two PHP pages that are accessed directly via web browser, one for the staff directory ([staff-directory.php](../docker/src/staff-directory.php)) and one for the organization chart ([org-chart.php](../docker/src/org-chart.php))
+-   There are two PHP pages that are accessed directly via web browser, one for the staff directory ([staff-directory.php](../docker/src/frontend/staff-directory.php)) and one for the organization chart ([org-chart.php](../docker/src/frontend/org-chart.php))
 -   ### Shared Elements
     -   There is a navigation menu at the top of both web pages that provides links to the two pages, the link for the current page is grayed out and the corresponding link is not enabled
 -   ### Staff Directory

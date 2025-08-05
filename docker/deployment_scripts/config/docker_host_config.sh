@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 # docker user account
 DOCKER_ACCOUNT_NAME="docker-user"
