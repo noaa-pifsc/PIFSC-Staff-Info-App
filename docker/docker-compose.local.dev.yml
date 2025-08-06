@@ -1,0 +1,21 @@
+services:
+  staff-info-app:
+    build:
+      context: .
+    image: pifsc/staff-info-app:latest
+    container_name: staff-info-app
+    ports:
+      - "0.0.0.0:5006:80"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_SERVICE_NAME: ${DB_SERVICE_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - "./src/frontend:/var/www/html"
+      - "./src/backend:/usr/src/app"

@@ -1,0 +1,96 @@
+
+
+td { font-size: small; }
+td.divisionouter { padding: 0px 8px;}
+td.program { border: 1px solid black; padding: 2px 4px; }
+td.subprogram { padding: 2px 4px; }
+td.division { border: 2px solid black; padding: 0px 4px; background-color: silver; height: 40px;}
+td.subdivision { border: 1px solid black; padding: 2px 4px; text-align: center; font-weight: bold; background-color: silver; }
+td.lineleft { border-left: 2px solid black; }
+td.linetopleft { border-left: 2px solid black; border-top: 2px solid black; }
+td.linetop { border-top: 2px solid black; }
+td.linetopright { border-right: 2px solid black; border-top: 2px solid black; }
+
+
+
+/* org chart layout sytling */
+table.layout_table {border-spacing: 0; margin-left: auto; margin-right: auto;}
+
+td.display_header {text-align: center; font-weight: bold;}
+
+td.nowrap {white-space: nowrap;}
+
+table.center, td.center {margin-left: auto; margin-right: auto;}
+
+td.align_top {vertical-align: top;}
+
+
+span.mgmt_position, span.error_bold, span.tooltip_label {font-weight: bold;}
+
+p.error_message {font-size: large;}
+
+
+/* tooltip styles */
+td.person-tooltip-trigger {cursor: help;}
+
+
+/* Tippy.js Custom Tooltip Styling */
+.tippy-box[data-theme~='custom-tooltip'] {
+	background-color: white; /* Tooltip background: White */
+	color: black;            /* Tooltip text color: Black */
+	padding: 10px;
+	border-radius: 4px;
+	font-size: 14px; /* Adjust as needed */
+	box-shadow: 0 0 10px rgba(0,0,0,0.2); /* Soft shadow for depth */
+	text-align: left; /* Ensure text within the tooltip is left-aligned */
+	border: 1px solid silver; /* Optional: A subtle border that matches division headers */
+}
+
+/* Tippy.js Arrow Styling */
+.tippy-box[data-theme~='custom-tooltip'] > .tippy-arrow {
+	color: white; /* Arrow color should match the tooltip background */
+}
+.tippy-box[data-theme~='custom-tooltip'][data-placement^='top'] > .tippy-arrow {
+	border-top-color: silver; /* For top placement, top arrow border matches silver */
+}
+.tippy-box[data-theme~='custom-tooltip'][data-placement^='bottom'] > .tippy-arrow {
+	border-bottom-color: silver; /* For bottom placement, bottom arrow border matches silver */
+}
+.tippy-box[data-theme~='custom-tooltip'][data-placement^='left'] > .tippy-arrow {
+	border-left-color: silver; /* For left placement, left arrow border matches silver */
+}
+.tippy-box[data-theme~='custom-tooltip'][data-placement^='right'] > .tippy-arrow {
+	border-right-color: silver; /* For right placement, right arrow border matches silver */
+}
+
+
+/* Styles for the content inside the tooltip */
+.tooltip-content p {
+	margin: 0 0 5px 0;
+	line-height: 1.4; /* Improve readability */
+}
+.tooltip-content p:last-child {
+	margin-bottom: 0;
+}
+.tooltip-content strong {
+	color: #333; /* Slightly darker black for strong text*/
+}
+.tooltip-content a {
+	color: #007bff; /* Standard link blue, or a darker black for links */
+	text-decoration: underline; /* Links should usually be underlined for usability */
+}
+.tooltip-content a:hover {
+	color: #0056b3; /* Darker blue on hover */
+}
+
+p.tooltip_heading {font-weight: bold; text-align: center;}
+
+
+td.blank_cell {}
+span.generated_timestamp {font-size: x-small;}
+
+table {empty-cells: show;}
+
+td:empty:before {
+	content: "\00A0"; /* Inserts a non-breaking space */
+}

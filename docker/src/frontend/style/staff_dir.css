@@ -1,0 +1,48 @@
+/* This Style sheet was made by aran @ studio7designs.com  if you have any questions please email me or visit http://www.studio7designs.com */  /*{border:1;margin:0;padding:0;background:transparent;} */
+
+body {
+font-size: 80%;
+background-color: #ffffff;
+line-height: 150%;
+margin-top: 0px;
+}
+
+div.background-image {background: #ffffff url('../img/bg.gif') top center repeat-x; margin: 0px; padding: 10px 0px 0px 0px; min-height: 192px;}
+
+span.page_content_on_background {text-align: center;}
+
+table.staff_directory { padding: .5em 1em; background-color: #FFFFFF; a { color: #3366CC;} a:hover { color: #FF9933;}}
+
+
+table.display {background-color: #FFFFFF; border: 1px outset black; padding: 1px; margin: 1px;}
+
+table.display td, table.display th {border: 1px inset gray; margin: 2px; padding: 3px;}
+	
+table.display thead {background-color: #DDDDDD;}
+
+div.page_heading {color: #336699; }
+
+span.page_content_on_background {color: #585858; font-size: 16px; display: block; color: white; font-weight: bold;}
+
+
+span.spacer {margin-bottom: 20px; display: block;}
+
+a.top_link {padding: 10px; display: block;}
+
+
+a.static_link {color: orange;}
+
+
+table.display td {color: #336699; font-size: 12px; font-weight:bold; padding: 0px 5px;}
+
+table.display th {color: black; font-size: 12px; font-weight:bold; padding: 0px 5px;}
+
+
+
+table.staff_directory {margin-left: auto; margin-right: auto; color:#3366CC; font-size: 80%;}
+
+
+th.column_heading {text-align: center;}
+div.center_content {text-align: center;}
+
+a {text-decoration: none;}

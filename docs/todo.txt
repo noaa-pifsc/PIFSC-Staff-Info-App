@@ -1,0 +1,12 @@
+Future updates:
+	_ Remove the hardcoding for the person ids or just filter by other database attributes for CIMAR admin
+		_ add flags to the DB table
+
+Short-term updates:
+	X update openssh so it can use the CAC to authenticate
+	
+	_ ** add the cloning to the Dockerfile to simplify the deployment (requires additional setup since docker-user would need to be able to have SSH keys to the repo)
+		Maybe create an OCI docker host account on gitlab and grant SSH keys to it?
+					
+				
+
