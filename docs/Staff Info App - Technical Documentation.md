@@ -16,11 +16,13 @@ The Staff Information Application (SIA) is a web app that provides access to the
 -   Production: https://picapps.nmfs.local/staff-directory/
 
 ## Requirements
--   System:
-    -   Docker
-        -   Apache 2.x, PHP 8.x
-        -   Docker host and reverse proxy configured to allow web requests to the docker host via port 80 to the web application on port 5006
-        - Docker secrets
+-   Docker Host
+    -   Apache 2.x, PHP 8.x
+    -   Docker host and reverse proxy configured to allow web requests to the docker host via port 80 to the web application on port 5006
+    - Docker secrets
+-   Client Machine (for deployments)
+    -   ssh is setup to work with CAC authentication
+    -   ssh is configured to specify the username in the ~/.ssh/config file for each docker host (e.g. pifsc-dev-docker-01-as for the dev docker host)
 -   User:
     -   Any modern web browser
     -   PIFSC network connection 
@@ -32,6 +34,7 @@ The Staff Information Application (SIA) is a web app that provides access to the
 
 ## Dependencies
 -   The SIA utilizes the [PHP Shared Library](https://picgitlab.nmfs.local/centralized-data-tools/php-shared-library) for Oracle database interactions
+    -   This application was developed with version 1.16 (tag: php_shared_libary_v1.16) of the PHP Shared Library
 
 ## Docker Image Details
 The Docker image is built from the official Oracle InstantClient on OracleLinux 8 [Docker image](https://github.com/oracle/docker-images/blob/main/OracleInstantClient/oraclelinux8/21/Dockerfile). Apache and PHP are installed on the base image.
@@ -87,7 +90,6 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
     ```
 
 ## Setup
--   \*Note: the steps shown here were developed and tested on a Windows computer
 -   Clone the [SIA repository](https://picgitlab.nmfs.local/omi-apps/staff-info-app)
 -   Within the project repository create the necessary bash files with the database credentials in each database instance (e.g. secrets.sh in the [dev folder](../docker/secrets/dev/) for the development database instance)
 	-   \*Note: There is a [secrets template](../docker/secrets/secrets.template.sh) file that can be used to create the secrets.sh file for each database instance 
@@ -98,6 +100,7 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
 
 ## Docker Deployment
 -   The following instructions are intended for different deployment environments and use cases
+-   \*Note: the steps shown here were developed and tested on a Windows computer and the bash scripts were executed using git-bash
 -   ### Local Docker Desktop 
 	-   #### Local Development
 		-   \*Note: this use case is intended for local docker desktop development that uses Docker Compose and maps local folders within the working copy of the repository to facilitate rapid application development
@@ -106,6 +109,7 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
 			-   Argument 2: the abbreviation for the given database instance listed in the [Database Instances](#database-instances) section (e.g. dev for development)
 		-   The script will perform the following high-level processes:
 			-   load the corresponding database credentials as environment variables within the docker container
+    		-   Clone the container dependencies and copy them into the designated folder ([dependencies](../docker/src/backend/dependencies)) in the working directory 
 			-   Build and run the docker container
 	-   #### Local Testing
 		-   \*Note: this use case is intended for local docker desktop development/testing that uses docker swarm and docker secrets to help ensure that the application can be deployed to a remote docker host
@@ -114,15 +118,15 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
 			-   Argument 2: the abbreviation for the given database instance listed in the [Database Instances](#database-instances) section (e.g. test for test/QA)
 		-   The script will perform the following high-level processes:
 			-   Specify the docker secrets for the docker application
+    		-   Clone the container dependencies and copy them into the designated folder ([dependencies](../docker/src/backend/dependencies)) in the working directory 
 			-   Build and run the docker container within the docker desktop swarm
 -   ### Remote Docker Host
 	-   \*Note: this use case is intended for deployment to a remote docker host that uses docker swarm and docker secrets to help ensure that the database credentials are secured against unauthorized access
 	-   Execute the [deploy_container_to_host.sh](../docker/deployment_scripts/client_scripts/deploy_container_to_host.sh) script with the following arguments:
 		-   Argument 1: the abbreviation for the given database instance listed in the [Database Instances](#database-instances) section (e.g. prod for production)
-		-   Argument 2: the SSH username for the user's personal account that is used to build and deploy the container to the docker host
 	-   The script will perform the following high-level processes:
-		-   Clone the repository within the docker host to a working directory
-		-   Clone the container dependencies and copy them into the designated folder in the working directory
+		-   Clone the SIA repository within the docker host to a working directory
+   		-   Clone the container dependencies and copy them into the designated folder ([dependencies](../docker/src/backend/dependencies)) in the working directory 
 		-   Switch to the designated docker user that has permissions to run docker commands:
 			-   Copy the working repository into the designated docker folder
 			-   Specify the docker secrets for the docker application

@@ -18,7 +18,7 @@ DOCKER_SOURCE_DIR="/tmp/$SIA_PROJECT_FOLDER"
 
 
 # define the PHP shared library git url
-PHP_LIB_GIT_URL="--branch branch_v1.16 git@picgitlab.nmfs.local:centralized-data-tools/php-shared-library.git"
+PHP_LIB_GIT_URL="git@picgitlab.nmfs.local:centralized-data-tools/php-shared-library.git"
 
 
 DOCKER_TARGET_DIR="/home/$DOCKER_ACCOUNT_NAME/containers/staff-directory"

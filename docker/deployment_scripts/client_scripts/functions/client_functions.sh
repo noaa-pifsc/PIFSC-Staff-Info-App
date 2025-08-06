@@ -18,56 +18,6 @@ function initialize_deployment_script
 }
 
 
-# this function prepares and executes the client deployment scripts
-# this function accepts 2 parameters: the environment name (dev, test, prod), and the ssh username used to connect to the remote docker host
-# Usage:
-#   prepare_deployment_script "$1" "$2"
-function prepare_execute_deployment_script ()
-{
-	local passed_env_name="$1"
-	local passed_ssh_user="$2"
-
-	# save/prompt for environment name and SSH username
-	set_env_var "$passed_env_name" 
-	set_user_var "$passed_ssh_user"
-
-#	echo "The value of ENV_NAME is: $ENV_NAME"
-
-	# convert all the .sh files in the parent directory to unix line endings
-	convert_dos2unix "../"
-
-	# load the bash variables for the runtime configuration
-	source ../config/deploy_config.$ENV_NAME.sh
-	source ../config/docker_host_config.sh
-	
-	# Prepare the docker host by creating directories and cloning the repository
-	prepare_docker_host
-
-	# load the oracle credentials into bash variables
-	source ../../secrets/$ENV_NAME/secrets.sh
-
-	# compile stdin credential/configuration variables:
-	CONFIG_DATA=$(encode_config_data)
-
-	# unset the sensitive bash variables so they can't be reused
-	unset_config_variables
-
-
-	# define the secrets and specify the bash variable values as stdin
-	exec_remote_cmd_with_stdin "$CONFIG_DATA" "bash $DOCKER_SOURCE_DIR/docker/deployment_scripts/host_scripts/define_secrets.sh"
-
-	# unset the CONFIG_DATA now that the plink call has completed
-	unset CONFIG_DATA
-
-
-	# execute the deployment/upgrade script on the host server and pass the DB_SERVICE_NAME and DB_HOST bash variable values
-	exec_remote_cmd "DB_HOST=\"$DB_HOST\" DB_SERVICE_NAME=\"$DB_SERVICE_NAME\" bash $DOCKER_SOURCE_DIR/docker/deployment_scripts/host_scripts/initiate_docker.sh"
-
-	echo "The $CURRENT_SCRIPT_NAME script finished executing"
-
-}
-
-
 
 # function that initializes the ENV_NAME variable for use in the script.
 # this function accepts an optional parameter: the environment name (dev, test, prod) 
@@ -107,28 +57,6 @@ function set_env_var ()
 }
 
 
-# function that initializes the DOCKER_USERNAME variable for use in the script.
-# this function accepts an optional parameter: the ssh username used to connect to the remote docker host
-# Usage:
-#   set_user_var "$2"
-#   or with no arguments to trigger prompts:
-#   set_user_var
-
-function set_user_var ()
-{
-  local passed_ssh_user="$1"
-
-  # Set DOCKER_USERNAME from argument or prompt the user
-  if [[ -n "$passed_ssh_user" ]]; then
-    DOCKER_USERNAME="$passed_ssh_user"
-  else
-
-    read -rp "Enter SSH username: " DOCKER_USERNAME < /dev/tty
-# 	echo "The value of DOCKER_USERNAME is: '$DOCKER_USERNAME'"
-
-  fi
-}
-
 # function that creates a logfile and populates it with all output from the script
 # this function accepts one parameter, the logfile prefix
 # Usage:
@@ -144,24 +72,46 @@ function create_logfile ()
 }
 
 
-# function that prepares the docker host by creating the temporary directory structure, copying the initial .sh and .env files for the host and executes the prepare_docker_host.sh script.  This function accepts no parameters
-# Usage:
-# prepare_docker_host
-function prepare_docker_host ()
-{
-	echo "create the directory path ('$DOCKER_SOURCE_DIR') for the initial deployment scripts"
+# =====================================================================
+#      CROSS-PLATFORM SMART SSH FUNCTION (Windows, macOS, Linux)
+# =====================================================================
+# This function intelligently adapts its behavior based on the OS.
+# On Windows/Git Bash, it uses the stable native client and winpty.
+# On macOS/Linux, it uses the standard, reliable system ssh.
+# =====================================================================
+ssh() {
+  # Detect the operating system kernel name
+  case "$(uname -s)" in
 
-	# remove the temporary directory, create the directory path ('$DOCKER_SOURCE_DIR') for the initial deployment scripts, and clone the repository
-	exec_remote_cmd "rm -rf '$DOCKER_SOURCE_DIR' && mkdir -p '$DOCKER_SOURCE_DIR' && git clone $DOCKER_GIT_URL $DOCKER_SOURCE_DIR"
-	
-	# prepare the docker project (clone shared library and copy files into designated folder in project repository):
-	exec_remote_cmd "bash $DOCKER_SOURCE_DIR/docker/deployment_scripts/host_scripts/prepare_docker_host.sh"
+    # --- Case 1: Windows (Git Bash) ---
+    MINGW*)
+      # This is the special logic we developed for Windows
+      local ssh_executable="/c/Windows/System32/OpenSSH/ssh.exe"
+      if [ "$#" -eq 1 ]; then
+        # Interactive session -> use winpty for terminal compatibility
+        winpty "$ssh_executable" "$@"
+      else
+        # Non-interactive command -> call ssh.exe directly to avoid bugs
+        "$ssh_executable" "$@"
+      fi
+      ;;
 
+    # --- Case 2: macOS, Linux, or any other Unix-like system ---
+    *)
+      # On macOS and Linux, the standard 'ssh' command works perfectly
+      # for both interactive and non-interactive use. No special
+      # handling is needed.
+
+      # The 'command' builtin bypasses this function, preventing an
+      # infinite loop and calling the real /usr/bin/ssh.
+      command ssh "$@"
+      ;;
+  esac
 }
+# --- End of Smart SSH Function ---
 
 
-
-# function to execute a remote command/script using plink
+# function to execute a remote command/script using ssh
 # The function accepts one parameter: the command to be executed
 # Usage:
 # exec_remote_cmd "$1"
@@ -172,14 +122,15 @@ function exec_remote_cmd ()
 
 	echo "running exec_remote_cmd ($1)"
 
-# echo "plink $DOCKER_USERNAME@$DOCKER_HOSTNAME $passed_cmd"
-	# execute the command via plink
-	plink "$DOCKER_USERNAME"@"$DOCKER_HOSTNAME" "$passed_cmd"
+	echo "ssh $DOCKER_HOSTNAME $passed_cmd"
+	
+	# execute the command via ssh
+	ssh "$DOCKER_HOSTNAME" "$passed_cmd"
 
 }
 
 
-# function to execute a remote command/script using plink and pass values in via STDIN
+# function to execute a remote command/script using ssh and pass values in via STDIN
 # The function accepts two parameters: the STDIN value and the command to be executed
 # Usage:
 # exec_remote_cmd_with_stdin "$1" "$2"
@@ -191,8 +142,11 @@ function exec_remote_cmd_with_stdin ()
 
 	echo "running exec_remote_cmd ($2)"
 
-# echo "plink $DOCKER_USERNAME@$DOCKER_HOSTNAME $passed_cmd"
-	# execute the command via plink
-	echo "$passed_stdin_content" | plink "$DOCKER_USERNAME"@"$DOCKER_HOSTNAME" "$passed_cmd"
+# echo "ssh $DOCKER_USERNAME@$DOCKER_HOSTNAME $passed_cmd"
+	# execute the command via ssh
+	echo "$passed_stdin_content" | ssh "$DOCKER_HOSTNAME" "$passed_cmd"
 
 }
+
+
+

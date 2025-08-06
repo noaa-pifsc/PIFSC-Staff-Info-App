@@ -10,10 +10,10 @@ cd "$(dirname "$(realpath "$0")")"
 source ../shared_functions/shared_functions.sh
 source ../shared_functions/custom_shared_functions.sh
 source ./functions/client_functions.sh
-source ../config/docker_host_config.sh
-source ../host_scripts/functions/host_functions.sh
-source ../host_scripts/functions/custom_host_functions.sh
 source ./functions/local_dev_test_client_functions.sh
+
+# include shell script configuration information
+source ../config/docker_host_config.sh
 
 # initialize the deployment script
 initialize_deployment_script "$0"

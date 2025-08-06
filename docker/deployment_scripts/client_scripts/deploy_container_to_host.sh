@@ -10,6 +10,7 @@ cd "$(dirname "$(realpath "$0")")"
 source ../shared_functions/shared_functions.sh
 source ../shared_functions/custom_shared_functions.sh
 source ./functions/client_functions.sh
+source ./functions/custom_client_functions.sh
 
 # initialize the deployment script
 initialize_deployment_script "$0"

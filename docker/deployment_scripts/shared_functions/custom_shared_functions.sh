@@ -35,3 +35,15 @@ function unset_config_variables()
 
 	unset DB_USERNAME DB_PASSWORD
 }
+
+
+# function to set the database secrets from bash variables:
+function set_db_secrets ()
+{
+	#set the database username secret value
+	create_secret "sia_db_username_secret" "$DB_USERNAME"
+
+	#set the database password secret value
+	create_secret "sia_db_password_secret" "$DB_PASSWORD"
+
+}
