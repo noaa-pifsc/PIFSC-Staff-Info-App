@@ -23,6 +23,6 @@ PHP_LIB_GIT_URL="git@picgitlab.nmfs.local:centralized-data-tools/php-shared-libr
 
 DOCKER_TARGET_DIR="/home/$DOCKER_ACCOUNT_NAME/containers/staff-directory"
 
-DOCKER_GIT_URL="--branch branch_v1.2_code_reorg git@picgitlab.nmfs.local:omi-apps/staff-info-app.git"
+DOCKER_GIT_URL="--branch branch_v1.2 git@picgitlab.nmfs.local:omi-apps/staff-info-app.git"
 
 
