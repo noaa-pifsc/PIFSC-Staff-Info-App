@@ -15,9 +15,6 @@ initialize_docker_env_var "$0"
 convert_dos2unix "../"
 
 
-# load the project configuration script to set the runtime variable values
-. ../config/docker_host_config.sh
-
 # prepre the docker preparation folder
 prepare_docker_prep_folder
 
