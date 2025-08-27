@@ -17,12 +17,14 @@ The Staff Information Application (SIA) is a web app that provides access to the
 
 ## Requirements
 -   Docker Host
-    -   Apache 2.x, PHP 8.x
-    -   Docker host and reverse proxy configured to allow web requests to the docker host via port 80 to the web application on port 5006
-    - Docker secrets
+    -   Docker
+        -   Docker host and reverse proxy configured to allow web requests to the docker host via port 80 to the web application on port 5006
+    -   Docker secrets
+    -   git
+    -   dos2unix
 -   Client Machine (for deployments)
-    -   ssh is setup to work with CAC authentication
-    -   ssh is configured to specify the username in the ~/.ssh/config file for each docker host (e.g. pifsc-dev-docker-01-as for the dev docker host)
+    -   OpenSSH is setup to work with CAC authentication
+    -   OpenSSH is configured to specify the username in the ~/.ssh/config file for each docker host (e.g. pifsc-dev-docker-01-as for the dev docker host)
         -   The ForwardAgent feature is enabled to allow the git repositories to be cloned on the docker host
 -   User:
     -   Any modern web browser
@@ -94,8 +96,10 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
 -   Clone the [SIA repository](https://picgitlab.nmfs.local/omi-apps/staff-info-app)
 -   Within the project repository create the necessary bash files with the database credentials in each database instance (e.g. secrets.sh in the [dev folder](../docker/secrets/dev/) for the development database instance)
 	-   \*Note: There is a [secrets template](../docker/secrets/secrets.template.sh) file that can be used to create the secrets.sh file for each database instance 
+    -   \*Note: the actual configuration files should not be committed to the repository for security purposes, a [.gitignore](../.gitignore) file has been added to the repository to prevent these sensitive files from being included in git.  
 -   Within the project repository create the necessary configuration bash files with the database connection information for each database instance
 	-   \*Note: There is a [database instance configuration template](../docker/deployment_scripts/config/deploy_config.template.sh) file that can be used to create the deploy_config.[ENV].sh file (e.g. deploy_config.dev.sh for the development database instance)
+    -   \*Note: the actual configuration files should not be committed to the repository for security purposes, a [.gitignore](../.gitignore) file has been added to the repository to prevent these files from being included in git.  
 -   #### Development Machine (Docker Desktop)
 	-   (One-time setup) Setup docker swarm: `docker swarm init`
 
@@ -165,4 +169,4 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
 -   Organization Chart:
     -   Tooltip content is retrieved from the database and stored in a javascript array of objects, when a given tooltip is activated the content in the corresponding object variable is sanitized before it is displayed
 -   Staff Directory:
-    -   User Input for links (used in sorting functionality) is validated against a list of acceptable values and if there 
+    -   User Input for links (used in sorting functionality) is validated against a list of acceptable values and if it does not match it will display a generic error to the user
