@@ -37,6 +37,6 @@ DOCKER_IMAGE_NAME="pifsc/staff-info-app"
 # declare an associative array with the secret name as the array element and the bash variable name as the array value
 declare -A SECRET_MAPPING_ARR=(
     # [Docker Secret Name] = "Bash Variable Name"
-    ["sia_db_username_secret"]="SIA_DB_USERNAME"
-    ["sia_db_password_secret"]="SIA_DB_PASSWORD"
+    ["sia_db_username_secret"]="DB_USERNAME"
+    ["sia_db_password_secret"]="DB_PASSWORD"
 )

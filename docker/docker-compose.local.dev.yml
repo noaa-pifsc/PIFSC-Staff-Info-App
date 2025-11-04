@@ -12,10 +12,12 @@ services:
         max-size: "100m"
         max-file: "1"
     environment:
+      TZ: "Pacific/Honolulu"
       DB_HOST: ${DB_HOST}
       DB_SERVICE_NAME: ${DB_SERVICE_NAME}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
+      RUN_MODE: "compose"
     volumes:
       - "./src/frontend:/var/www/html"
       - "./src/backend:/usr/src/app"

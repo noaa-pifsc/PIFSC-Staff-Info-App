@@ -13,6 +13,7 @@ services:
       DB_SERVICE_NAME: ${DB_SERVICE_NAME}
       DB_USERNAME_FILE: /run/secrets/sia_db_username_secret
       DB_PASSWORD_FILE: /run/secrets/sia_db_password_secret
+      RUN_MODE: "stack"
     secrets:
       - sia_db_username_secret
       - sia_db_password_secret
