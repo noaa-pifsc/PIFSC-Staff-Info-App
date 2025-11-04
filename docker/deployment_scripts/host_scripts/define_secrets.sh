@@ -1,19 +1,20 @@
 #!/bin/bash
 
+#-----------------------------------------------------------------------------
+# define_secrets.sh:
+# this host script runs a script as the $DOCKER_ACCOUNT_NAME to define the 
+# docker secrets that are used by the docker container by executing 
+# docker_define_secrets.sh
+#-----------------------------------------------------------------------------
+
 # change to the directory the script is running in
 cd "$(dirname "$(realpath "$0")")"
 
-# include the shell script functions
-source ../shared_functions/shared_functions.sh
-source ../shared_functions/custom_shared_functions.sh
-source ./functions/host_functions.sh
-source ./functions/custom_host_functions.sh
+# load all function definition files used in host scripts
+source ./includes/include_host_resources.sh
 
 # initialize the docker environment variables
 initialize_docker_env_var "$0"
-
-# process the stdin configuration data: parse and store in variables, construct the
-# process_stdin_config_data
 
 # read the key/value pairs from STDIN and store them in bash variables
 parse_config_data

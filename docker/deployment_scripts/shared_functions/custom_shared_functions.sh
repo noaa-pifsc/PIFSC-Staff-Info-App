@@ -1,49 +1,38 @@
 #!/bin/bash
 
-# this function parses the standard configuration data that is provided to bash scripts via stdin and stores them in the corresponding bash variables
+#-----------------------------------------------------------------------------
+# custom_shared_functions.sh:
+# this file defines custom functions that are used for this specific docker 
+# application in client and host scripts that are used for docker deployments 
+# (in both local docker desktop and remote docker host scenarios)
+#-----------------------------------------------------------------------------
+
+# this function parses the standard configuration data that is provided to bash scripts via stdin and stores them in the corresponding bash variables based on the SECRET_MAPPING_ARR array values
 # this function accepts no parameters
 function parse_config_data()
 {
-#	echo "running parse_config_data()"
-
-
-	while IFS='=' read -r key value; do
-		case "$key" in
-			DB_USERNAME) DB_USERNAME="$value";;
-			DB_PASSWORD) DB_PASSWORD="$value";;
-			*)
-				# output warning message to stderr
-				echo "Warning: unknown configuration key '$key' ignored" >&2
-				;;
-		esac
-	done < /dev/stdin	# ensure the loop runs in the current shell instead of a subshell
+	# parse the configuration variable data and declare the key/value pairs as bash variables based on the SECRET_MAPPING_ARR array values defined in docker_config.sh:
+	generic_parse_config_data SECRET_MAPPING_ARR
 }
 
-# this function encodes the standard configuration data stored in bash variables so it can be passed to bash scripts via stdin
+# this function encodes the standard configuration data stored in bash variables so it can be passed to bash scripts via stdin based on the SECRET_MAPPING_ARR array values
 # this function accepts no parameters
 function encode_config_data ()
 {
-	printf 'DB_USERNAME=%s\n' "$DB_USERNAME"
-	printf 'DB_PASSWORD=%s\n' "$DB_PASSWORD"
+	# encode all configuration variables based on the SECRET_MAPPING_ARR array values defined in docker_config.sh
+	generic_encode_config_data SECRET_MAPPING_ARR
 }
 
-
-# function to unset bash variables specified by STDIN:
+# function to unset bash variables specified by STDIN based on the SECRET_MAPPING_ARR array values:
 function unset_config_variables()
 {
-#	echo "running unset_config_variables()"
-
-	unset DB_USERNAME DB_PASSWORD
+	# unset all configuration variables based on the SECRET_MAPPING_ARR array values defined in docker_config.sh
+	generic_unset_config_variables SECRET_MAPPING_ARR
 }
 
+# function to set the database secrets based on the SECRET_MAPPING_ARR associative array (containing secret names, variable names) and the corresponding variable values
+function set_db_secrets() {
 
-# function to set the database secrets from bash variables:
-function set_db_secrets ()
-{
-	#set the database username secret value
-	create_secret "sia_db_username_secret" "$DB_USERNAME"
-
-	#set the database password secret value
-	create_secret "sia_db_password_secret" "$DB_PASSWORD"
-
+    # set the database secrets based on the SECRET_MAPPING_ARR array elements and values defined in docker_config.sh
+    generic_set_docker_secrets SECRET_MAPPING_ARR
 }

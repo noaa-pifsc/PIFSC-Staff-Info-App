@@ -1,16 +1,19 @@
 #!/bin/bash
 
+#-----------------------------------------------------------------------------
+# deploy_container_to_host.sh:
+# this client script deploys a container to a remote docker host
+#-----------------------------------------------------------------------------
+
+
 # force script to exit immediately when an error is encountered
 set -euo pipefail
 
 # change to the directory the script is running in
 cd "$(dirname "$(realpath "$0")")"
 
-# include shell script function definitions
-source ../shared_functions/shared_functions.sh
-source ../shared_functions/custom_shared_functions.sh
-source ./functions/client_functions.sh
-source ./functions/custom_client_functions.sh
+# load all function definition files used in client scripts
+source ./includes/include_client_resources.sh
 
 # initialize the deployment script
 initialize_deployment_script "$0"
@@ -22,5 +25,5 @@ echo "************************************************************************"
 echo "*Note: This script will deploy the current version of the Staff Info App to the specified docker host"
 echo ""
 
-# prepare and execute the deployment script
-prepare_execute_deployment_script "${1:-}" "${2:-}"
+# deploy the container locally based on the arguments specified by the user ($1 is the environment: dev, test, prod)
+prepare_execute_deployment_script "${1:-}"
