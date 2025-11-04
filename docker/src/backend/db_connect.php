@@ -3,10 +3,13 @@
 //include the oracle_db class for DB interactions
 include(SHARED_LIBRARY_FOLDER_PATH."oracle_db.php");
 
+include_once (PROJECT_FOLDER_PATH."secret_configuration.php");
+
+
 function db_connect(&$oracle_db) {
 
 	//connect to the database, do not exit on failure
-	$oracle_db = new oracle_db(get_secret('DB_USERNAME_FILE', 'DB_USERNAME'), get_secret('DB_PASSWORD_FILE', 'DB_PASSWORD'), getenv("DB_HOST")."/".getenv("DB_SERVICE_NAME"), false);
+	$oracle_db = new oracle_db(get_secret(SECRET_MAPPING['DB_USERNAME']['FILE'], SECRET_MAPPING['DB_USERNAME']['ENV']), get_secret(SECRET_MAPPING['DB_PASSWORD']['FILE'], SECRET_MAPPING['DB_PASSWORD']['ENV']), getenv("DB_HOST")."/".getenv("DB_SERVICE_NAME"), false);
   
   
 	if (!($conn = $oracle_db->is_connected($error_info))) {
