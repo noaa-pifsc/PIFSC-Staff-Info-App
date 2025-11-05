@@ -15,6 +15,8 @@
 #   prepare_deployment_script "$1"
 function prepare_execute_deployment_script ()
 {
+	echo "prepare the docker source files and deploy the container"
+	
 	local passed_env_name="$1"
 
 	# save/prompt for environment name and SSH username

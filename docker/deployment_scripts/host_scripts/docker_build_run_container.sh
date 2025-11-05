@@ -18,4 +18,4 @@ initialize_docker_env_var "$0"
 # initialize the docker target folder and build/run the container
 initialize_run_docker_project
 
-echo "$CURRENT_SCRIPT_NAME has finished running"
+# echo "$CURRENT_SCRIPT_NAME has finished running"

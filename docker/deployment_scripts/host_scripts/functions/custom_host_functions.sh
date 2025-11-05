@@ -52,6 +52,8 @@ function prepare_docker_prep_folder ()
 # initialize_run_docker_project
 function initialize_run_docker_project ()
 {
+	echo "build the image and deploy the container to swarm"
+	
 	# copy the necessary files to deploy/upgrade/rollback a specific data system from the $DOCKER_SOURCE_DIR/$DOCKER_GIT_DIR to the $DOCKER_TARGET_DIR
 	prepare_docker_target_dir
 

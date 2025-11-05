@@ -33,4 +33,4 @@ EOF
 # clean up project folders/files that were used to build and run the docker container
 rm -rf "$DOCKER_SOURCE_DIR"
 
-echo "$CURRENT_SCRIPT_NAME has finished running"
+# echo "$CURRENT_SCRIPT_NAME has finished running"

@@ -49,4 +49,4 @@ EOF
 # unset the CONFIG_DATA variable
 unset CONFIG_DATA
 
-echo "$CURRENT_SCRIPT_NAME has finished running"
+# echo "$CURRENT_SCRIPT_NAME has finished running"

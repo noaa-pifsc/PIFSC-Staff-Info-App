@@ -23,4 +23,4 @@ convert_dos2unix "../"
 # prepre the docker preparation folder
 prepare_docker_prep_folder
 
-echo "$CURRENT_SCRIPT_NAME has finished running"
+# echo "$CURRENT_SCRIPT_NAME has finished running"

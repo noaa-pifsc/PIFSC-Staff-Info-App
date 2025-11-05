@@ -32,5 +32,5 @@ set_db_secrets
 # unset bash variables specified by STDIN
 unset_config_variables
 
-echo "$CURRENT_SCRIPT_NAME has finished running"
+# echo "$CURRENT_SCRIPT_NAME has finished running"
 

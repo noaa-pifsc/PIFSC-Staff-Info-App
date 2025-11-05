@@ -11,10 +11,10 @@
 DOCKER_ACCOUNT_NAME="docker-user"
 
 # define the project folder name
-SIA_PROJECT_FOLDER="staff-info-app"
+REPO_NAME="staff-info-app"
 
 # define the docker source directory (parent folder used to clone the SIA repo and prepare the docker preparation folder)
-DOCKER_SOURCE_DIR="/tmp/$SIA_PROJECT_FOLDER"
+DOCKER_SOURCE_DIR="/tmp/$REPO_NAME"
 
 # define the PHP shared library git url
 PHP_LIB_GIT_URL="git@picgitlab.nmfs.local:centralized-data-tools/php-shared-library.git"
@@ -32,7 +32,7 @@ DOCKER_STACK_NAME="SIA_stack"
 DOCKER_NETWORK_NAME="${DOCKER_STACK_NAME}_default"
 
 # define the docker image name
-DOCKER_IMAGE_NAME="pifsc/staff-info-app"
+DOCKER_IMAGE_NAME="pifsc/$REPO_NAME"
 
 # declare an associative array with the secret name as the array element and the bash variable name as the array value
 declare -A SECRET_MAPPING_ARR=(

@@ -18,4 +18,4 @@ initialize_docker_env_var "$0"
 # initialize the docker target folder and build/run the container
 restart_docker_project "$REBUILD_IMAGE"
 
-echo "$CURRENT_SCRIPT_NAME has finished running"
+# echo "$CURRENT_SCRIPT_NAME has finished running"
