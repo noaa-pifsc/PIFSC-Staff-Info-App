@@ -113,8 +113,8 @@ The Docker image is built from the official Oracle InstantClient on OracleLinux 
 
 ## Docker Application Deployment Scripts
 -   This project implements reusable docker application deployment functions from the [PIFSC Container Deployment Scripts (CDS)](https://picgitlab.nmfs.local/centralized-data-tools/pifsc-container-deployment-scripts) project
-    -   URL: <git@picgitlab.nmfs.local:centralized-data-tools/pifsc-docker-application-deployment-scripts.git>
-    -   Scripts: 1.0 (Git tag: pifsc_docker_app_deployment_scripts_v1.0)
+    -   URL: <git@picgitlab.nmfs.local:centralized-data-tools/pifsc-container-deployment-scripts.git>
+    -   Scripts: 1.0 (Git tag: pifsc_container_deployment_scripts_v1.0)
 -   ### Folders/Files:
     -   [deployment_scripts](../docker/deployment_scripts) contains the automated docker application deployment scripts:
         -   [reusable_functions](../docker/deployment_scripts/reusable_functions) is copied directly from the CDS repository to provide core functionality using reusable function definitions
