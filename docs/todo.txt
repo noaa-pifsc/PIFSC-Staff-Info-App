@@ -10,3 +10,63 @@ Short-term updates:
 					
 				
 
+X implement the same configuration as PRI
+	
+	
+
+X deployment/restart container testing (testing completed on 11/5/25):
+	X deploy to local
+		success:
+			args: dev mount
+				X container running
+				X container not running
+			args: dev stack
+				X container running
+				X container not running
+	X deploy to host
+		success:
+			X args: dev
+				X container running
+				X container not running
+			X args: test
+				X container running
+				X container not running
+
+	X restart container
+		args: dev yes
+			X success:
+				stack rm
+				drop image
+				run restart with rebuild
+			X success (container running)
+		args: dev no
+			X success (no rebuild):
+				stack rm
+				run restart
+			X success (automatic rebuild):
+				stack rm
+				drop image
+				run restart
+			X success (container running)
+		args: test yes
+			X success:
+				stack rm
+				drop image
+				run restart with rebuild
+			X success (container running)
+		args: test no
+			X success (no rebuild):
+				stack rm
+				run restart
+			X success (automatic rebuild):
+				stack rm
+				drop image
+				run restart
+			X success (container running)
+
+
+	commands for scenarios:
+		docker stack rm SIA_stack
+		docker image rm pifsc/staff-info-app
+		docker image inspect pifsc/staff-info-app
+		

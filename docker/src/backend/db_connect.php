@@ -9,7 +9,7 @@ include_once (PROJECT_FOLDER_PATH."secret_configuration.php");
 function db_connect(&$oracle_db) {
 
 	//connect to the database, do not exit on failure
-	$oracle_db = new oracle_db(get_secret(SECRET_MAPPING['DB_USERNAME']['FILE'], SECRET_MAPPING['DB_USERNAME']['ENV']), get_secret(SECRET_MAPPING['DB_PASSWORD']['FILE'], SECRET_MAPPING['DB_PASSWORD']['ENV']), getenv("DB_HOST")."/".getenv("DB_SERVICE_NAME"), false);
+	$oracle_db = new oracle_db(get_secret(SECRET_MAPPING_ARR['DB_USERNAME']['FILE'], SECRET_MAPPING_ARR['DB_USERNAME']['ENV']), get_secret(SECRET_MAPPING_ARR['DB_PASSWORD']['FILE'], SECRET_MAPPING_ARR['DB_PASSWORD']['ENV']), getenv("DB_HOST")."/".getenv("DB_SERVICE_NAME"), false);
   
   
 	if (!($conn = $oracle_db->is_connected($error_info))) {
