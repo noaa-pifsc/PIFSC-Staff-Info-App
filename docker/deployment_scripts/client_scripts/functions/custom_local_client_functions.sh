@@ -82,5 +82,7 @@ function deploy_container_locally ()
 
     fi
 
+	echo "the local docker deployment script has finished executing"
+
 }
 

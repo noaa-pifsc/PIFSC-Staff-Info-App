@@ -53,8 +53,7 @@ function prepare_execute_deployment_script ()
 	# execute the deployment/upgrade script on the host server and pass the DB_SERVICE_NAME and DB_HOST bash variable values
 	exec_remote_cmd "DB_HOST=\"$DB_HOST\" DB_SERVICE_NAME=\"$DB_SERVICE_NAME\" bash $DOCKER_SOURCE_DIR/docker/deployment_scripts/host_scripts/build_run_container.sh"
 
-
-#	echo "The $CURRENT_SCRIPT_NAME script finished executing"
+	echo "the docker deployment script has finished executing"
 }
 
 
@@ -124,6 +123,5 @@ function prepare_execute_restart_script ()
 	# execute the deployment/upgrade script on the host server and pass the DB_SERVICE_NAME and DB_HOST bash variable values
 	exec_remote_cmd "DB_HOST=\"$DB_HOST\" DB_SERVICE_NAME=\"$DB_SERVICE_NAME\" REBUILD_IMAGE=\"$REBUILD_IMAGE\" bash $DOCKER_SOURCE_DIR/docker/deployment_scripts/host_scripts/restart_container.sh"
 
-#	echo "The $CURRENT_SCRIPT_NAME script finished executing"
-
+	echo "the container restart script has finished executing"
 }
