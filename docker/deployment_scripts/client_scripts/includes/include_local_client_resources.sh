@@ -9,7 +9,6 @@
 
 # include the shared functions
 source ../reusable_functions/shared_functions.sh
-source ../shared_functions/custom_shared_functions.sh
 
 # include the client functions
 source ./functions/custom_local_client_functions.sh
