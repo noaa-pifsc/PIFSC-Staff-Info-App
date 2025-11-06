@@ -1,13 +1,16 @@
 #!/bin/bash
 
+#-----------------------------------------------------------------------------
+# docker_define_secrets.sh:
+# this host script runs as the $DOCKER_ACCOUNT_NAME to define the docker 
+# secrets used by the docker container application
+#-----------------------------------------------------------------------------
+
 # change to the directory the script is running in
 cd "$(dirname "$(realpath "$0")")"
 
-# include the shell script functions
-source ../shared_functions/shared_functions.sh
-source ../shared_functions/custom_shared_functions.sh
-source ./functions/host_functions.sh
-source ./functions/custom_host_functions.sh
+# load all function definition files used in host scripts
+source ./includes/include_host_resources.sh
 
 # initialize the docker environment variables
 initialize_docker_env_var "$0"
@@ -19,7 +22,7 @@ initialize_docker_env_var "$0"
 parse_config_data
 
 # stop the container if it's running so the secrets can be defined/updated
-docker stack rm SIA_stack
+docker stack rm "$DOCKER_STACK_NAME"
 
 
 # set the docker secrets for the database information based on the parsed configuration data from STDIN
@@ -29,5 +32,5 @@ set_db_secrets
 # unset bash variables specified by STDIN
 unset_config_variables
 
-echo "$CURRENT_SCRIPT_NAME has finished running"
+# echo "$CURRENT_SCRIPT_NAME has finished running"
 

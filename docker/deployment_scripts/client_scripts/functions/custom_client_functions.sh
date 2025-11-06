@@ -1,27 +1,35 @@
 #!/bin/bash
 
+#-----------------------------------------------------------------------------
+# custom_client_functions.sh:
+# this file defines custom client functions that are used for this specific 
+# docker application for docker deployments (intended for remote docker host 
+# scenarios)
+#-----------------------------------------------------------------------------
+
+
+
 # this function prepares and executes the client deployment scripts
 # this function accepts 1 parameter: the environment name (dev, test, prod)
 # Usage:
 #   prepare_deployment_script "$1"
 function prepare_execute_deployment_script ()
 {
+	echo "prepare the docker source files and deploy the container"
+	
 	local passed_env_name="$1"
 
 	# save/prompt for environment name and SSH username
 	set_env_var "$passed_env_name" 
-
-#	echo "The value of ENV_NAME is: $ENV_NAME"
 
 	# convert all the .sh files in the parent directory to unix line endings
 	convert_dos2unix "../"
 
 	# load the bash variables for the runtime configuration
 	source ../config/deploy_config.$ENV_NAME.sh
-	source ../config/docker_host_config.sh
 	
 	# Prepare the docker host by creating directories and cloning the repository
-	prepare_docker_host
+	prepare_docker_host "yes"
 
 	# load the oracle credentials into bash variables
 	source ../../secrets/$ENV_NAME/secrets.sh
@@ -32,6 +40,7 @@ function prepare_execute_deployment_script ()
 	# unset the sensitive bash variables so they can't be reused
 	unset_config_variables
 
+	echo "define the docker secrets"
 
 	# define the secrets and specify the bash variable values as stdin
 	exec_remote_cmd_with_stdin "$CONFIG_DATA" "bash $DOCKER_SOURCE_DIR/docker/deployment_scripts/host_scripts/define_secrets.sh"
@@ -39,26 +48,80 @@ function prepare_execute_deployment_script ()
 	# unset the CONFIG_DATA now that the ssh call has completed
 	unset CONFIG_DATA
 
+	echo "deploy the container"
 
 	# execute the deployment/upgrade script on the host server and pass the DB_SERVICE_NAME and DB_HOST bash variable values
-	exec_remote_cmd "DB_HOST=\"$DB_HOST\" DB_SERVICE_NAME=\"$DB_SERVICE_NAME\" bash $DOCKER_SOURCE_DIR/docker/deployment_scripts/host_scripts/initiate_docker.sh"
+	exec_remote_cmd "DB_HOST=\"$DB_HOST\" DB_SERVICE_NAME=\"$DB_SERVICE_NAME\" bash $DOCKER_SOURCE_DIR/docker/deployment_scripts/host_scripts/build_run_container.sh"
 
-	echo "The $CURRENT_SCRIPT_NAME script finished executing"
+	echo "the docker deployment script has finished executing"
+}
+
+
+# this function prepares the docker host by creating the temporary directory structure (defined by ${DOCKER_SOURCE_DIR}), cloning the project repository, and optionally copying project dependencies from the PHP shared library repository.  This function accepts 1 parameter: include_php_shared_library (yes/no) to copy the PHP shared library repository dependencies (yes) or not (no).  If no parameters are specified it will default to yes
+# Usage:
+# prepare_docker_host "yes"
+# prepare_docker_host "no"
+function prepare_docker_host ()
+{
+	echo "prepare the docker host by cloning the application repository: $DOCKER_GIT_URL"
+
+	# Get the first argument ($1). If it's not provided, default to 'yes'.
+	local include_php_shared_library="${1:-yes}"
+
+	echo "create the directory path ('$DOCKER_SOURCE_DIR') for the initial deployment scripts"
+
+	# Check if the 'include_php_shared_library' variable is numerically equal to 1
+	if [ "$include_php_shared_library" == "yes" ]; then
+		# dynamically retrieve the php shared library files for the new deployment
+#		echo "dynamically retrieve the php shared library files for the new deployment"
+
+		# remove the temporary directory, create the directory path ('$DOCKER_SOURCE_DIR') for the initial deployment scripts, clone the repository, and prepare the docker project (clone shared library and copy files into designated folder in project repository):
+		exec_remote_cmd "rm -rf '${DOCKER_SOURCE_DIR}' && mkdir -p '${DOCKER_SOURCE_DIR}' && git clone ${DOCKER_GIT_URL} ${DOCKER_SOURCE_DIR} && bash $DOCKER_SOURCE_DIR/docker/deployment_scripts/host_scripts/prepare_docker_host.sh"
+
+	else
+#		echo "do NOT dynamically retrieve the php shared library files for the new deployment"
+	
+		# remove the temporary directory, create the directory path ('$DOCKER_SOURCE_DIR') for the initial deployment scripts, clone the repository, and update the file permissions
+		exec_remote_cmd "rm -rf '${DOCKER_SOURCE_DIR}' && mkdir -p '${DOCKER_SOURCE_DIR}' && git clone ${DOCKER_GIT_URL} ${DOCKER_SOURCE_DIR} && chmod -R 755 $DOCKER_SOURCE_DIR"
+
+	fi
 
 }
 
 
-# function that prepares the docker host by creating the temporary directory structure, copying the initial .sh and .env files for the host and executes the prepare_docker_host.sh script.  This function accepts no parameters
+
+
+# this function prepares and executes the host scripts that restart the docker app
+# this function accepts 2 parameters: the environment name (dev, test, prod), and rebuild image? (yes, no) to rebuild the image (yes) or reuse the existing image (no)
 # Usage:
-# prepare_docker_host
-function prepare_docker_host ()
+#   prepare_deployment_script "dev" "yes"
+#   prepare_deployment_script "prod" "no"
+function prepare_execute_restart_script ()
 {
-	echo "create the directory path ('$DOCKER_SOURCE_DIR') for the initial deployment scripts"
-
-	# remove the temporary directory, create the directory path ('$DOCKER_SOURCE_DIR') for the initial deployment scripts, and clone the repository
-	exec_remote_cmd "rm -rf '${DOCKER_SOURCE_DIR}' && mkdir -p '${DOCKER_SOURCE_DIR}' && git clone ${DOCKER_GIT_URL} ${DOCKER_SOURCE_DIR}"
+	echo "restart the container on the docker host"
 	
-	# prepare the docker project (clone shared library and copy files into designated folder in project repository):
-	exec_remote_cmd "bash $DOCKER_SOURCE_DIR/docker/deployment_scripts/host_scripts/prepare_docker_host.sh"
+	# save/prompt for environment name
+	set_env_var "$1" 
 
+#	echo "The value of ENV_NAME is: $ENV_NAME"
+
+	# save/prompt for the rebuild docker image boolean value 
+	set_rebuild_var "$2"
+
+#	echo "The value of REBUILD_IMAGE is: $REBUILD_IMAGE"
+
+
+	# convert all the .sh files in the parent directory to unix line endings
+	convert_dos2unix "../"
+
+	# load the bash variables for the runtime configuration
+	source ../config/deploy_config.$ENV_NAME.sh
+	
+	# Prepare the docker host by creating directories and cloning the repository (do not include the php shared library since it will not be used in a docker container restart scenario)
+	prepare_docker_host "no"
+
+	# execute the deployment/upgrade script on the host server and pass the DB_SERVICE_NAME and DB_HOST bash variable values
+	exec_remote_cmd "DB_HOST=\"$DB_HOST\" DB_SERVICE_NAME=\"$DB_SERVICE_NAME\" REBUILD_IMAGE=\"$REBUILD_IMAGE\" bash $DOCKER_SOURCE_DIR/docker/deployment_scripts/host_scripts/restart_container.sh"
+
+	echo "the container restart script has finished executing"
 }
