@@ -6,7 +6,7 @@ The Staff Information Application (SIA) is a web app that provides access to the
 ## Resources
 -   Version Control Information:
     -   URL: https://picgitlab.nmfs.local/omi-apps/staff-directory.git
-    -   Application: 1.2 (Git tag: staff_info_app_v1.2)
+    -   Application: 1.3 (Git tag: staff_info_app_v1.3)
 -   [End-User Documentation](./Staff%20Info%20App%20-%20End-User%20Documentation.md)
 
 ## Application Access
