@@ -20,7 +20,7 @@ DOCKER_SOURCE_DIR="/tmp/$REPO_NAME"
 PHP_LIB_GIT_URL="git@picgitlab.nmfs.local:centralized-data-tools/php-shared-library.git"
 
 
-DOCKER_TARGET_DIR="/home/$DOCKER_ACCOUNT_NAME/containers/staff-directory"
+DOCKER_TARGET_DIR="/home/$DOCKER_ACCOUNT_NAME/containers/$REPO_NAME"
 
 DOCKER_GIT_URL="--branch Branch_docker_restart git@picgitlab.nmfs.local:omi-apps/staff-info-app.git"
 
