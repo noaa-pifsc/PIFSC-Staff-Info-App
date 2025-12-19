@@ -22,8 +22,8 @@ function prepare_execute_deployment_script ()
 	# save/prompt for environment name and SSH username
 	set_env_var "$passed_env_name" 
 
-	# convert all the .sh files in the parent directory to unix line endings
-	convert_dos2unix "../"
+	# recursively convert the line endings for all .sh files in the root folder of the repository
+	convert_dos2unix "../../../"
 
 	# load the bash variables for the runtime configuration
 	source ../config/deploy_config.$ENV_NAME.sh
@@ -57,35 +57,17 @@ function prepare_execute_deployment_script ()
 }
 
 
-# this function prepares the docker host by creating the temporary directory structure (defined by ${DOCKER_SOURCE_DIR}), cloning the project repository, and optionally copying project dependencies from the PHP shared library repository.  This function accepts 1 parameter: include_php_shared_library (yes/no) to copy the PHP shared library repository dependencies (yes) or not (no).  If no parameters are specified it will default to yes
+# this function prepares the docker host by creating the temporary directory structure (defined by ${DOCKER_SOURCE_DIR}), cloning the project repository, and optionally copying project dependencies from the PHP shared library repository.  This function accepts no parameters
 # Usage:
-# prepare_docker_host "yes"
-# prepare_docker_host "no"
+# prepare_docker_host
 function prepare_docker_host ()
 {
 	echo "prepare the docker host by cloning the application repository: $DOCKER_GIT_URL"
 
-	# Get the first argument ($1). If it's not provided, default to 'yes'.
-	local include_php_shared_library="${1:-yes}"
-
 	echo "create the directory path ('$DOCKER_SOURCE_DIR') for the initial deployment scripts"
 
-	# Check if the 'include_php_shared_library' variable is numerically equal to 1
-	if [ "$include_php_shared_library" == "yes" ]; then
-		# dynamically retrieve the php shared library files for the new deployment
-#		echo "dynamically retrieve the php shared library files for the new deployment"
-
-		# remove the temporary directory, create the directory path ('$DOCKER_SOURCE_DIR') for the initial deployment scripts, clone the repository, and prepare the docker project (clone shared library and copy files into designated folder in project repository):
-		exec_remote_cmd "rm -rf '${DOCKER_SOURCE_DIR}' && mkdir -p '${DOCKER_SOURCE_DIR}' && git clone ${DOCKER_GIT_URL} ${DOCKER_SOURCE_DIR} && bash $DOCKER_SOURCE_DIR/docker/deployment_scripts/host_scripts/prepare_docker_host.sh"
-
-	else
-#		echo "do NOT dynamically retrieve the php shared library files for the new deployment"
-	
 		# remove the temporary directory, create the directory path ('$DOCKER_SOURCE_DIR') for the initial deployment scripts, clone the repository, and update the file permissions
-		exec_remote_cmd "rm -rf '${DOCKER_SOURCE_DIR}' && mkdir -p '${DOCKER_SOURCE_DIR}' && git clone ${DOCKER_GIT_URL} ${DOCKER_SOURCE_DIR} && chmod -R 755 $DOCKER_SOURCE_DIR"
-
-	fi
-
+	exec_remote_cmd "rm -rf '${DOCKER_SOURCE_DIR}' && mkdir -p '${DOCKER_SOURCE_DIR}' && git clone --recurse-submodules ${DOCKER_GIT_URL} ${DOCKER_SOURCE_DIR} && chmod -R 755 $DOCKER_SOURCE_DIR"
 }
 
 
@@ -110,9 +92,8 @@ function prepare_execute_restart_script ()
 
 #	echo "The value of REBUILD_IMAGE is: $REBUILD_IMAGE"
 
-
-	# convert all the .sh files in the parent directory to unix line endings
-	convert_dos2unix "../"
+	# recursively convert the line endings for all .sh files in the root folder of the repository
+	convert_dos2unix "../../../"
 
 	# load the bash variables for the runtime configuration
 	source ../config/deploy_config.$ENV_NAME.sh

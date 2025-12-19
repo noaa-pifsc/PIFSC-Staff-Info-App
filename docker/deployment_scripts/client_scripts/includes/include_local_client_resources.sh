@@ -8,12 +8,12 @@
 #-----------------------------------------------------------------------------
 
 # include the shared functions
-source ../reusable_functions/shared_functions.sh
+source ../../../modules/CDS/src/reusable_functions/shared_functions.sh
 
 # include the client functions
 source ./functions/custom_local_client_functions.sh
-source ../reusable_functions/local_client_functions.sh
-source ../reusable_functions/client_functions.sh
+source ../../../modules/CDS/src/reusable_functions/local_client_functions.sh
+source ../../../modules/CDS/src/reusable_functions/client_functions.sh
 
 # include the docker host configuration variables
 source ../config/docker_config.sh

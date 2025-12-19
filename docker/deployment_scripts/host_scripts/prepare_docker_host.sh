@@ -16,9 +16,8 @@ source ./includes/include_host_resources.sh
 # initialize the docker environment variables
 initialize_docker_env_var "$0"
 
-# convert the line endings for all .sh files in the parent folder
-convert_dos2unix "../"
-
+# recursively convert the line endings for all .sh files in the root folder of the repository
+convert_dos2unix "../../../"
 
 # prepre the docker preparation folder
 prepare_docker_prep_folder

@@ -1,7 +1,8 @@
 services:
   staff-info-app:
     build:
-      context: .
+      context: ..
+      dockerfile: docker/Dockerfile
     image: pifsc/staff-info-app:latest
     container_name: staff-info-app
     ports:
@@ -21,3 +22,4 @@ services:
     volumes:
       - "./src/frontend:/var/www/html"
       - "./src/backend:/usr/src/app"
+      - "../modules/php-shared-library:/usr/src/app/dependencies"

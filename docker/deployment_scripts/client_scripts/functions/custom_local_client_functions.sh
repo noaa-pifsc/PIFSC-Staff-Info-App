@@ -21,10 +21,6 @@ function deploy_container_locally ()
 	# save/prompt for execution mode
 	set_exec_mode_var "$2"
 
-	#define the directory paths used to clone the repository and copy the dependencies 
-	local source_dependency_dir="../../src/backend/dependencies/tmp"
-	local backend_dependency_dir="../../src/backend/dependencies"
-
 	# load the bash variables for the runtime configuration
 	source ../config/deploy_config.$ENV_NAME.sh
 	
@@ -35,16 +31,8 @@ function deploy_container_locally ()
 	export DB_HOST
 	export DB_SERVICE_NAME
 
-	# clone the project dependencies into the current working copy where the script was executed from:
-	fetch_git_dependency "$PHP_LIB_GIT_URL" "$source_dependency_dir"
-
-	# copy the required PHP shared library files into the dependencies directory
-#	echo "Copy the backend dependency files (.php and .inc extensions)"
-	copy_files_by_filename_expansion "$source_dependency_dir" "$backend_dependency_dir" "oracle*.php"
 
 
-	# remove the temporary directory
-	rm -rf "$source_dependency_dir"
 
 	# change directory into the docker folder that contains the Dockerfile and .yml files
 	cd ../../
