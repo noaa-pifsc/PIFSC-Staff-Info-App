@@ -18,7 +18,7 @@ DOCKER_SOURCE_DIR="/tmp/$REPO_NAME"
 
 DOCKER_TARGET_DIR="/home/$DOCKER_ACCOUNT_NAME/containers/$REPO_NAME"
 
-DOCKER_GIT_URL="--branch Branch_version1.4 git@picgitlab.nmfs.local:omi-apps/staff-info-app.git"
+DOCKER_GIT_URL="git@picgitlab.nmfs.local:omi-apps/staff-info-app.git"
 
 
 # define the name of the docker stack
