@@ -2,17 +2,7 @@ Future updates:
 	_ Remove the hardcoding for the person ids or just filter by other database attributes for CIMAR admin
 		_ add flags to the DB table
 
-Short-term updates:
-	X update openssh so it can use the CAC to authenticate
-	
-	_ ** add the cloning to the Dockerfile to simplify the deployment (requires additional setup since docker-user would need to be able to have SSH keys to the repo)
-		Maybe create an OCI docker host account on gitlab and grant SSH keys to it?
-					
-				
 
-X implement the same configuration as PRI
-	
-	
 
 X deployment/restart container testing (testing completed on 11/5/25):
 	X deploy to local
@@ -70,3 +60,21 @@ X deployment/restart container testing (testing completed on 11/5/25):
 		docker image rm pifsc/staff-info-app
 		docker image inspect pifsc/staff-info-app
 		
+		
+		
+	cd /c/Users/jesse.abdul/Documents/Version\ Control/Git/staff-info-app/docker
+
+	# deploy dev container locally for development purposes
+	bash ./deployment_scripts/client_scripts/deploy_container_to_local.sh dev mount
+
+	# deploy test container locally for test purposes
+	bash ./deployment_scripts/client_scripts/deploy_container_to_local.sh dev stack
+
+	# deploy dev container to host for test purposes
+	bash ./deployment_scripts/client_scripts/deploy_container_to_host.sh dev
+
+	# restart the dev remote host without rebuilding
+	bash ./deployment_scripts/client_scripts/restart_container_on_host.sh dev no
+
+	# restart the dev remote host with rebuilding
+	bash ./deployment_scripts/client_scripts/restart_container_on_host.sh dev yes

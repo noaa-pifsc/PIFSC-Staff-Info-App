@@ -16,10 +16,6 @@ REPO_NAME="staff-info-app"
 # define the docker source directory (parent folder used to clone the SIA repo and prepare the docker preparation folder)
 DOCKER_SOURCE_DIR="/tmp/$REPO_NAME"
 
-# define the PHP shared library git url
-PHP_LIB_GIT_URL="git@picgitlab.nmfs.local:centralized-data-tools/php-shared-library.git"
-
-
 DOCKER_TARGET_DIR="/home/$DOCKER_ACCOUNT_NAME/containers/$REPO_NAME"
 
 DOCKER_GIT_URL="git@picgitlab.nmfs.local:omi-apps/staff-info-app.git"

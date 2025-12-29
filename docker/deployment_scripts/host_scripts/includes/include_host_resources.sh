@@ -7,10 +7,10 @@
 #-----------------------------------------------------------------------------
 
 # include the shared functions
-source ../reusable_functions/shared_functions.sh
+source ../../../modules/CDS/src/reusable_functions/shared_functions.sh
 
 # include the host functions
-source ../reusable_functions/host_functions.sh
+source ../../../modules/CDS/src/reusable_functions/host_functions.sh
 source ./functions/custom_host_functions.sh
 
 # include the docker host configuration variables

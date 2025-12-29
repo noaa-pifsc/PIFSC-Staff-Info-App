@@ -19,7 +19,9 @@ function prepare_docker_target_dir ()
 	rm -rf "$DOCKER_TARGET_DIR"/*
 
 	# copy the docker files to the root $DOCKER_TARGET_DIR
-	rsync -a "$DOCKER_SOURCE_DIR"/docker/* "$DOCKER_TARGET_DIR"
+	rsync -a "$DOCKER_SOURCE_DIR"/docker/* "$DOCKER_TARGET_DIR"/docker
+	rsync -a "$DOCKER_SOURCE_DIR"/modules/* "$DOCKER_TARGET_DIR"/modules
+
 }
 
 # function to prepare the docker preparation folder that will be copied to 
@@ -27,20 +29,6 @@ function prepare_docker_target_dir ()
 function prepare_docker_prep_folder ()
 {
 	echo "prepare the docker source folder ($DOCKER_SOURCE_DIR)"
-
-	#define the directory paths used to clone the repository and copy the dependencies 
-	local source_dependency_dir="$DOCKER_SOURCE_DIR/docker/src/backend/dependencies/tmp"
-	local backend_dependency_dir="$DOCKER_SOURCE_DIR/docker/src/backend/dependencies"
-
-#	echo "clone the project dependencies"
-	fetch_git_dependency "$PHP_LIB_GIT_URL" "$source_dependency_dir"
-
-	# copy the required PHP shared library files into the dependencies directory
-#	echo "Copy the backend dependency files (.php and .inc extensions)"
-	copy_files_by_filename_expansion "$source_dependency_dir" "$backend_dependency_dir" "oracle*.php"
-
-	# remove the temporary directory
-	rm -rf "$source_dependency_dir"
 
 	# grant permissions so $DOCKER_ACCOUNT_NAME can copy/execute files from the repo/docker preparation folders
 	chmod -R 755 "$DOCKER_SOURCE_DIR"
@@ -58,7 +46,7 @@ function initialize_run_docker_project ()
 	prepare_docker_target_dir
 
 	# switch to the docker project's source directory
-	cd "$DOCKER_TARGET_DIR"
+	cd "$DOCKER_TARGET_DIR"/docker
 
 	# build and deploy the docker stack
 	build_deploy_docker_stack "$DOCKER_IMAGE_NAME" "$DOCKER_STACK_NAME" yes
@@ -73,8 +61,7 @@ function restart_docker_project ()
 	echo "restart the docker container (REBUILD_IMAGE = $1)"
 
 	# switch to the docker project's source directory
-	cd "$DOCKER_TARGET_DIR"
-
+	cd "$DOCKER_TARGET_DIR"/docker
 
 	# stop the docker stack if it exists:
 	remove_docker_stack "$DOCKER_STACK_NAME"

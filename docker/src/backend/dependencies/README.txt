@@ -1,1 +1,0 @@
-This directory is used to store external dependencies (dynamically retrieved during build)
