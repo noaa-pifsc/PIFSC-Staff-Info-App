@@ -6,10 +6,6 @@
 # the container application
 #-----------------------------------------------------------------------------
 
-echo "DB_HOST is: ${DB_HOST}"
-echo "DB_SERVICE_NAME is: ${DB_SERVICE_NAME}"
-echo "BUILD_IMAGE is: ${BUILD_IMAGE}"
-
 # include the host functions
 source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/includes/include_host_resources.sh"
 
@@ -23,8 +19,6 @@ declare -A FUNC_ARGS=(
 		["build_image"]="${BUILD_IMAGE}"
 		["calling_script_path"]="${0}"
 	)
-
-echo "host_deploy_container_elev_privs(): $(dump_array_vals "FUNC_ARGS")"	
 
 # deploy the container in stack mode
 host_deploy_container_elev_privs "FUNC_ARGS"

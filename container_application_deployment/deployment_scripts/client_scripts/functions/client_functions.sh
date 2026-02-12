@@ -121,7 +121,7 @@ function client_deploy_container ()
 			# this is a deploy container call that includes the build process, specify the stdin data (secrets)
 			set_array_val "LOCAL_FUNC_ARGS" "passed_stdin_content" "${!CONFIG_DATA_VAR_NAME}"
 		fi
-		
+
 		# execute the deployment script via ssh with corresponding environment variables/stdin configuration data
 		exec_remote_cmd "LOCAL_FUNC_ARGS"		
 	fi

@@ -32,8 +32,8 @@ function host_prepare_container_target_dir ()
 function host_deploy_define_env_vars_block()
 {
 	# validate the bash variable values
-	if ! host_deploy_define_env_vars_block	"DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE"; then
-        echo "ERROR: client_export_env_vars() function required bash variable validation failed" >&2
+	if ! validate_required_vars "DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE"; then
+        echo "ERROR: host_deploy_define_env_vars_block() function required bash variable validation failed" >&2
         return 1
 	fi
 	# build the list of environment variable declarations passed to the bash script, in multi-line format for readability. Expand variables before it is passed to the bash function
