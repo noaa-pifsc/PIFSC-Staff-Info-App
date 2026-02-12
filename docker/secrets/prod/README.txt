@@ -1,1 +1,0 @@
-This directory contains the database username and password for the production server

@@ -1,1 +1,0 @@
-This folder contains the log files from the deployment scripts
