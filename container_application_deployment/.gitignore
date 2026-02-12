@@ -1,0 +1,12 @@
+# prevent secrets from being committed to the repository
+secrets/dev/secrets.sh
+secrets/test/secrets.sh
+secrets/prod/secrets.sh
+
+# prevent container server information from being committed to the repository
+deployment_scripts/config/deploy_config.dev.sh
+deployment_scripts/config/deploy_config.test.sh
+deployment_scripts/config/deploy_config.prod.sh
+
+# prevent deployment logs from being saved in the repository
+deployment_script_logs/*.log

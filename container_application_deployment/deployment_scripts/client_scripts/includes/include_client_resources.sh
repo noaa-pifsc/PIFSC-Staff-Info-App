@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#-----------------------------------------------------------------------------
+# include_client_resources.sh:
+# this file loads all of the reusable bash files that are used in the client 
+# container deployment scripts (intended for remote container host scenarios)
+#-----------------------------------------------------------------------------
+
+# determine current folder path (container_application_deployment/deployment_scripts/client_scripts/includes)
+CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# include the custom container configuration variables
+source "${CURR_DIR}/../../config/custom_container_config.sh"
+
+# include the CAD client functions
+source "${CURR_DIR}/../../../../modules/CAD/src/includes/load_CAD_client_resources.sh"
+
+# include the project-specific client functions
+source "${CURR_DIR}/../functions/client_functions.sh"
+source "${CURR_DIR}/../functions/custom_client_functions.sh"
