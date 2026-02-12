@@ -14,6 +14,8 @@ echo "DB_HOST is: ${DB_HOST}"
 echo "DB_SERVICE_NAME is: ${DB_SERVICE_NAME}"
 echo "BUILD_IMAGE is: ${BUILD_IMAGE}"
 
+echo "the value of env_vars_block is: $(host_deploy_define_env_vars_block)"
+
 # declare the function arguments
 declare -A FUNC_ARGS=(
 		["container_host_scripts_path"]="${CONTAINER_HOST_SCRIPTS_PATH}"

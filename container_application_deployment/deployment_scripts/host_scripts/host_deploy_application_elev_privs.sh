@@ -6,6 +6,10 @@
 # the container application
 #-----------------------------------------------------------------------------
 
+echo "DB_HOST is: ${DB_HOST}"
+echo "DB_SERVICE_NAME is: ${DB_SERVICE_NAME}"
+echo "BUILD_IMAGE is: ${BUILD_IMAGE}"
+
 # include the host functions
 source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/includes/include_host_resources.sh"
 
