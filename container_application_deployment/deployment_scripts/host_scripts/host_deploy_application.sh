@@ -23,5 +23,7 @@ declare -A FUNC_ARGS=(
 		["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
 	)
 	
+echo "host_deploy_container(): $(dump_array_vals "FUNC_ARGS")"	
+
 #initiate the build/run process for the container using a privileged account on the host
 host_deploy_container "FUNC_ARGS"

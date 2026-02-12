@@ -20,5 +20,7 @@ declare -A FUNC_ARGS=(
 		["calling_script_path"]="${0}"
 	)
 
+echo "host_deploy_container_elev_privs(): $(dump_array_vals "FUNC_ARGS")"	
+
 # deploy the container in stack mode
 host_deploy_container_elev_privs "FUNC_ARGS"
