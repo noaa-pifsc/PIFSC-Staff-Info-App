@@ -7,8 +7,8 @@
 # container_stack_name: the container stack name
 # secret_mapping_var_name: name of an associative array that maps the secret values passed to bash commands via STDIN
 # container_network_name: container network name
-# deploy_dest: the deployment destination (local or server)
-# build_image: (yes = the container image is built and then run, no = the container is restarted using the existing container image)
+# container_deploy_dest: the deployment destination (local or server)
+# container_build_image: (yes = the container image is built and then run, no = the container is restarted using the existing container image)
 # calling_script_path: the full path of the calling script
 function host_deploy_container_elev_privs()
 {
@@ -22,7 +22,7 @@ function host_deploy_container_elev_privs()
     fi
 	
 	# input validation
-	if ! validate_required_array_vals "${arg_array}" "container_target_path" "container_image_name" "container_stack_name" "secret_mapping_var_name" "container_network_name" "build_image" "calling_script_path"; then 
+	if ! validate_required_array_vals "${arg_array}" "container_target_path" "container_image_name" "container_stack_name" "secret_mapping_var_name" "container_network_name" "container_build_image" "calling_script_path"; then 
         echo "ERROR: host_deploy_container_elev_privs() function argument validation failed" >&2
         return 1
     fi
@@ -40,8 +40,8 @@ function host_deploy_container_elev_privs()
 			["container_stack_name"]="$(get_array_val "${arg_array}" "container_stack_name")"
 			["secret_mapping_var_name"]="$(get_array_val "${arg_array}" "secret_mapping_var_name")"
 			["container_network_name"]="$(get_array_val "${arg_array}" "container_network_name")"
-			["deploy_dest"]="server"
-			["build_image"]="$(get_array_val "${arg_array}" "build_image")"
+			["container_deploy_dest"]="server"
+			["container_build_image"]="$(get_array_val "${arg_array}" "container_build_image")"
 		)
 
 	# execute the secret definitions and the container build/run process on the target folder using a privileged account

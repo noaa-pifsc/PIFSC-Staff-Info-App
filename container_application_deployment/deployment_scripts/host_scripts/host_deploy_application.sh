@@ -19,7 +19,7 @@ declare -A FUNC_ARGS=(
 		["host_script_name"]="host_deploy_application_elev_privs.sh"
 		["env_vars_block"]="$(host_deploy_define_env_vars_block)"
 		["calling_script_path"]="${0}"
-		["build_image"]="${BUILD_IMAGE}"
+		["container_build_image"]="${CONTAINER_BUILD_IMAGE}"
 		["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
 	)
 

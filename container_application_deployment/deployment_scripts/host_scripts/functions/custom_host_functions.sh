@@ -32,7 +32,7 @@ function host_prepare_container_target_dir ()
 function host_deploy_define_env_vars_block()
 {
 	# validate the bash variable values
-	if ! validate_required_vars "DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE"; then
+	if ! validate_required_vars "DB_HOST" "DB_SERVICE_NAME" "CONTAINER_BUILD_IMAGE"; then
         echo "ERROR: host_deploy_define_env_vars_block() function required bash variable validation failed" >&2
         return 1
 	fi
@@ -40,7 +40,7 @@ function host_deploy_define_env_vars_block()
 	local env_vars_block="
 	export DB_HOST='${DB_HOST}'
 	export DB_SERVICE_NAME='${DB_SERVICE_NAME}'
-	export BUILD_IMAGE='${BUILD_IMAGE}'
+	export CONTAINER_BUILD_IMAGE='${CONTAINER_BUILD_IMAGE}'
 	"
 
 	# return the multiline string

@@ -62,19 +62,82 @@ X deployment/restart container testing (testing completed on 11/5/25):
 		
 		
 		
-	cd /c/Users/jesse.abdul/Documents/Version\ Control/Git/staff-info-app/docker
 
-	# deploy dev container locally for development purposes
-	bash ./deployment_scripts/client_scripts/deploy_container_to_local.sh dev mount
+	cd /c/Users/jesse.abdul/Documents/Version\ Control/Git/staff-info-app/container_application_deployment
 
-	# deploy test container locally for test purposes
-	bash ./deployment_scripts/client_scripts/deploy_container_to_local.sh dev stack
+	# Deploy Container:
 
-	# deploy dev container to host for test purposes
-	bash ./deployment_scripts/client_scripts/deploy_container_to_host.sh dev
+		# Server:
+			# deploy dev container to host for test purposes
+			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev server yes 
 
-	# restart the dev remote host without rebuilding
-	bash ./deployment_scripts/client_scripts/restart_container_on_host.sh dev no
+		# Local:
 
-	# restart the dev remote host with rebuilding
-	bash ./deployment_scripts/client_scripts/restart_container_on_host.sh dev yes
+			# deploy dev container locally for development purposes
+			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev local yes mount 
+
+			# deploy test container locally for test purposes
+			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev local yes stack
+
+
+	# Restart Container
+
+		# Server:
+			# restart the dev remote host without rebuilding
+			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev server  no
+
+		# Local:
+
+			# restart the dev local host stack without rebuilding
+			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev local no stack 
+
+			# restart the dev local host compose without rebuilding
+			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev local no mount
+
+
+
+
+
+	_ testing (2/2026):
+		local:
+			build - yes
+				mount
+					image does not exist
+						_ build and deploy image
+					image exists
+						_ build and deploy image
+				stack
+					image does not exist
+						_ build and deploy image
+					image exists
+						_ build and deploy image
+					
+			build - no
+				mount
+					image does not exist
+						_ rebuild image and deploy stack
+					image exists
+						_ restart container (no build)
+				
+				stack
+					image does not exist
+						_ rebuild image and deploy stack
+					image exists
+						_ restart container (no build)
+		server:
+			build - yes
+				image does not exist
+					_ build and deploy image
+				image exists
+					_ build and deploy image
+					
+			build - no
+				image does not exist
+					_ rebuild image and deploy stack
+				image exists
+					_ restart container (no build)
+
+	commands for scenarios:
+		docker stack rm PLW_stack
+		docker image rm pifsc/pifsc-library-website
+		docker image inspect pifsc/pifsc-library-website

@@ -11,9 +11,9 @@
 # this function prepares and executes the client deployment scripts
 # This function accepts the following parameters as elements in the specified array name (arg_array): 
 # calling_script_path: the full path of the calling script
-# env_name: (optional) the environment name (dev, test, prod)
-# deploy_dest: (optional) deployment destination (local, server)
-# build_image: (optional) build_image (yes = the container image is built and then run, no = the container is restarted using the existing container image)
+# container_env_name: (optional) the environment name (dev, test, prod)
+# container_deploy_dest: (optional) deployment destination (local, server)
+# container_build_image: (optional) container_build_image (yes = the container image is built and then run, no = the container is restarted using the existing container image)
 # container_run_mode: (optional) container run mode (mount = mounting source code directories, stack = deploying as container stack with secrets) (when deplyment destination = server this argument is ignored)
 function client_deploy_container ()
 {
@@ -44,12 +44,12 @@ function client_deploy_container ()
 	initialize_deployment_script "${DEPLOYMENT_SCRIPT_LOGS}" "$(get_array_val "${arg_array}" "calling_script_path")" 
 	
 	# prepare the client deployment resources
-	client_prepare_vars "$(get_array_val "${arg_array}" "calling_script_path")" "$(get_array_val "${arg_array}" "env_name")" "$(get_array_val "${arg_array}" "deploy_dest")"
+	client_prepare_vars "$(get_array_val "${arg_array}" "calling_script_path")" "$(get_array_val "${arg_array}" "container_env_name")" "$(get_array_val "${arg_array}" "container_deploy_dest")"
 
 	# save/prompt for deployment mode
-	set_build_image_var "$(get_array_val "${arg_array}" "build_image")"
+	set_container_build_image_var "$(get_array_val "${arg_array}" "container_build_image")"
 
-	if [[ "${DEPLOY_DEST}" == "local" ]]; then
+	if [[ "${CONTAINER_DEPLOY_DEST}" == "local" ]]; then
 		# this is a local deployment
 		
 		# save/prompt for container run mode
@@ -70,7 +70,7 @@ function client_deploy_container ()
 					["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
 					["container_compose_path_mount"]="${CONTAINER_COMPOSE_PATH_MOUNT}"
 					["container_image_name"]="${CONTAINER_IMAGE_NAME}"
-					["build_image"]="${BUILD_IMAGE}"
+					["container_build_image"]="${CONTAINER_BUILD_IMAGE}"
 				)
 
 			# deploy the container application locally with folders mounted as volumes for development purposes
@@ -85,8 +85,8 @@ function client_deploy_container ()
 					["container_stack_name"]="${CONTAINER_STACK_NAME}"
 					["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
 					["container_network_name"]="${CONTAINER_NETWORK_NAME}"
-					["deploy_dest"]="local"
-					["build_image"]="${BUILD_IMAGE}"
+					["container_deploy_dest"]="local"
+					["container_build_image"]="${CONTAINER_BUILD_IMAGE}"
 				)
 
 			# build and deploy the local container stack
@@ -102,7 +102,7 @@ function client_deploy_container ()
 				["config_data_var_name"]="${CONFIG_DATA_VAR_NAME}"
 				["container_host_source_path"]="${CONTAINER_HOST_SOURCE_PATH}"
 				["container_hostname"]="${CONTAINER_HOSTNAME}"
-				["parse_config_data"]="${BUILD_IMAGE}"
+				["parse_config_data"]="${CONTAINER_BUILD_IMAGE}"
 			)
 			
 		# prepare for the container deployment to the container host
@@ -117,7 +117,7 @@ function client_deploy_container ()
 			["cmd"]="$(client_deploy_define_env_vars_string) bash ${CONTAINER_HOST_SCRIPTS_PATH}/host_deploy_application.sh"
 		)
 
-		if [[ "${BUILD_IMAGE}" == "yes" ]]; then
+		if [[ "${CONTAINER_BUILD_IMAGE}" == "yes" ]]; then
 			# this is a deploy container call that includes the build process, specify the stdin data (secrets)
 			set_array_val "LOCAL_FUNC_ARGS" "passed_stdin_content" "${!CONFIG_DATA_VAR_NAME}"
 		fi
@@ -129,7 +129,7 @@ function client_deploy_container ()
 	echo "the container deployment script has finished executing"
 }
 
-# function that initializes the ENV_NAME variable and loads the client secret/configuration files, and process the $CONFIG_DATA_VAR_NAME so it can be passed to a bash script via STDIN
+# function that initializes the CONTAINER_ENV_NAME variable and loads the client secret/configuration files, and process the $CONFIG_DATA_VAR_NAME so it can be passed to a bash script via STDIN
 # this function accepts the following parameters: 
 # 1: client container source path 
 # 2: (optional) the environment name (dev, test, prod)

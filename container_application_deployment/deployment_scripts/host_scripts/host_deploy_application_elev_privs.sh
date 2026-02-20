@@ -16,7 +16,7 @@ declare -A FUNC_ARGS=(
 		["container_stack_name"]="${CONTAINER_STACK_NAME}"
 		["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
 		["container_network_name"]="${CONTAINER_NETWORK_NAME}"
-		["build_image"]="${BUILD_IMAGE}"
+		["container_build_image"]="${CONTAINER_BUILD_IMAGE}"
 		["calling_script_path"]="${0}"
 	)
 
