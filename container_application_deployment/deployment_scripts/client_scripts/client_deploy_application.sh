@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #-----------------------------------------------------------------------------
-# deploy_container.sh:
+# client_deploy_application.sh:
 # this client script deploys a container to a remote container server or locally
 #-----------------------------------------------------------------------------
 

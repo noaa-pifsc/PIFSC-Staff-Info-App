@@ -27,7 +27,7 @@
 	CONTAINER_COMPOSE_PATH="docker-compose.yml"
 
 	# define the container git project URL
-	CONTAINER_GIT_URL="git@picgitlab.nmfs.local:omi-apps/staff-info-app.git"
+	CONTAINER_GIT_URL="git@github.com:noaa-pifsc/PIFSC-Staff-Info-App.git"
 
 	# define the target directory for the container project when the container image is built
 	CONTAINER_HOST_TARGET_PATH="/home/${CONTAINER_ACCOUNT_NAME}/containers/${CONTAINER_PROJECT_FOLDER}"
