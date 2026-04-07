@@ -69,7 +69,8 @@ X deployment/restart container testing (testing completed on 11/5/25):
 
 		# Server:
 			# deploy dev container to host for test purposes
-			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev server yes 
+			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev server yes
+
 
 		# Local:
 

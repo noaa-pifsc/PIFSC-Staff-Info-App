@@ -9,16 +9,22 @@ The PIFSC Container Application Deployment (CAD) project was created to provide 
 -   [SIA App Documentation](../../docs/Staff%20Info%20App%20-%20Technical%20Documentation.md)
 
 ## Platform Requirements
--   See [CAD Platform Requirements](https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments/blob/main/README.md#platform-requirements)
+-   Refer to [CAD Platform Requirements](https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments/blob/main/README.md#platform-requirements)
 
 ## Container Host Instances
--    See [CAD Container Host Instances](https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments/blob/main/README.md#container-host-instances)
+-   Refer to [CAD Container Host Instances](https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments/blob/main/README.md#container-host-instances)
+
+## Project-Specific CAD Folder Structure
+-   Refer to [CAD Repository Folder Structure](https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments/blob/main/README.md#project-specific-cad-folder-structure)
+
+## CAD Implementation Procedure
+-   Refer to [CAD Implementation Procedure](https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments/blob/main/README.md#cad-implementation-procedure)
 
 ## Setup
--    See [CAD Setup](https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments/blob/main/README.md#setup)
+-    Refer to [CAD Setup](https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments/blob/main/README.md#setup)
 
 ## Executing the CAD Script
 -   The [CAD Documentation](https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments/blob/main/README.md#executing-the-cad-script) contains detailed information about the automated deployment process
 
 ## Security Features
--   See [CAD Security Features](https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments/blob/main/README.md#security-features)
+-   Refer to [CAD Security Features](https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments/blob/main/README.md#security-features)

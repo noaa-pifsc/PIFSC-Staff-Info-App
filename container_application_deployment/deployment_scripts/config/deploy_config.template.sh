@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# define the docker hostname configuration information
-CONTAINER_HOSTNAME="[DOCKER HOSTNAME]"
+# define the container server hostname configuration information
+HOSTNAME="[HOSTNAME]"
 
 # define the database connection configuration information
 DB_HOST="[DB HOSTNAME/IP ADDRESS]"

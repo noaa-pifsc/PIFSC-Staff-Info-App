@@ -1,36 +1,41 @@
 #!/bin/bash
 
+# Enforce Bash strict mode: exit on errors, unbound variables, and pipeline failures
+set -euo pipefail
+
 #-----------------------------------------------------------------------------
 # client_deploy_application.sh:
 # this client script deploys a container to a remote container server or locally
 #-----------------------------------------------------------------------------
 
-# force script to exit immediately when an error is encountered
-set -euo pipefail
-
 # include the client functions
 source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/includes/include_client_resources.sh"
 
-# notify the user which script is being run
-echo "*********************************************************************"
-echo "********* Executing PIFSC Library Website deployment script *********"
-echo "*********************************************************************"
-echo "*Note: This script will deploy the PIFSC Library Website to the specified destination"
-echo ""
-
-# deploy the container based on the arguments specified by the user 
+# main function that executes the container deployment based on the arguments specified by the user 
+# $0: full path of the script that was executed directly
 # $1: (optional) the environment name (dev, test, prod)
 # $2: (optional) deployment destination (local, server)
-# $3: (optional) container_build_image (yes = the container image is built and then run, no = the container is restarted using the existing container image)
+# $3: (optional) build_image (yes = the container image is built and then run, no = the container is restarted using the existing container image)
 # $4: (optional) container run mode (mount = mounting source code directories, stack = deploying as container stack with secrets), when deplyment destination = server this argument is ignored
+function main ()
+{
+	# notify the user which script is being run
+	echo "*********************************************************************"
+	echo "********* Executing container application deployment script *********"
+	echo "*********************************************************************"
+	echo "*Note: This script will deploy the container application to the specified destination"
+	echo ""
 
-# declare the function arguments
-declare -A FUNC_ARGS=(
-		["calling_script_path"]="${0}"
-		["container_env_name"]="${1:-}"
-		["container_deploy_dest"]="${2:-}"
-		["container_build_image"]="${3:-}"
-		["container_run_mode"]="${4:-}"
-	)
+	# declare the function arguments
+	local -A func_args=(
+			["env_name"]="${1:-}"
+			["deploy_dest"]="${2:-}"
+			["build_image"]="${3:-}"
+			["run_mode"]="${4:-}"
+		)
 
-client_deploy_container "FUNC_ARGS"
+	proj_client_deploy_container "func_args"
+}
+
+# execute the main function with all arguments from this calling script:
+main "$@"

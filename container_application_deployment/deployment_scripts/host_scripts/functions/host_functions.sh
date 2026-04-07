@@ -1,49 +1,56 @@
 #!/bin/bash
 
-# function to execute the container stack deployment on the docker host
-# This function accepts the following parameters as elements in the specified array name (arg_array): 
-# container_target_path: the container target directory that contains the Dockerfile, docker-compose.yml files
-# container_image_name: the container image name
-# container_stack_name: the container stack name
-# secret_mapping_var_name: name of an associative array that maps the secret values passed to bash commands via STDIN
-# container_network_name: container network name
-# container_deploy_dest: the deployment destination (local or server)
-# container_build_image: (yes = the container image is built and then run, no = the container is restarted using the existing container image)
-# calling_script_path: the full path of the calling script
-function host_deploy_container_elev_privs()
+# function to execute the container stack deployment on the docker host using a privileged account
+# This function accepts no parameters: 
+function proj_host_deploy_container_elev_privs()
 {
-	# store the function array argument
-	local arg_array="${1}"
-
-    # Safety check: ensure the argument is a valid array
-    if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
-        echo "Error: host_deploy_container_elev_privs() function argument '${arg_array}' is not a valid associative array." >&2
+	# required bash variable validation
+	if ! cds_shared_validate_required_vars "HOST_SOURCE_PATH" "IMAGE_NAME" "STACK_NAME" "SECRET_MAPPING_VAR_NAME" "NETWORK_NAME" "BUILD_IMAGE" "COMPOSE_PATH" "IMAGE_SPEC_PATH" "BUILD_CONTEXT"; then 
+        echo "Error: proj_host_deploy_container() function argument validation failed" >&2
         return 1
     fi
-	
-	# input validation
-	if ! validate_required_array_vals "${arg_array}" "container_target_path" "container_image_name" "container_stack_name" "secret_mapping_var_name" "container_network_name" "container_build_image" "calling_script_path"; then 
-        echo "ERROR: host_deploy_container_elev_privs() function argument validation failed" >&2
-        return 1
-    fi
-	
-	# initialize the container environment variables
-	initialize_container_env_var "$(get_array_val "${arg_array}" "calling_script_path")"
 
 	# prepare the container host target directory by transferring the necessary source files
-	host_prepare_container_target_dir
+	proj_host_prepare_container_target_dir "${HOST_SOURCE_PATH}" "${CONTAINER_TARGET_PATH}" 
 
 	# declare the function arguments
-	local -A LOCAL_FUNC_ARGS=(
-			["container_target_path"]="$(get_array_val "${arg_array}" "container_target_path")"
-			["container_image_name"]="$(get_array_val "${arg_array}" "container_image_name")"
-			["container_stack_name"]="$(get_array_val "${arg_array}" "container_stack_name")"
-			["secret_mapping_var_name"]="$(get_array_val "${arg_array}" "secret_mapping_var_name")"
-			["container_network_name"]="$(get_array_val "${arg_array}" "container_network_name")"
-			["container_deploy_dest"]="server"
-			["container_build_image"]="$(get_array_val "${arg_array}" "container_build_image")"
+	local -A host_deploy_stack_args=(
+			["image_name"]="${IMAGE_NAME}"
+			["stack_name"]="${STACK_NAME}"
+			["secret_map"]="${SECRET_MAPPING_VAR_NAME}"
+			["network_name"]="${NETWORK_NAME}"
+			["deploy_dest"]="server"
+			["build_image"]="${BUILD_IMAGE}"
+			["compose_path"]="${COMPOSE_PATH}"
+			["image_spec_path"]="${IMAGE_SPEC_PATH}"
+			["build_context"]="${BUILD_CONTEXT}"
 		)
 
 	# execute the secret definitions and the container build/run process on the target folder using a privileged account
-	deploy_container_stack "LOCAL_FUNC_ARGS"
+	cad_shared_deploy_container_stack "host_deploy_stack_args"
+}
+
+# function to initiate the container deployment process on the container host using an unprivileged account
+# This function accepts no parameters: 
+function proj_host_deploy_container()
+{
+	# required bash variable validation
+	if ! cds_shared_validate_required_vars "PRIV_USER" "HOST_SOURCE_PATH" "SECRET_DATA_VAR_NAME" "HOST_SCRIPTS_PATH" "SECRET_MAPPING_VAR_NAME" "BUILD_IMAGE"; then 
+        echo "Error: proj_host_deploy_container() function argument validation failed" >&2
+        return 1
+    fi
+
+	# declare the function arguments
+	local -A host_deploy_stack_args=(
+			["target_user"]="${PRIV_USER}"
+			["source_path"]="${HOST_SOURCE_PATH}"
+			["secret_var"]="${SECRET_DATA_VAR_NAME}"
+			["deploy_script_path"]="${HOST_SCRIPTS_PATH}/host_deploy_application_elev_privs.sh"
+			["env_block"]="$(proj_host_define_env_vars_block)"
+			["secret_map"]="${SECRET_MAPPING_VAR_NAME}"
+			["process_secrets"]="${BUILD_IMAGE}"
+		)
+		
+	#initiate the build/run process for the container using a privileged account on the host
+	cds_host_deploy_container "host_deploy_stack_args"
 }

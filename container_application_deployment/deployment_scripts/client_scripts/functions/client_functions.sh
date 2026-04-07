@@ -10,149 +10,81 @@
 
 # this function prepares and executes the client deployment scripts
 # This function accepts the following parameters as elements in the specified array name (arg_array): 
-# calling_script_path: the full path of the calling script
-# container_env_name: (optional) the environment name (dev, test, prod)
-# container_deploy_dest: (optional) deployment destination (local, server)
-# container_build_image: (optional) container_build_image (yes = the container image is built and then run, no = the container is restarted using the existing container image)
-# container_run_mode: (optional) container run mode (mount = mounting source code directories, stack = deploying as container stack with secrets) (when deplyment destination = server this argument is ignored)
-function client_deploy_container ()
+# env_name: (optional) the environment name (dev, test, prod)
+# deploy_dest: (optional) deployment destination (local, server)
+# build_image: (optional) build_image (yes = the container image is built and then run, no = the container is restarted using the existing container image)
+# run_mode: (optional) container run mode (mount = mounting source code directories, stack = deploying as container stack with secrets) (when deplyment destination = server this argument is ignored)
+function proj_client_deploy_container ()
 {
 	echo "prepare the container source files and deploy the container"
 	
 	# store the function array argument
 	local arg_array="${1}"
 	
-    # Safety check: ensure the argument is a valid array
+    # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
-        echo "Error: client_deploy_container() function argument '${arg_array}' is not a valid associative array." >&2
+        echo "Error: proj_client_deploy_container() function argument '${arg_array}' is not a valid associative array." >&2
         return 1
     fi
 
-	# input validation:
-	if ! validate_required_array_vals "${arg_array}" "calling_script_path"; then 
-        echo "ERROR: client_deploy_container() function argument validation failed" >&2
-        return 1
-    fi
-
-	# validate the bash variable values
-	if ! validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "CLIENT_CONTAINER_SOURCE_PATH" "SECRET_MAPPING_VAR_NAME" "CONTAINER_COMPOSE_PATH_MOUNT" "CONTAINER_IMAGE_NAME" "CONTAINER_STACK_NAME" "CONTAINER_NETWORK_NAME" "CONTAINER_GIT_URL" "CONFIG_DATA_VAR_NAME" "CONTAINER_HOST_SOURCE_PATH" "CONTAINER_HOST_SCRIPTS_PATH"; then
-        echo "ERROR: client_deploy_container() function required bash variable validation failed" >&2
+	# required bash variable validation
+	if ! cds_shared_validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "BUILD_PATH" "SECRET_MAPPING_VAR_NAME" "COMPOSE_MOUNT_PATH" "IMAGE_NAME" "STACK_NAME" "NETWORK_NAME" "GIT_URL" "SECRET_DATA_VAR_NAME" "HOST_SOURCE_PATH" "HOST_SCRIPTS_PATH" "COMPOSE_PATH" "IMAGE_SPEC_PATH" "BUILD_CONTEXT" ; then
+        echo "Error: proj_client_deploy_container() function required bash variable validation failed" >&2
         return 1
 	fi
 	
-	# initialize the deployment script
-	initialize_deployment_script "${DEPLOYMENT_SCRIPT_LOGS}" "$(get_array_val "${arg_array}" "calling_script_path")" 
+	# declare the function arguments for cad_client_process_runtime_arguments()
+	local -A runtime_args=(
+			["log_path"]="${DEPLOYMENT_SCRIPT_LOGS}"
+			["env_name"]="$(cds_shared_get_array_val "${arg_array}" "env_name")"
+			["deploy_dest"]="$(cds_shared_get_array_val "${arg_array}" "deploy_dest")"
+			["run_mode"]="$(cds_shared_get_array_val "${arg_array}" "run_mode")"
+			["build_image"]="$(cds_shared_get_array_val "${arg_array}" "build_image")"
+			["repo_root"]="${REPO_ROOT_PATH}"
+		)
 	
-	# prepare the client deployment resources
-	client_prepare_vars "$(get_array_val "${arg_array}" "calling_script_path")" "$(get_array_val "${arg_array}" "container_env_name")" "$(get_array_val "${arg_array}" "container_deploy_dest")"
+	#process/prompt the user for runtime values
+	cad_client_process_runtime_arguments "runtime_args"
+	
+	# load the client secrets and server configuration files
+	proj_client_load_config_secrets "${BUILD_PATH}" "$(cds_shared_get_array_val "runtime_args" "env_name")"
 
-	# save/prompt for deployment mode
-	set_container_build_image_var "$(get_array_val "${arg_array}" "container_build_image")"
+	# enforce an EXIT trap immediately after loading secrets to guarantee memory sanitization. If the script errors out or is manually aborted, the sensitive globals will be securely wiped.
+	trap "cds_shared_unset_secret_variables '${SECRET_MAPPING_VAR_NAME}'" EXIT
+	
+	# declare the function arguments
+	local -A deploy_args=(
+		["deploy_dest"]="$(cds_shared_get_array_val "runtime_args" "deploy_dest")"
+		["build_path"]="${BUILD_PATH}"
+		["secret_map"]="${SECRET_MAPPING_VAR_NAME}"
+		["compose_mount_path"]="${COMPOSE_MOUNT_PATH}"
+		["image_name"]="${IMAGE_NAME}"
+		["build_image"]="$(cds_shared_get_array_val "runtime_args" "build_image")"
+		["stack_name"]="${STACK_NAME}"
+		["network_name"]="${NETWORK_NAME}"
+		["git_url"]="${GIT_URL}"
+		["secret_var"]="${SECRET_DATA_VAR_NAME}"
+		["source_path"]="${HOST_SOURCE_PATH}"
+		["target_host"]="${HOSTNAME}"
+		["ssh_cmd"]="$(proj_client_deploy_define_env_vars_string "$(cds_shared_get_array_val "runtime_args" "env_name")" "$(cds_shared_get_array_val "runtime_args" "build_image")") bash ${HOST_SCRIPTS_PATH}/host_deploy_application.sh"
+		["compose_path"]="${COMPOSE_PATH}"
+		["image_spec_path"]="${IMAGE_SPEC_PATH}"
+		["build_context"]="${BUILD_CONTEXT}"
+	)
 
-	if [[ "${CONTAINER_DEPLOY_DEST}" == "local" ]]; then
+	# check where the container is being deployed
+	if [[ "$(cds_shared_get_array_val "runtime_args" "deploy_dest")" == "local" ]]; then
 		# this is a local deployment
 		
-		# save/prompt for container run mode
-		set_container_run_mode_var "$(get_array_val "${arg_array}" "container_run_mode")"
-
 		# declare the environment variables for the local deployment
-		client_export_env_vars
-			
-		# change directory into the container folder that contains the Dockerfile and .yml files (/container_application_deployment)
-		cd "${CLIENT_CONTAINER_SOURCE_PATH}"
-
-		# check if this is a mounted or stack deployment:
-		if [[ "${CONTAINER_RUN_MODE}" == "mount" ]]; then
-			# this is a mounted directory deployment
-
-			# declare the function arguments
-			local -A LOCAL_FUNC_ARGS=(
-					["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
-					["container_compose_path_mount"]="${CONTAINER_COMPOSE_PATH_MOUNT}"
-					["container_image_name"]="${CONTAINER_IMAGE_NAME}"
-					["container_build_image"]="${CONTAINER_BUILD_IMAGE}"
-				)
-
-			# deploy the container application locally with folders mounted as volumes for development purposes
-			client_deploy_local_container_mount "LOCAL_FUNC_ARGS"
-		else
-			# use container stack and secrets to test if the code is working for a secure container host deployment
-
-			# declare the function arguments
-			local -A LOCAL_FUNC_ARGS=(
-					["container_target_path"]="${CLIENT_CONTAINER_SOURCE_PATH}"
-					["container_image_name"]="${CONTAINER_IMAGE_NAME}"
-					["container_stack_name"]="${CONTAINER_STACK_NAME}"
-					["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
-					["container_network_name"]="${CONTAINER_NETWORK_NAME}"
-					["container_deploy_dest"]="local"
-					["container_build_image"]="${CONTAINER_BUILD_IMAGE}"
-				)
-
-			# build and deploy the local container stack
-			deploy_container_stack "LOCAL_FUNC_ARGS"
-		fi	
-	else
-		# this is a server deployment
-
-		# declare the function arguments
-		local -A LOCAL_FUNC_ARGS=(
-				["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
-				["container_git_url"]="${CONTAINER_GIT_URL}"
-				["config_data_var_name"]="${CONFIG_DATA_VAR_NAME}"
-				["container_host_source_path"]="${CONTAINER_HOST_SOURCE_PATH}"
-				["container_hostname"]="${CONTAINER_HOSTNAME}"
-				["parse_config_data"]="${CONTAINER_BUILD_IMAGE}"
-			)
-			
-		# prepare for the container deployment to the container host
-		client_prepare_container_host "LOCAL_FUNC_ARGS"
-
-		# reset array before re-defining elements/values
-		LOCAL_FUNC_ARGS=()
-
-		# define the ssh function arguments
-		LOCAL_FUNC_ARGS=(
-			["container_hostname"]="${CONTAINER_HOSTNAME}"
-			["cmd"]="$(client_deploy_define_env_vars_string) bash ${CONTAINER_HOST_SCRIPTS_PATH}/host_deploy_application.sh"
-		)
-
-		if [[ "${CONTAINER_BUILD_IMAGE}" == "yes" ]]; then
-			# this is a deploy container call that includes the build process, specify the stdin data (secrets)
-			set_array_val "LOCAL_FUNC_ARGS" "passed_stdin_content" "${!CONFIG_DATA_VAR_NAME}"
-		fi
-
-		# execute the deployment script via ssh with corresponding environment variables/stdin configuration data
-		exec_remote_cmd "LOCAL_FUNC_ARGS"		
+		proj_client_export_env_vars "$(cds_shared_get_array_val "runtime_args" "env_name")" "$(cds_shared_get_array_val "runtime_args" "build_image")"
+		
+		# this is a container deployment to a local endpoint, specify the run_mode function argument
+		cds_shared_set_array_val "deploy_args" "run_mode" "$(cds_shared_get_array_val "runtime_args" "run_mode")"
 	fi
+	
+	# deploy the container for the specified scenario
+	cad_client_deploy_container "deploy_args"
 
 	echo "the container deployment script has finished executing"
-}
-
-# function that initializes the CONTAINER_ENV_NAME variable and loads the client secret/configuration files, and process the $CONFIG_DATA_VAR_NAME so it can be passed to a bash script via STDIN
-# this function accepts the following parameters: 
-# 1: client container source path 
-# 2: (optional) the environment name (dev, test, prod)
-# 3: (optional) deployment destination (local, server)
-function client_prepare_vars ()
-{
-	local client_container_source_path="${1}"
-
-	# input validation
-	if [[ -z "${client_container_source_path}" ]]; then
-        echo "ERROR: client_prepare_vars() function requires client_container_source_path as a non-empty argument" >&2
-        return 1
-	fi
-
-	# set the environment and deployment destination variable values
-	set_env_deployment_vars "${2}" "${3}"
-	
-	# recursively convert the line endings for all .sh files in the root folder of the repository (/)
-	convert_dos2unix "${1}"
-	
-	# load the environment-specific deployment configuration file
-	client_load_deploy_config_file
-	
-	# load the environment-specific client secret file
-	client_load_secret_file
 }
