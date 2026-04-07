@@ -20,6 +20,6 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       RUN_MODE: "compose"
     volumes:
-      - "./src/frontend:/var/www/html"
-      - "./src/backend:/usr/src/app"
+      - "../src/frontend:/var/www/html"
+      - "../src/backend:/usr/src/app"
       - "../modules/php-shared-library:/usr/src/app/dependencies"

@@ -61,8 +61,8 @@ RUN sed -i 's/Options Indexes MultiViews FollowSymlinks/Options MultiViews Follo
 COPY container_application_deployment/config/php/*.ini /etc/php.d/
 
 # copy the application source files:
-COPY ./container_application_deployment/src/frontend/ /var/www/html/
-COPY ./container_application_deployment/src/backend/ /usr/src/app/
+COPY ./src/frontend/ /var/www/html/
+COPY ./src/backend/ /usr/src/app/
 # copy the php shared library source files:
 COPY ./modules/php-shared-library/oracle*.php /usr/src/app/dependencies/
 
