@@ -21,7 +21,7 @@ function proj_client_deploy_define_env_vars_string()
 	fi
 
 	# Dynamically validate and strictly format the SSH string
-	cds_shared_generate_ssh_env_vars_string "DB_HOST" "DB_SERVICE_NAME" "APP_INSTANCE" "BUILD_IMAGE" "CRON_SCHEDULE"
+	cds_shared_generate_ssh_env_vars_string "DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE"
 }
 
 # function to declare the environment variables for local deployments
