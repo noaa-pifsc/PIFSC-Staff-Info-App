@@ -62,20 +62,21 @@ The container image is built from the official Oracle InstantClient on OracleLin
         -   Tooltips are implemented for all personnel.  When a given person's email or phone numbers are stored in the database, links for each are available in the tooltip.  
 
 ## Repository Folder Structure
--   [docker-compose.yml](../container_application_deployment/docker-compose.yml) is the configuration file used for docker swarm deployments
--   [docker-compose.local.dev.yml](../container_application_deployment/docker-compose.local.dev.yml) is the configuration file used for local docker compose deployments
--   The [httpd](../container_application_deployment/config/httpd) folder contains the Apache configuration 
--   The [php](../container_application_deployment/config/php) folder contains the PHP configuration 
--   The [deployment_script_logs](../container_application_deployment/deployment_script_logs) folder contains logs from the execution of scripts to prepare and deploy the docker project
--   The [deployment_scripts](../container_application_deployment/deployment_scripts) folder contains scripts to prepare and deploy the docker project
--   The [secrets](../container_application_deployment/secrets) folder contains the database credentials that are used when building the container (these files are not committed to version control)
+-   \*Note: See [CAD Repository Folder Structure](../container_application_deployment/Container%20Application%20Deployment%20Process.md#project-specific-cad-folder-structure) for information about the standard project-specific CAD folder structure
+-   The [container_application_deployment](../container_application_deployment) folder contains all files used directly in the CAD implementation
+    -   [docker-compose.yml](../container_application_deployment/docker-compose.yml) is the configuration file used for container swarm deployments
+    -   [docker-compose.local.dev.yml](../container_application_deployment/docker-compose.local.dev.yml) is the configuration file used for local container compose deployments
+    -   [Dockerfile](Dockerfile) defines the resources used in the PRI container image
+    -   The [config](../container_application_deployment/config) folder contains the container configuration files 
+        -   The [httpd](../container_application_deployment/config/httpd) folder contains the Apache configuration 
+        -   The [php](../container_application_deployment/config/php) folder contains the PHP configuration 
 -   The [src](../src) folder contains all source code for the project
--   The [backend](../src/backend) folder contains backend PHP include files for the project
--   The [frontend](../src/frontend) folder contains the PHP web pages that are directly requested via web browser
-    -   The [img](../src/frontend/img) folder contains the client-side images used in the web pages
-    -   The [js](../src/frontend/js) folder contains the client-side JavaScript code used in the web pages
-    -   The [style](../src/frontend/style) folder contains the client-side css used in the web pages
-    -   The [webfonts](../src/frontend/webfonts) folder contains the client-side web fonts used by the css in the web pages
+    -   The [backend](../src/backend) folder contains backend PHP include files for the project
+    -   The [frontend](../src/frontend) folder contains the PHP web pages that are directly requested via web browser
+        -   The [img](../src/frontend/img) folder contains the client-side images used in the web pages
+        -   The [js](../src/frontend/js) folder contains the client-side JavaScript code used in the web pages
+        -   The [style](../src/frontend/style) folder contains the client-side css used in the web pages
+        -   The [webfonts](../src/frontend/webfonts) folder contains the client-side web fonts used by the css in the web pages
 -   The [docs](../docs) folder contains documentation for the project
 -   #### Repository Folder Diagram:
     ```
@@ -87,12 +88,9 @@ The container image is built from the official Oracle InstantClient on OracleLin
     |    |--- config
     |    |    |--- httpd
     |    |    |--- php
-    |    |--- deployment_script_logs
-    |    |--- deployment_scripts
-    |    |--- secrets 
     |--- docs
     |--- modules
-    |    |--- CDS
+    |    |--- CAD
     |    |--- php-shared-library
     |--- src 
     |    |--- backend
@@ -106,112 +104,22 @@ The container image is built from the official Oracle InstantClient on OracleLin
 
     ```
 
+## Project-Specific CAD Implementation
+-   Refer to the [CAD Implementation Procedure](../container_application_deployment/docs/Container%20Application%20Deployment%20Process.md#cad-implementation-procedure) documentation for custom project-specific CAD files
+
 ## Setup:
--   ### Docker Application Setup
-    -   \*Note: the steps shown here were developed and tested on a Windows 11 computer
-    -  Recursively clone (use --recurse-submodules option) the [SIA repository](https://picgitlab.nmfs.local/omi-apps/staff-info-app)
--   Within the project repository create the necessary bash files with the database credentials in each database instance (e.g. secrets.sh in the [dev folder](../container_application_deployment/secrets/dev/) for the development database instance)
-    -   \*Note: There is a [secrets template](../container_application_deployment/secrets/secrets.template.sh) file that can be used to create the secrets.sh file for each database instance 
-    -   \*Note: the actual configuration files should not be committed to the repository for security purposes, a [.gitignore](../.gitignore) file has been added to the repository to prevent these sensitive files from being included in git.  
--   Within the project repository create the necessary configuration bash files with the database connection information for each database instance
-    -   \*Note: There is a [database instance configuration template](../container_application_deployment/deployment_scripts/config/deploy_config.template.sh) file that can be used to create the deploy_config.[ENV].sh file (e.g. deploy_config.dev.sh for the development database instance)
-    -   \*Note: the actual configuration files should not be committed to the repository for security purposes, a [.gitignore](../.gitignore) file has been added to the repository to prevent these files from being included in git.  
--   #### Development Machine (Docker Desktop)
-    -   (One-time setup) Setup docker swarm: `docker swarm init`
+-   Refer to [PRI Container Application Deployment Process - Setup Documentation](../container_application_deployment/Container%20Application%20Deployment%20Process.md#setup) for CAD setup details
 
-## Docker Application Deployment Scripts
--   This project implements reusable docker application deployment functions from the [PIFSC Container Deployment Scripts (CDS)](https://picgitlab.nmfs.local/centralized-data-tools/pifsc-container-deployment-scripts) project.
--   ### Folders/Files:
-    -   [deployment_scripts](../container_application_deployment/deployment_scripts) contains the automated docker application deployment scripts:
-        -   [client_scripts](../container_application_deployment/deployment_scripts/client_scripts) - scripts that run directly on the docker host machine
-            -   [deploy_container_to_host.sh](../container_application_deployment/deployment_scripts/client_scripts/deploy_container_to_host.sh) - client bash script that deploys the docker application to a remote docker host
-            -   [restart_container_on_host.sh](../container_application_deployment/deployment_scripts/client_scripts/restart_container_on_host.sh) - client bash script that restarts the docker application on a remote docker host
-            -   [deploy_container_to_local.sh](../container_application_deployment/deployment_scripts/client_scripts/deploy_container_to_local.sh) - client bash script that deploys the docker application on the local client machine 
-            -   [functions](../container_application_deployment/deployment_scripts/client_scripts/functions) - contains application-specific bash functions that are used directly in the client bash scripts
-                -   [custom_client_functions.sh](../container_application_deployment/deployment_scripts/client_scripts/functions/custom_client_functions.sh) - contains bash functions used in client scripts that deploy the docker application to a remote host
-                -   [custom_local_client_functions.sh](../container_application_deployment/deployment_scripts/client_scripts/functions/custom_local_client_functions.sh) - contains bash functions used in client scripts that deploy the docker application to a local docker desktop instance
-            -   [includes](../container_application_deployment/deployment_scripts/client_scripts/includes) - contains bash files that load collections of function definitions and configuration files for specific client scripts 
-                -   [include_client_resources.sh](../container_application_deployment/deployment_scripts/client_scripts/includes/include_client_resources.sh) - loads a series of bash files used for client scripts that deploy the docker application to a remote host
-                -   [include_local_client_resources.sh](../container_application_deployment/deployment_scripts/client_scripts/includes/include_local_client_resources.sh) - loads a series of bash files used for client scripts that deploy the docker application to a local docker desktop instance
-        -   [host_scripts](../container_application_deployment/deployment_scripts/host_scripts) - scripts that run directly on the host machine 
-            -   [prepare_docker_host.sh](../container_application_deployment/deployment_scripts/host_scripts) - this script prepares a designated directory with the docker container source files so the docker image can be built and deployed on the docker host
-            -   [build_run_container.sh](../container_application_deployment/deployment_scripts/host_scripts/build_run_container.sh) - this script runs a deployment script as the privileged docker user to build the docker image and run the container on the docker host by executing docker_build_run_container.sh
-                -   [docker_build_run_container.sh](../container_application_deployment/deployment_scripts/host_scripts/docker_build_run_container.sh) - this script runs as the privileged docker user to build the docker image and run the container
-            -   [define_secrets.sh](../container_application_deployment/deployment_scripts/host_scripts/define_secrets.sh) - this script runs a script as the privileged docker user to define the docker secrets that are used by the docker container by executing docker_define_secrets.sh
-                -   [docker_define_secrets.sh](../container_application_deployment/deployment_scripts/host_scripts/docker_define_secrets.sh) - this script runs as the privileged docker user to define the docker secrets used by the docker container application
-            -   [restart_container.sh](../container_application_deployment/deployment_scripts/host_scripts/restart_container.sh) - this script runs a script as the privileged docker user to restart the docker container on the docker host by executing docker_restart_container.sh
-                -   [docker_restart_container.sh](../container_application_deployment/deployment_scripts/host_scripts/docker_restart_container.sh) - this script runs as the privileged docker user to restart the docker container application
-            -   [custom_host_functions.sh](../container_application_deployment/deployment_scripts/host_scripts/functions/custom_host_functions.sh) - contains bash functions used in scripts executed on the docker host that build and deploy the docker application
-            -   [include_host_resources.sh](../container_application_deployment/deployment_scripts/host_scripts/includes/include_host_resources.sh) - loads a series of bash files used for scripts executed on the docker host that build and deploy the docker application
-        -   [config](../container_application_deployment/deployment_scripts/config) - contains configuration files for the docker deployment scripts
-            -   [docker_config.sh](../container_application_deployment/deployment_scripts/config/docker_config.sh) - defines bash variables that drive the runtime behavior of the docker application deployment scripts
--   ### Script Maintenance
-    -   There are multiple files that need to be kept synchronized to ensure proper execution of the application deployment scripts:
-        -   secret names (e.g. sia_db_username_secret) must match:  
-            -   [docker_config.sh](../container_application_deployment/deployment_scripts/config/docker_config.sh) - SECRET_MAPPING_ARR associative array variable element names
-            -   [docker-compose.yml](../container_application_deployment/docker-compose.yml):
-                -   the "secrets" values 
-                -   the environment variable file path values (e.g. /run/secrets/sia_db_username_secret)
-        -   variable names (e.g. DB_USERNAME)
-            -   [docker_config.sh](../container_application_deployment/deployment_scripts/config/docker_config.sh) - SECRET_MAPPING_ARR associative array variable element values
-            -   [docker-compose.local.dev.yml](../container_application_deployment/docker-compose.local.dev.yml) - environment variable names and values
-            -   secrets.sh  (e.g. secrets.sh in the [dev folder](../container_application_deployment/secrets/dev/) for the development database instance) - bash variable names
-            -   [secret_configuration.php](../src/backend/secret_configuration.php) - SECRET_MAPPING_ARR constant array values (e.g. SECRET_MAPPING_ARR['SECRET_TYPE']['ENV'])
-        -   secret file names (e.g. DB_USERNAME_FILE)
-            -   [docker-compose.yml](../container_application_deployment/docker-compose.yml) environment variable names
-            -   [secret_configuration.php](../src/backend/secret_configuration.php) - SECRET_MAPPING_ARR constant array values (e.g. SECRET_MAPPING_ARR['SECRET_TYPE']['FILE'])
+## Executing the CAD Script
+-   To deploy the container application, refer to the [Executing the CAD Script](../container_application_deployment/docs/Container%20Application%20Deployment%20Process.md#executing-the-cad-script) documentation
 
-## Docker Deployment
--   The following instructions are intended for different deployment environments and use cases
--   \*Note: the steps shown here were developed and tested on a Windows 11 computer and the bash scripts were executed using git-bash
--   ### Local Docker Desktop 
-    -   #### Local Development/Testing
-        -   Execute the [deploy_container_to_local.sh](../container_application_deployment/deployment_scripts/client_scripts/deploy_container_to_local.sh) script with the following arguments:
-            -   Argument 1: the abbreviation for the given database instance listed in the [Database Instances](#database-instances) section (e.g. dev for development)
-            -   Argument 2: the execution mode for the docker container (mount = mounting source code directories, stack = deploying as docker stack with secrets)
-            -   Example usage to deploy the development docker container and mount the local directories to facilitate local development: `bash ./deploy_container_to_local.sh dev mount`
-            -   Example usage to deploy the production docker container and deploy as a docker stack to facilitate local testing: `bash ./deploy_container_to_local.sh prod swarm`
-        -   The script will perform the following high-level processes:
-            -   Execution Modes:
-                -   mount: load the corresponding database credentials as environment variables within the docker container
-                    -   \*Note: this use case is intended for local docker desktop development that uses Docker Compose and maps local folders within the working copy of the repository to facilitate rapid application development
-                -   stack: specify the docker secrets for the docker application
-                    -   \*Note: this use case is intended for local docker desktop development/testing that uses docker swarm and docker secrets to help ensure that the application can be deployed to a remote docker host
-            -   Build and run the docker container
--   ### Remote Docker Host
-    -   \*Note: this use case is intended for deployment to a remote docker host that uses docker swarm and docker secrets to help ensure that the database credentials are secured against unauthorized access
-    -   #### Deploying the project
-    -   Execute the [deploy_container_to_host.sh](../container_application_deployment/deployment_scripts/client_scripts/deploy_container_to_host.sh) script with the following arguments:
-        -   Argument 1: the abbreviation for the given database instance listed in the [Database Instances](#database-instances) section (e.g. prod for production)
-            -   Example usage to deploy the development docker container from source: `bash ./deploy_container_to_host.sh dev`
-    -   The script will perform the following high-level processes:
-            -   Recursively clone the SIA repository within the docker host to a working copy of the repository
-        -   Switch to the designated docker user that has permissions to run docker commands:
-            -   Copy the working repository into the designated docker folder
-            -   Specify the docker secrets for the docker application
-            -   Build and run the docker application
-        -   Delete the working copy of the repository
-    -   #### Restarting the container
-        -   Execute the [restart_container_on_host.sh](../container_application_deployment/deployment_scripts/client_scripts/restart_container_on_host.sh) script with the following arguments:
-            -   Argument 1: the abbreviation for the given database instance listed in the [Database Instances](#database-instances) section (e.g. prod for production)
-            -   Argument 2: text value to rebuild the image (yes, no)
-            -   Example usage to restart and rebuild the development docker container from source: `bash ./restart_container_on_host.sh dev yes`
-            -   Example usage to restart the production docker container from the existing image: `bash ./restart_container_on_host.sh prod no`
-        -   The script will perform the following high-level processes:
-            -   Recursively clone the SIA repository within the docker host to a working copy of the repository
-            -   Switch to the designated docker user that has permissions to run docker commands:
-                -   remove the docker stack
-                -   If Argument 2 = yes, then the docker image is built and saved from the existing docker source code in the designated docker folder
-                -   deploy the docker stack
-            -   Delete the working copy of the repository
-
-## Docker Folder Structure
--   The docker folder structure closely mirrors the [Repository Folder Structure](#repository-folder-structure) except for a few notable differences:
+## Container Folder Structure
+-   The container folder structure closely mirrors the [Repository Folder Structure](#repository-folder-structure) except for a few notable differences:
     -   The /var/www/html folder is populated with the contents of the [frontend](../src/frontend) folder from the repository
     -   The /usr/src/app folder is populated with the contents of the [backend](../src/backend) folder from the repository
     -   The /etc/php.d folder is populated with the contents of the [php](../container_application_deployment/config/php) folder from the repository
     -   The /etc/httpd/conf.d folder is populated with the contents of the [php](../container_application_deployment/config/httpd) folder from the repository
--   ### Docker Folder Diagram
+-   ### Container Folder Diagram
     ```
     .
     |--- /var/www/html
@@ -233,6 +141,7 @@ The container image is built from the official Oracle InstantClient on OracleLin
     -   SQL queries use prepared statements and bind variables to prevent SQL Injection Attacks
     -   Database values are sanitized using [htmlspecialchars()](https://www.php.net/manual/en/function.htmlspecialchars.php) before being included in the HTML web page content to prevent Cross Site Scripting (XSS) attacks
     -   Database credentials are managed within the docker swarm using docker secrets to help ensure the credentials are secured against unauthorized access
+    -   Refer to [CAD Security Features](../container_application_deployment/docs/Container%20Application%20Deployment%20Process.md#security-features)
 -   Organization Chart:
     -   Tooltip content is retrieved from the database and stored in a javascript array of objects, when a given tooltip is activated the content in the corresponding object variable is sanitized before it is displayed
 -   Staff Directory:
