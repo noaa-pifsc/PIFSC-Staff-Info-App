@@ -52,17 +52,17 @@ RUN echo instantclient,/usr/lib/oracle/21/client64/lib | pecl install oci8 \
     && echo "extension=oci8.so" > /etc/php.d/20-oci8.ini
 
 # Configure httpd
-COPY docker/config/httpd/*.conf /etc/httpd/conf.d/
+COPY container_application_deployment/config/httpd/*.conf /etc/httpd/conf.d/
 
 # Disable directory listing, specifically for virtual directory '/icons/small/'
 RUN sed -i 's/Options Indexes MultiViews FollowSymlinks/Options MultiViews FollowSymlinks/' /etc/httpd/conf.d/autoindex.conf
 
 # Secure php
-COPY docker/config/php/*.ini /etc/php.d/
+COPY container_application_deployment/config/php/*.ini /etc/php.d/
 
 # copy the application source files:
-COPY ./docker/src/frontend/ /var/www/html/
-COPY ./docker/src/backend/ /usr/src/app/
+COPY ./src/frontend/ /var/www/html/
+COPY ./src/backend/ /usr/src/app/
 # copy the php shared library source files:
 COPY ./modules/php-shared-library/oracle*.php /usr/src/app/dependencies/
 

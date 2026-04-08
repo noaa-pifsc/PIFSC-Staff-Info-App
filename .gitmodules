@@ -1,6 +1,7 @@
-[submodule "modules/CDS"]
-	path = modules/CDS
-	url = git@github.com:noaa-pifsc/PIFSC-Container-Deployment-Scripts.git
 [submodule "modules/php-shared-library"]
 	path = modules/php-shared-library
-	url = git@picgitlab.nmfs.local:centralized-data-tools/php-shared-library.git
+	url = git@github.com:noaa-pifsc/PIFSC-PHP-Shared-Library.git
+[submodule "modules/CAD"]
+	path = modules/CAD
+	url = git@github.com:noaa-pifsc/PIFSC-Container-Application-Deployments.git
+	branch = Branch_initial_CDS_implementation
