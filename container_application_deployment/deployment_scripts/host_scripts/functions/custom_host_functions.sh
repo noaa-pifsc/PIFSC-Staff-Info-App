@@ -26,6 +26,7 @@ function proj_host_prepare_container_target_dir ()
 	rm -rf "${target_path}"/*
 
 	# copy the container files to the root $target_path
+	rsync -a "${source_path}"/src/* "${target_path}"/src
 	rsync -a "${source_path}"/container_application_deployment/* "${target_path}"/container_application_deployment
 	rsync -a "${source_path}"/modules/* "${target_path}"/modules
 }
