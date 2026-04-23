@@ -27,7 +27,7 @@ function proj_host_deploy_container_elev_privs()
 		)
 
 	# execute the secret definitions and the container build/run process on the target folder using a privileged account
-	cad_shared_deploy_container_stack "host_deploy_stack_args"
+	cds_shared_deploy_container_stack "host_deploy_stack_args"
 }
 
 # function to initiate the container deployment process on the container host using an unprivileged account

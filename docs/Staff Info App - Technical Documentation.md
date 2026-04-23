@@ -8,7 +8,7 @@ The Staff Information Application (SIA) is a web app that provides access to the
     -   URL: https://picgitlab.nmfs.local/omi-apps/staff-directory.git
     -   Application: 1.3 (Git tag: staff_info_app_v1.3)
 -   [End-User Documentation](./Staff%20Info%20App%20-%20End-User%20Documentation.md)
--   [Container Application Deployment (CAD) process documentation](../container_application_deployment/Container%20Application%20Deployment%20Process.md)
+-   [Container Application Deployment (CAD) process documentation](../container_application_deployment/docs/Container%20Application%20Deployment%20Process.md)
 
 ## Application Access
 -   Development: https://picapps-dev.nmfs.local/staff-directory/
@@ -66,7 +66,7 @@ The container image is built from the official Oracle InstantClient on OracleLin
 -   The [container_application_deployment](../container_application_deployment) folder contains all files used directly in the CAD implementation
     -   [docker-compose.yml](../container_application_deployment/docker-compose.yml) is the configuration file used for container swarm deployments
     -   [docker-compose.local.dev.yml](../container_application_deployment/docker-compose.local.dev.yml) is the configuration file used for local container compose deployments
-    -   [Dockerfile](Dockerfile) defines the resources used in the PRI container image
+    -   [Dockerfile](../container_application_deployment/Dockerfile) defines the resources used in the PRI container image
     -   The [config](../container_application_deployment/config) folder contains the container configuration files 
         -   The [httpd](../container_application_deployment/config/httpd) folder contains the Apache configuration 
         -   The [php](../container_application_deployment/config/php) folder contains the PHP configuration 
@@ -108,7 +108,7 @@ The container image is built from the official Oracle InstantClient on OracleLin
 -   Refer to the [CAD Implementation Procedure](../container_application_deployment/docs/Container%20Application%20Deployment%20Process.md#cad-implementation-procedure) documentation for custom project-specific CAD files
 
 ## Setup:
--   Refer to [PRI Container Application Deployment Process - Setup Documentation](../container_application_deployment/Container%20Application%20Deployment%20Process.md#setup) for CAD setup details
+-   Refer to [PRI Container Application Deployment Process - Setup Documentation](../container_application_deployment/docs/Container%20Application%20Deployment%20Process.md#setup) for CAD setup details
 
 ## Executing the CAD Script
 -   To deploy the container application, refer to the [Executing the CAD Script](../container_application_deployment/docs/Container%20Application%20Deployment%20Process.md#executing-the-cad-script) documentation
