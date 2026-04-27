@@ -16,7 +16,8 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/includes/include_clien
 # $1: (optional) the environment name (dev, test, prod)
 # $2: (optional) deployment destination (local, server)
 # $3: (optional) build_image (yes = the container image is built and then run, no = the container is restarted using the existing container image)
-# $4: (optional) container run mode (mount = mounting source code directories, stack = deploying as container stack with secrets), when deplyment destination = server this argument is ignored
+# $4: (optional) remove volume flag - remove the volumes associated with the docker stack name (yes) or retain them (no). This defaults to "no"
+# $5: (optional) container run mode (mount = mounting source code directories, stack = deploying as container stack with secrets), when deplyment destination = server this argument is ignored
 function main ()
 {
 	# notify the user which script is being run
@@ -31,7 +32,8 @@ function main ()
 			["env_name"]="${1:-}"
 			["deploy_dest"]="${2:-}"
 			["build_image"]="${3:-}"
-			["run_mode"]="${4:-}"
+			["rem_vol"]="${4:-no}"
+			["run_mode"]="${5:-}"
 		)
 
 	proj_client_deploy_container "func_args"

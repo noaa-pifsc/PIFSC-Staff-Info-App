@@ -24,6 +24,7 @@ function proj_host_deploy_container_elev_privs()
 			["compose_path"]="${COMPOSE_PATH}"
 			["image_spec_path"]="${IMAGE_SPEC_PATH}"
 			["build_context"]="${BUILD_CONTEXT}"
+			["rem_vol"]="${REM_VOL}"
 		)
 
 	# execute the secret definitions and the container build/run process on the target folder using a privileged account
@@ -49,6 +50,7 @@ function proj_host_deploy_container()
 			["env_block"]="$(proj_host_define_env_vars_block)"
 			["secret_map"]="${SECRET_MAPPING_VAR_NAME}"
 			["process_secrets"]="${BUILD_IMAGE}"
+			["persistent_container"]="yes"
 		)
 		
 	#initiate the build/run process for the container using a privileged account on the host

@@ -9,10 +9,12 @@
 # function that defines the environment variable bash string that will define bash variable arguments for inclusion when the client run/build container bash scripts execute
 # the function accepts the following arguments:
 # 1: build image (yes, no)
+# 2: remove volume (yes, no)
 function proj_client_deploy_define_env_vars_string()
 {
 	# store the function arguments in local variables
 	local BUILD_IMAGE="${1}"
+	local REM_VOL="${2}"
 
 	# required bash variable validation
 	if ! cds_shared_validate_required_vars	"DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE"; then

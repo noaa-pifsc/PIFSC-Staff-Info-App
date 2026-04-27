@@ -14,6 +14,7 @@
 # deploy_dest: (optional) deployment destination (local, server)
 # build_image: (optional) build_image (yes = the container image is built and then run, no = the container is restarted using the existing container image)
 # run_mode: (optional) container run mode (mount = mounting source code directories, stack = deploying as container stack with secrets) (when deplyment destination = server this argument is ignored)
+# rem_vol: flag to indicate if the associated volumes should be removed (yes) or not (no)
 function proj_client_deploy_container ()
 {
 	echo "prepare the container source files and deploy the container"
@@ -33,43 +34,51 @@ function proj_client_deploy_container ()
         return 1
 	fi
 	
+	# create a pointer to the arg_array variable to make it easy to access the argument array values
+	local -n arg_ref="${arg_array}"
+
 	# declare the function arguments for cad_client_process_runtime_arguments()
 	local -A runtime_args=(
 			["log_path"]="${DEPLOYMENT_SCRIPT_LOGS}"
-			["env_name"]="$(cds_shared_get_array_val "${arg_array}" "env_name")"
-			["deploy_dest"]="$(cds_shared_get_array_val "${arg_array}" "deploy_dest")"
-			["run_mode"]="$(cds_shared_get_array_val "${arg_array}" "run_mode")"
-			["build_image"]="$(cds_shared_get_array_val "${arg_array}" "build_image")"
+			["env_name"]="${arg_ref[env_name]}"
+			["deploy_dest"]="${arg_ref[deploy_dest]}"
+			["run_mode"]="${arg_ref[run_mode]}"
+			["build_image"]="${arg_ref[build_image]}"
 			["repo_root"]="${REPO_ROOT_PATH}"
+			["rem_vol"]="${arg_ref[rem_vol]}"
 		)
 	
 	#process/prompt the user for runtime values
 	cad_client_process_runtime_arguments "runtime_args"
+
+	# define a pointer to the runtime arguments array
+	local -n runtime_args_ref="runtime_args"
 	
 	# load the client secrets and server configuration files
-	proj_client_load_config_secrets "${BUILD_PATH}" "$(cds_shared_get_array_val "runtime_args" "env_name")"
+	proj_client_load_config_secrets "${BUILD_PATH}" "${runtime_args_ref[env_name]}"
 
 	# enforce an EXIT trap immediately after loading secrets to guarantee memory sanitization. If the script errors out or is manually aborted, the sensitive globals will be securely wiped.
 	trap "cds_shared_unset_secret_variables '${SECRET_MAPPING_VAR_NAME}'" EXIT
 	
 	# declare the function arguments
 	local -A deploy_args=(
-		["deploy_dest"]="$(cds_shared_get_array_val "runtime_args" "deploy_dest")"
+		["deploy_dest"]="${runtime_args_ref[deploy_dest]}"
 		["build_path"]="${BUILD_PATH}"
 		["secret_map"]="${SECRET_MAPPING_VAR_NAME}"
 		["compose_mount_path"]="${COMPOSE_MOUNT_PATH}"
 		["image_name"]="${IMAGE_NAME}"
-		["build_image"]="$(cds_shared_get_array_val "runtime_args" "build_image")"
+		["build_image"]="${runtime_args_ref[build_image]}"
 		["stack_name"]="${STACK_NAME}"
 		["network_name"]="${NETWORK_NAME}"
 		["git_url"]="${GIT_URL}"
 		["secret_var"]="${SECRET_DATA_VAR_NAME}"
 		["source_path"]="${HOST_SOURCE_PATH}"
 		["target_host"]="${HOSTNAME}"
-		["ssh_cmd"]="$(proj_client_deploy_define_env_vars_string "$(cds_shared_get_array_val "runtime_args" "env_name")" "$(cds_shared_get_array_val "runtime_args" "build_image")") bash ${HOST_SCRIPTS_PATH}/host_deploy_application.sh"
+		["ssh_cmd"]="$(proj_client_deploy_define_env_vars_string  "$(cds_shared_get_array_val "runtime_args" "build_image")" "$(cds_shared_get_array_val "runtime_args" "rem_vol")") bash ${HOST_SCRIPTS_PATH}/host_deploy_application.sh"
 		["compose_path"]="${COMPOSE_PATH}"
 		["image_spec_path"]="${IMAGE_SPEC_PATH}"
 		["build_context"]="${BUILD_CONTEXT}"
+		["rem_vol"]="$(cds_shared_get_array_val "runtime_args" "rem_vol")"
 	)
 
 	# check where the container is being deployed

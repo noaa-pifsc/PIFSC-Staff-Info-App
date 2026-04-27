@@ -68,32 +68,32 @@ X deployment/restart container testing (testing completed on 11/5/25):
 	# Deploy Container:
 
 		# Server:
-			# deploy dev container to host for test purposes
-			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev server yes
+			# deploy dev container to host for test purposes and without removing container volumes
+			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev server yes no
 
 
 		# Local:
 
-			# deploy dev container locally for development purposes
-			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev local yes mount 
+			# deploy dev container locally for development purposes and without removing container volumes
+			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev local yes no mount 
 
-			# deploy test container locally for test purposes
-			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev local yes stack
+			# deploy test container locally for test purposes and without removing container volumes
+			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev local yes no stack
 
 
 	# Restart Container
 
 		# Server:
-			# restart the dev remote host without rebuilding
-			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev server  no
+			# restart the dev remote host without rebuilding and without removing container volumes
+			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev server no no
 
 		# Local:
 
-			# restart the dev local host stack without rebuilding
-			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev local no stack 
+			# restart the dev local host stack without rebuilding and without removing container volumes
+			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev local no no stack 
 
-			# restart the dev local host compose without rebuilding
-			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev local no mount
+			# restart the dev local host compose without rebuilding and without removing container volumes
+			bash ./deployment_scripts/client_scripts/client_deploy_application.sh dev local no no mount
 
 
 
