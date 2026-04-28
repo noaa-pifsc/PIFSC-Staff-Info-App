@@ -13,6 +13,8 @@ function proj_host_deploy_container_elev_privs()
 	# prepare the container host target directory by transferring the necessary source files
 	proj_host_prepare_container_target_dir "${HOST_SOURCE_PATH}" "${HOST_TARGET_PATH}" 
 
+	echo "running proj_host_deploy_container_elev_privs()"
+
 	# declare the function arguments
 	local -A host_deploy_stack_args=(
 			["image_name"]="${IMAGE_NAME}"

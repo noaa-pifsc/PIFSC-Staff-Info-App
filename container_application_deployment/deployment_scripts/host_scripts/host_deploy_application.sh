@@ -13,5 +13,7 @@ set -euo pipefail
 # include the host functions
 source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/includes/include_host_resources.sh"
 
+echo "running host_deploy_application.sh"
+
 #initiate the build/run process for the container using a privileged account on the host
 proj_host_deploy_container

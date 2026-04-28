@@ -12,5 +12,7 @@ set -euo pipefail
 # include the host functions
 source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/includes/include_host_resources.sh"
 
+echo "running host_deploy_application_elev_privs.sh"
+
 # deploy the container in stack mode
 proj_host_deploy_container_elev_privs
