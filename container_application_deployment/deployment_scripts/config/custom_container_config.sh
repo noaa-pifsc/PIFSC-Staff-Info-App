@@ -29,7 +29,7 @@
 	NETWORK_NAME="${STACK_NAME}_default"
 
 	# define the container image name
-	IMAGE_NAME="pifsc/${PROJECT_FOLDER}"
+	IMAGE_NAME="pifsc/${PROJECT_FOLDER}:latest"
 
 	# define the container compose file path for local development deployments where local folders and mounted as volumes
 	COMPOSE_MOUNT_PATH="${BUILD_PATH}/docker-compose.local.dev.yml"

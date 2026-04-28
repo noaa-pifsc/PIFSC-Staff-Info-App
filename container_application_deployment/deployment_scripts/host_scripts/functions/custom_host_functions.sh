@@ -36,5 +36,5 @@ function proj_host_prepare_container_target_dir ()
 function proj_host_define_env_vars_block()
 {
 	# Validates the arguments, securely quote values, and print the multi-line block
-	cds_shared_generate_export_env_vars_block "DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE"
+	cds_shared_generate_export_env_vars_block "DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE" "REM_VOL"
 }
