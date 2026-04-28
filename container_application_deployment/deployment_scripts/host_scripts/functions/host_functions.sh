@@ -36,11 +36,11 @@ function proj_host_deploy_container_elev_privs()
 function proj_host_deploy_container()
 {
 	# required bash variable validation
-	if ! cds_shared_validate_required_vars "PRIV_USER" "HOST_SOURCE_PATH" "SECRET_DATA_VAR_NAME" "HOST_SCRIPTS_PATH" "SECRET_MAPPING_VAR_NAME" "BUILD_IMAGE"; then 
+	if ! cds_shared_validate_required_vars "PRIV_USER" "HOST_SOURCE_PATH" "SECRET_DATA_VAR_NAME" "HOST_SCRIPTS_PATH" "SECRET_MAPPING_VAR_NAME" "BUILD_IMAGE" "REM_VOL"; then 
         echo "Error: proj_host_deploy_container() function argument validation failed" >&2
         return 1
     fi
-
+	
 	# declare the function arguments
 	local -A host_deploy_stack_args=(
 			["target_user"]="${PRIV_USER}"

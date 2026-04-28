@@ -17,31 +17,33 @@ function proj_client_deploy_define_env_vars_string()
 	local REM_VOL="${2}"
 
 	# required bash variable validation
-	if ! cds_shared_validate_required_vars	"DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE"; then
+	if ! cds_shared_validate_required_vars	"DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE" "REM_VOL"; then
         echo "Error: proj_client_deploy_define_env_vars_string() function required bash variable validation failed" >&2
         return 1
 	fi
 
 	# Dynamically validate and strictly format the SSH string
-	cds_shared_generate_ssh_env_vars_string "DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE"
+	cds_shared_generate_ssh_env_vars_string "DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE" "REM_VOL"
 }
 
 # function to declare the environment variables for local deployments
 # the function accepts the following arguments:
 # 1: build image (yes, no)
+# 2: remove volume (yes, no)
 function proj_client_export_env_vars ()
 {
 	# store the function arguments in global variables
 	BUILD_IMAGE="${1}"
+	REM_VOL="${2}"
 
 	# required bash variable validation
-	if ! cds_shared_validate_required_vars	"DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE"; then
+	if ! cds_shared_validate_required_vars	"DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE" "REM_VOL"; then
         echo "Error: proj_client_export_env_vars() function required bash variable validation failed" >&2
         return 1
 	fi
 
 	# export the bash variables as environment variables:
-	export DB_HOST DB_SERVICE_NAME BUILD_IMAGE
+	export DB_HOST DB_SERVICE_NAME BUILD_IMAGE REM_VOL
 }
 
 
