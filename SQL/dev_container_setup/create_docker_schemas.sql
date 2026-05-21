@@ -1,6 +1,15 @@
-set role all;
+SET DEFINE ON
+-- Provide credentials in the form: USER@TNS/PASSWORD when using a TNS Name
+-- Provide credentials in the form: USER/PASSWORD@HOSTNAME/SID when specifying hostname and SID values
+DEFINE apps_credentials=&1
 
-set define off;
+--Provide the passwords to the PICADM and STAFF_INFO_APP separately
+DEFINE picadm_db_password_secret=&2
+DEFINE sia_db_password_secret=&3
+
+CONNECT &apps_credentials. AS SYSDBA
+
+set role all;
 
 SET FEEDBACK ON
 SET TRIMSPOOL ON
@@ -13,12 +22,6 @@ SET ECHO ON
 WHENEVER SQLERROR EXIT 1
 WHENEVER OSERROR  EXIT 1
 
-SET DEFINE ON
--- Provide credentials in the form: USER@TNS/PASSWORD when using a TNS Name
--- Provide credentials in the form: USER/PASSWORD@HOSTNAME/SID when specifying hostname and SID values
-DEFINE apps_credentials=&1
-CONNECT &apps_credentials. AS SYSDBA
-
 PROMPT create PICADM schemas 
 
 
@@ -27,7 +30,7 @@ PROMPT create PICADM schemas
 -- --
 
 	CREATE USER PICADM
-  IDENTIFIED BY "[CONTAINER_PW]"
+  IDENTIFIED BY "&picadm_db_password_secret."
   DEFAULT TABLESPACE  USERS
   QUOTA 500M ON USERS;
 
@@ -55,7 +58,7 @@ set define off;
 -- --
 
 CREATE USER STAFF_INFO_APP
-  IDENTIFIED BY "[CONTAINER_PW]"
+  IDENTIFIED BY "&picadm_db_password_secret."
   DEFAULT TABLESPACE  USERS
   QUOTA 500M ON USERS ;
 
