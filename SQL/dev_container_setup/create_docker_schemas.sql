@@ -50,9 +50,6 @@ GRANT CREATE PROCEDURE TO PICADM;
 GRANT CREATE TYPE TO PICADM;
 
 
-
-
-set define off;
 -- --
 -- -- Create new schema user
 -- --
