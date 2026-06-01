@@ -5,7 +5,7 @@
 function proj_host_deploy_container_elev_privs()
 {
 	# required bash variable validation
-	if ! cds_shared_validate_required_vars "HOST_SOURCE_PATH" "IMAGE_NAME" "STACK_NAME" "SECRET_MAPPING_VAR_NAME" "NETWORK_NAME" "BUILD_IMAGE" "COMPOSE_PATH" "IMAGE_SPEC_PATH" "BUILD_CONTEXT" "HOST_TARGET_PATH" "CONTAINER_APP_PORT"; then 
+	if ! cds_shared_validate_required_vars "HOST_SOURCE_PATH" "IMAGE_NAME" "STACK_NAME" "SECRET_MAPPING_VAR_NAME" "NETWORK_NAME" "BUILD_IMAGE" "COMPOSE_PATH" "IMAGE_SPEC_PATH" "BUILD_CONTEXT" "HOST_TARGET_PATH" "CONTAINER_APP_PORT" "BUILD_PATH"; then 
         echo "Error: proj_host_deploy_container() function argument validation failed" >&2
         return 1
     fi
@@ -28,6 +28,7 @@ function proj_host_deploy_container_elev_privs()
 			["image_spec_path"]="${IMAGE_SPEC_PATH}"
 			["build_context"]="${BUILD_CONTEXT}"
 			["rem_vol"]="${REM_VOL}"
+			["build_path"]="${BUILD_PATH}"
 		)
 
 	# execute the secret definitions and the container build/run process on the target folder using a privileged account
