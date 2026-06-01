@@ -15,7 +15,7 @@
 	PROJECT_FOLDER="staff-info-app"
 
 	# define the container git project URL
-	GIT_URL="git@github.com:noaa-pifsc/PIFSC-Staff-Info-App.git"
+	GIT_URL="--branch Branch_CAD_v1.1 git@github.com:noaa-pifsc/PIFSC-Staff-Info-App.git"
 
 	# define the target directory for the container project when the container image is built
 	HOST_TARGET_PATH="/home/${PRIV_USER}/containers/${PROJECT_FOLDER}"
@@ -42,6 +42,9 @@
 	
 	# define the container build context (e.g. ..)
 	BUILD_CONTEXT="${BUILD_PATH}/.."
+	
+	# define the port to access container web app
+	CONTAINER_APP_PORT="5006"
 	
 	# declare an associative array with the secret name as the array element and the bash variable name as the array value
 	declare -A SECRET_MAPPING_ARR=(

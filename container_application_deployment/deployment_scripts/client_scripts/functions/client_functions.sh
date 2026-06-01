@@ -29,7 +29,7 @@ function proj_client_deploy_container ()
     fi
 
 	# required bash variable validation
-	if ! cds_shared_validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "BUILD_PATH" "SECRET_MAPPING_VAR_NAME" "COMPOSE_MOUNT_PATH" "IMAGE_NAME" "STACK_NAME" "NETWORK_NAME" "GIT_URL" "SECRET_DATA_VAR_NAME" "HOST_SOURCE_PATH" "HOST_SCRIPTS_PATH" "COMPOSE_PATH" "IMAGE_SPEC_PATH" "BUILD_CONTEXT" ; then
+	if ! cds_shared_validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "BUILD_PATH" "SECRET_MAPPING_VAR_NAME" "COMPOSE_MOUNT_PATH" "IMAGE_NAME" "STACK_NAME" "NETWORK_NAME" "GIT_URL" "SECRET_DATA_VAR_NAME" "HOST_SOURCE_PATH" "HOST_SCRIPTS_PATH" "COMPOSE_PATH" "IMAGE_SPEC_PATH" "BUILD_CONTEXT" "CONTAINER_APP_PORT"; then
         echo "Error: proj_client_deploy_container() function required bash variable validation failed" >&2
         return 1
 	fi
@@ -51,45 +51,45 @@ function proj_client_deploy_container ()
 	#process/prompt the user for runtime values
 	cad_client_process_runtime_arguments "runtime_args"
 
-	# define a pointer to the runtime arguments array
-	local -n runtime_args_ref="runtime_args"
-	
 	# load the client secrets and server configuration files
-	proj_client_load_config_secrets "${BUILD_PATH}" "${runtime_args_ref[env_name]}"
+	proj_client_load_config_secrets "${BUILD_PATH}" "${runtime_args[env_name]}"
 
 	# enforce an EXIT trap immediately after loading secrets to guarantee memory sanitization. If the script errors out or is manually aborted, the sensitive globals will be securely wiped.
 	trap "cds_shared_unset_secret_variables '${SECRET_MAPPING_VAR_NAME}'" EXIT
 	
 	# declare the function arguments
 	local -A deploy_args=(
-		["deploy_dest"]="${runtime_args_ref[deploy_dest]}"
+		["deploy_dest"]="${runtime_args[deploy_dest]}"
 		["build_path"]="${BUILD_PATH}"
 		["secret_map"]="${SECRET_MAPPING_VAR_NAME}"
 		["compose_mount_path"]="${COMPOSE_MOUNT_PATH}"
 		["image_name"]="${IMAGE_NAME}"
-		["build_image"]="${runtime_args_ref[build_image]}"
+		["build_image"]="${runtime_args[build_image]}"
 		["stack_name"]="${STACK_NAME}"
 		["network_name"]="${NETWORK_NAME}"
 		["git_url"]="${GIT_URL}"
 		["secret_var"]="${SECRET_DATA_VAR_NAME}"
 		["source_path"]="${HOST_SOURCE_PATH}"
 		["target_host"]="${HOSTNAME}"
-		["ssh_cmd"]="$(proj_client_deploy_define_env_vars_string  "$(cds_shared_get_array_val "runtime_args" "build_image")" "$(cds_shared_get_array_val "runtime_args" "rem_vol")") bash ${HOST_SCRIPTS_PATH}/host_deploy_application.sh"
+		["ssh_cmd"]="$(proj_client_deploy_define_env_vars_string  ${runtime_args[build_image]} ${runtime_args[rem_vol]}) bash ${HOST_SCRIPTS_PATH}/host_deploy_application.sh"
 		["compose_path"]="${COMPOSE_PATH}"
 		["image_spec_path"]="${IMAGE_SPEC_PATH}"
 		["build_context"]="${BUILD_CONTEXT}"
-		["rem_vol"]="$(cds_shared_get_array_val "runtime_args" "rem_vol")"
+		["rem_vol"]="${runtime_args[rem_vol]}"
 	)
 
 	# check where the container is being deployed
-	if [[ "$(cds_shared_get_array_val "runtime_args" "deploy_dest")" == "local" ]]; then
+	if [[ "${runtime_args[deploy_dest]}" == "local" ]]; then
 		# this is a local deployment
 		
 		# declare the environment variables for the local deployment
-		proj_client_export_env_vars "$(cds_shared_get_array_val "runtime_args" "env_name")" "$(cds_shared_get_array_val "runtime_args" "build_image")"
+		proj_client_export_env_vars "${runtime_args[env_name]}" "${runtime_args[build_image]}"
+		
+		# export the CONTAINER_APP_PORT variable so it can be used during the container deployment
+		export "CONTAINER_APP_PORT"
 		
 		# this is a container deployment to a local endpoint, specify the run_mode function argument
-		cds_shared_set_array_val "deploy_args" "run_mode" "$(cds_shared_get_array_val "runtime_args" "run_mode")"
+		cds_shared_set_array_val "deploy_args" "run_mode" "${runtime_args[run_mode]}"
 	fi
 	
 	# deploy the container for the specified scenario

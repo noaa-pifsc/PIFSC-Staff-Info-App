@@ -5,13 +5,16 @@
 function proj_host_deploy_container_elev_privs()
 {
 	# required bash variable validation
-	if ! cds_shared_validate_required_vars "HOST_SOURCE_PATH" "IMAGE_NAME" "STACK_NAME" "SECRET_MAPPING_VAR_NAME" "NETWORK_NAME" "BUILD_IMAGE" "COMPOSE_PATH" "IMAGE_SPEC_PATH" "BUILD_CONTEXT" "HOST_TARGET_PATH"; then 
+	if ! cds_shared_validate_required_vars "HOST_SOURCE_PATH" "IMAGE_NAME" "STACK_NAME" "SECRET_MAPPING_VAR_NAME" "NETWORK_NAME" "BUILD_IMAGE" "COMPOSE_PATH" "IMAGE_SPEC_PATH" "BUILD_CONTEXT" "HOST_TARGET_PATH" "CONTAINER_APP_PORT"; then 
         echo "Error: proj_host_deploy_container() function argument validation failed" >&2
         return 1
     fi
 
 	# prepare the container host target directory by transferring the necessary source files
 	proj_host_prepare_container_target_dir "${HOST_SOURCE_PATH}" "${HOST_TARGET_PATH}" 
+
+	# export the CONTAINER_APP_PORT variable so it can be used during the container deployment
+	export "CONTAINER_APP_PORT"
 
 	# declare the function arguments
 	local -A host_deploy_stack_args=(
