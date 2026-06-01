@@ -102,10 +102,6 @@ function proj_client_deploy_container ()
 	# enforce an EXIT trap immediately after loading secrets to guarantee memory sanitization. If the script errors out or is manually aborted, the sensitive globals will be securely wiped.
 	trap "cds_shared_unset_secret_variables '${SECRET_MAPPING_VAR_NAME}'" EXIT
 	
-	# define the standard environment variables including the build_image and rem_vol runtime config variables
-	local env_vars_string="$(proj_client_deploy_define_env_vars_string  ${runtime_args[build_image]} ${runtime_args[rem_vol]})"
-	
-	
 	# declare the function arguments
 	local -A deploy_args=(
 		["deploy_dest"]="${runtime_args[deploy_dest]}"
@@ -120,7 +116,7 @@ function proj_client_deploy_container ()
 		["secret_var"]="${SECRET_DATA_VAR_NAME}"
 		["source_path"]="${HOST_SOURCE_PATH}"
 		["target_host"]="${HOSTNAME}"
-		["ssh_cmd"]="${env_vars_string} bash ${HOST_SCRIPTS_PATH}/host_deploy_application.sh"
+		["ssh_cmd"]="$(proj_client_deploy_define_env_vars_string ${runtime_args[build_image]} ${runtime_args[rem_vol]}) bash ${HOST_SCRIPTS_PATH}/host_deploy_application.sh"
 		["compose_path"]="${COMPOSE_PATH}"
 		["image_spec_path"]="${IMAGE_SPEC_PATH}"
 		["build_context"]="${BUILD_CONTEXT}"
