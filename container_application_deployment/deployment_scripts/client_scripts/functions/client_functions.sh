@@ -7,6 +7,51 @@
 # be modified across individual container apps
 #-----------------------------------------------------------------------------
 
+# function that defines the environment variable bash string that will define bash variable arguments for inclusion when the client run/build container bash scripts execute
+# the function accepts the following arguments:
+# 1: build image (yes, no)
+# 2: remove volume (yes, no)
+function proj_client_deploy_define_env_vars_string()
+{
+	# store the function arguments in local variables
+	local BUILD_IMAGE="${1}"
+	local REM_VOL="${2}"
+
+	# required bash variable validation
+	if ! cds_shared_validate_required_vars	"DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE" "REM_VOL"; then
+        echo "Error: proj_client_deploy_define_env_vars_string() function required bash variable validation failed" >&2
+        return 1
+	fi
+
+	# Dynamically validate and strictly format the SSH string
+	cds_shared_generate_ssh_env_vars_string "DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE" "REM_VOL"
+	
+	# export any custom environment variables in the SSH string:
+	proj_client_custom_deploy_define_env_vars_string
+}
+
+# function to declare the environment variables for local deployments
+# the function accepts the following arguments:
+# 1: build image (yes, no)
+# 2: remove volume (yes, no)
+function proj_client_export_env_vars ()
+{
+	# store the function arguments in global variables
+	BUILD_IMAGE="${1}"
+	REM_VOL="${2}"
+
+	# required bash variable validation
+	if ! cds_shared_validate_required_vars	"DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE" "REM_VOL"; then
+        echo "Error: proj_client_export_env_vars() function required bash variable validation failed" >&2
+        return 1
+	fi
+
+	# export the bash variables as environment variables:
+	export DB_HOST DB_SERVICE_NAME BUILD_IMAGE REM_VOL
+
+	# export any custom environment variables:
+	proj_client_custom_export_env_vars
+}
 
 # this function prepares and executes the client deployment scripts
 # This function accepts the following parameters as elements in the specified array name (arg_array): 
@@ -52,10 +97,14 @@ function proj_client_deploy_container ()
 	cad_client_process_runtime_arguments "runtime_args"
 
 	# load the client secrets and server configuration files
-	proj_client_load_config_secrets "${BUILD_PATH}" "${runtime_args[env_name]}"
+	proj_client_custom_load_config_secrets "${BUILD_PATH}" "${runtime_args[env_name]}"
 
 	# enforce an EXIT trap immediately after loading secrets to guarantee memory sanitization. If the script errors out or is manually aborted, the sensitive globals will be securely wiped.
 	trap "cds_shared_unset_secret_variables '${SECRET_MAPPING_VAR_NAME}'" EXIT
+	
+	# define the standard environment variables including the build_image and rem_vol runtime config variables
+	local env_vars_string="$(proj_client_deploy_define_env_vars_string  ${runtime_args[build_image]} ${runtime_args[rem_vol]})"
+	
 	
 	# declare the function arguments
 	local -A deploy_args=(
@@ -71,7 +120,7 @@ function proj_client_deploy_container ()
 		["secret_var"]="${SECRET_DATA_VAR_NAME}"
 		["source_path"]="${HOST_SOURCE_PATH}"
 		["target_host"]="${HOSTNAME}"
-		["ssh_cmd"]="$(proj_client_deploy_define_env_vars_string  ${runtime_args[build_image]} ${runtime_args[rem_vol]}) bash ${HOST_SCRIPTS_PATH}/host_deploy_application.sh"
+		["ssh_cmd"]="${env_vars_string} bash ${HOST_SCRIPTS_PATH}/host_deploy_application.sh"
 		["compose_path"]="${COMPOSE_PATH}"
 		["image_spec_path"]="${IMAGE_SPEC_PATH}"
 		["build_context"]="${BUILD_CONTEXT}"
