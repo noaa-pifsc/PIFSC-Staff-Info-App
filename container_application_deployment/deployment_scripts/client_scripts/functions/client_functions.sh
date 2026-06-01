@@ -89,7 +89,7 @@ function proj_client_deploy_container ()
 		export "CONTAINER_APP_PORT"
 		
 		# this is a container deployment to a local endpoint, specify the run_mode function argument
-		cds_shared_set_array_val "deploy_args" "run_mode" "${runtime_args[run_mode]}"
+		deploy_args[run_mode]="${runtime_args[run_mode]}"
 	fi
 	
 	# deploy the container for the specified scenario
