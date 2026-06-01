@@ -34,7 +34,7 @@ function proj_client_custom_load_config_secrets ()
 
 	# required bash variable validation
 	if ! cds_shared_validate_required_vars	"build_path" "env_name"; then
-        echo "Error: proj_client_custom_load_config_secrets() function required required function argument validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function required required function argument validation failed" >&2
         return 1
 	fi
 	

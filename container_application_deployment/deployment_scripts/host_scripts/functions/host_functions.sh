@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# function that defines the environment variable bash block that will define the environment variables for inclusion when the build/run container bash scripts execute
+# this function accepts no parameters
+function proj_host_define_env_vars_block()
+{
+	# Validates the arguments, securely quote values, and print the multi-line block
+	cds_shared_generate_export_env_vars_block "DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE" "REM_VOL"
+	
+	# include any custom environment variable block
+	proj_host_custom_define_env_vars_block
+}
+
 # function to execute the container stack deployment on the docker host using a privileged account
 # This function accepts no parameters: 
 function proj_host_deploy_container_elev_privs()
@@ -11,7 +22,7 @@ function proj_host_deploy_container_elev_privs()
     fi
 
 	# prepare the container host target directory by transferring the necessary source files
-	proj_host_prepare_container_target_dir "${HOST_SOURCE_PATH}" "${HOST_TARGET_PATH}" 
+	proj_host_custom_prepare_container_target_dir "${HOST_SOURCE_PATH}" "${HOST_TARGET_PATH}" 
 
 	# export the CONTAINER_APP_PORT variable so it can be used during the container deployment
 	export "CONTAINER_APP_PORT"
