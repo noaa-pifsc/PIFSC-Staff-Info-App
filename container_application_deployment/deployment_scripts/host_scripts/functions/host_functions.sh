@@ -7,7 +7,7 @@ function proj_host_define_env_vars_block()
 	# Validates the arguments, securely quote values, and print the multi-line block
 	cds_shared_generate_export_env_vars_block "DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE" "REM_VOL"
 	
-	# include any custom environment variable block
+	# include any custom environment variables in the generated block
 	proj_host_custom_define_env_vars_block
 }
 
@@ -17,7 +17,7 @@ function proj_host_deploy_container_elev_privs()
 {
 	# required bash variable validation
 	if ! cds_shared_validate_required_vars "HOST_SOURCE_PATH" "IMAGE_NAME" "STACK_NAME" "SECRET_MAPPING_VAR_NAME" "NETWORK_NAME" "BUILD_IMAGE" "COMPOSE_PATH" "IMAGE_SPEC_PATH" "BUILD_CONTEXT" "HOST_TARGET_PATH" "CONTAINER_APP_PORT" "BUILD_PATH" "REM_VOL"; then 
-        echo "Error: proj_host_deploy_container() function argument validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function argument validation failed" >&2
         return 1
     fi
 
@@ -52,7 +52,7 @@ function proj_host_deploy_container()
 {
 	# required bash variable validation
 	if ! cds_shared_validate_required_vars "PRIV_USER" "HOST_SOURCE_PATH" "SECRET_DATA_VAR_NAME" "HOST_SCRIPTS_PATH" "SECRET_MAPPING_VAR_NAME" "BUILD_IMAGE"; then 
-        echo "Error: proj_host_deploy_container() function argument validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function argument validation failed" >&2
         return 1
     fi
 	

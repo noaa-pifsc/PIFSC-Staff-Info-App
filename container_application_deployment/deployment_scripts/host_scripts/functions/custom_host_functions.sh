@@ -18,7 +18,7 @@ function proj_host_custom_prepare_container_target_dir ()
 
 	# required bash variable validation
 	if ! cds_shared_validate_required_vars	"target_path" "source_path"; then
-        echo "Error: proj_host_custom_prepare_container_target_dir() function required bash variable validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function required bash variable validation failed" >&2
         return 1
 	fi
 

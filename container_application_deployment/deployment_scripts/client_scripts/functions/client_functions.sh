@@ -19,7 +19,7 @@ function proj_client_deploy_define_env_vars_string()
 
 	# required bash variable validation
 	if ! cds_shared_validate_required_vars	"DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE" "REM_VOL"; then
-        echo "Error: proj_client_deploy_define_env_vars_string() function required bash variable validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function required bash variable validation failed" >&2
         return 1
 	fi
 
@@ -42,7 +42,7 @@ function proj_client_export_env_vars ()
 
 	# required bash variable validation
 	if ! cds_shared_validate_required_vars	"DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE" "REM_VOL"; then
-        echo "Error: proj_client_export_env_vars() function required bash variable validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function required bash variable validation failed" >&2
         return 1
 	fi
 
@@ -69,13 +69,13 @@ function proj_client_deploy_container ()
 	
     # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
-        echo "Error: proj_client_deploy_container() function argument '${arg_array}' is not a valid associative array." >&2
+        echo "Error: ${FUNCNAME[0]}() function argument '${arg_array}' is not a valid associative array." >&2
         return 1
     fi
 
 	# required bash variable validation
 	if ! cds_shared_validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "BUILD_PATH" "SECRET_MAPPING_VAR_NAME" "COMPOSE_MOUNT_PATH" "IMAGE_NAME" "STACK_NAME" "NETWORK_NAME" "GIT_URL" "SECRET_DATA_VAR_NAME" "HOST_SOURCE_PATH" "HOST_SCRIPTS_PATH" "COMPOSE_PATH" "IMAGE_SPEC_PATH" "BUILD_CONTEXT" "CONTAINER_APP_PORT"; then
-        echo "Error: proj_client_deploy_container() function required bash variable validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function required bash variable validation failed" >&2
         return 1
 	fi
 	
