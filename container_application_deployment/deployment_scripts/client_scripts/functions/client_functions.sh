@@ -24,10 +24,17 @@ function proj_client_deploy_define_env_vars_string()
 	fi
 
 	# Dynamically validate and strictly format the SSH string
-	cds_shared_generate_ssh_env_vars_string "DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE" "REM_VOL"
+	local base_vars="$(cds_shared_generate_ssh_env_vars_string "DB_HOST" "DB_SERVICE_NAME" "BUILD_IMAGE" "REM_VOL")"
 	
 	# export any custom environment variables in the SSH string:
-	proj_client_custom_deploy_define_env_vars_string
+	local custom_vars="$(proj_client_custom_deploy_define_env_vars_string)"
+	
+	# check if the custom_vars is blank
+    if [[ -n "${custom_vars}" ]]; then
+        echo "${base_vars} ${custom_vars}" 	# concatenate the base and custom environment variables so they can be concatenated
+    else
+        echo "${base_vars}"	# output just the base environment variables
+    fi
 }
 
 # function to declare the environment variables for local deployments
