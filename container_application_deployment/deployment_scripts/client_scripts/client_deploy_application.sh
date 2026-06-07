@@ -21,9 +21,11 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/includes/include_clien
 function main ()
 {
 	# notify the user which script is being run
+	echo ""
 	echo "*********************************************************************"
 	echo "********* Executing container application deployment script *********"
 	echo "*********************************************************************"
+	echo ""
 	echo "*Note: This script will deploy the container application to the specified destination"
 	echo ""
 
