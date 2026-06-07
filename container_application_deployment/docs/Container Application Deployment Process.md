@@ -8,23 +8,29 @@ The PIFSC Container Application Deployment (CAD) project was created to provide 
     -   URL: https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments
 -   [SIA App Documentation](../../docs/Staff%20Info%20App%20-%20Technical%20Documentation.md)
 
-## Platform Requirements
--   Refer to [CAD Platform Requirements](https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments/blob/main/README.md#platform-requirements)
+## Requirements
+-   Refer to [CAD Platform Requirements](../../modules/CDD/README.md#requirements)
 
 ## Container Host Instances
--   Refer to [CAD Container Host Instances](https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments/blob/main/README.md#container-host-instances)
+-   Refer to [CAD Container Host Instances](../../modules/CAD/README.md#container-host-instances)
 
-## Project-Specific CAD Folder Structure
--   Refer to [CAD Repository Folder Structure](https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments/blob/main/README.md#project-specific-cad-folder-structure)
+## Dependencies
+-   Refer to [CAD Container Host Instances](../../modules/CAD/README.md#dependencies)
+
+## Naming Conventions
+-   Refer to [CAD Naming Conventions](../../modules/CAD/README.md#naming-conventions)
+
+## CAD Folder Structure
+-   Refer to [CAD Folder Structure](../../modules/CAD/README.md#cad-folder-structure)
 
 ## CAD Implementation Procedure
--   Refer to [CAD Implementation Procedure](https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments/blob/main/README.md#cad-implementation-procedure)
+-   Refer to [CAD Implementation Procedure](../../modules/CAD/README.md#cad-implementation-procedure)
 
 ## Setup
--    Refer to [CAD Setup](https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments/blob/main/README.md#setup)
+-    Refer to [CAD Setup](../../modules/CAD/README.md#setup)
 
 ## Executing the CAD Script
--   The [CAD Documentation](https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments/blob/main/README.md#executing-the-cad-script) contains detailed information about the automated deployment process
+-   The [CAD Documentation](../../modules/CAD/README.md#executing-the-cad-script) contains detailed information about the automated deployment process
 
 ## Security Features
--   Refer to [CAD Security Features](https://github.com/noaa-pifsc/PIFSC-Container-Application-Deployments/blob/main/README.md#security-features)
+-   Refer to [CAD Security Features](../../modules/CAD/README.md#security-features)
