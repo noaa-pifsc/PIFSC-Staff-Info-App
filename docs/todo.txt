@@ -96,47 +96,46 @@ Future updates:
 
 
 
-
-	_ testing (2/2026):
-		local:
-			build - yes
-				mount
-					image does not exist
-						_ build and deploy image
-					image exists
-						_ build and deploy image
-				stack
-					image does not exist
-						_ build and deploy image
-					image exists
-						_ build and deploy image
+	X testing (6/9/2026):
+		X local:
+			X build - yes
+				X mount
+					X image does not exist
+						X build and deploy image
+					X image exists
+						X build and deploy image
+				X stack
+					X image does not exist
+						X build and deploy image
+					X image exists
+						X build and deploy image
+			X build - no
+				X mount
+					X image does not exist
+						X rebuild image and deploy stack
+					X image exists
+						X restart container (no build)
+				X stack
+					X image does not exist
+						X rebuild image and deploy stack
+					X image exists
+						X restart container (no build)
+		X server (always stack mode):
+			X build - yes
+				X image does not exist
+					X build and deploy image
+				X image exists
+					X build and deploy image
 					
-			build - no
-				mount
-					image does not exist
-						_ rebuild image and deploy stack
-					image exists
-						_ restart container (no build)
-				
-				stack
-					image does not exist
-						_ rebuild image and deploy stack
-					image exists
-						_ restart container (no build)
-		server:
-			build - yes
-				image does not exist
-					_ build and deploy image
-				image exists
-					_ build and deploy image
-					
-			build - no
-				image does not exist
-					_ rebuild image and deploy stack
-				image exists
-					_ restart container (no build)
+			X build - no
+				X image does not exist
+					X rebuild image and deploy stack
+				X image exists
+					X restart container (no build)
 
 	commands for scenarios:
-		docker stack rm PLW_stack
-		docker image rm pifsc/pifsc-library-website
-		docker image inspect pifsc/pifsc-library-website
+		docker stack rm SIA_stack
+		docker image rm pifsc/staff-info-app
+		docker image inspect pifsc/staff-info-app
+
+
