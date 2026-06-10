@@ -121,11 +121,10 @@ class org_chart
 		
 		//generate the html to display the person in the org chart:
 		$return_string = "				<TR><TD class=\"nowrap person-tooltip-trigger\" data-tooltip-id=\"".htmlspecialchars($person_info['PERS_ID'])."\">\n
-	".($person_info['MGMT_POSITION_YN'] == 'Y' ? "<span class=\"mgmt_position\">": '').htmlspecialchars($person_info['FIRST_INITIAL'] ?? '').". ".htmlspecialchars($person_info['LASTNAME'] ?? '').", ".htmlspecialchars($person_info['POSITION'] ?? '')." ".htmlspecialchars($person_info['EMPLOYER'] ?? '')." ".htmlspecialchars($person_info['TYPE_ABBR'] ?? '').($person_info['MGMT_POSITION_YN'] == 'Y' ? "</span>": '')."\n
+	".($person_info['MGMT_POSITION_YN'] == 'Y' ? "<span class=\"mgmt_position\">": '').htmlspecialchars($person_info['FIRSTNAME'] ?? '')." ".htmlspecialchars($person_info['LASTNAME'] ?? '').", ".htmlspecialchars($person_info['POSITION'] ?? '')." ".htmlspecialchars($person_info['EMPLOYER'] ?? '')." ".htmlspecialchars($person_info['TYPE_ABBR'] ?? '').($person_info['MGMT_POSITION_YN'] == 'Y' ? "</span>": '')."\n
 					</TD></TR>\n";
 					
 		//remove unnecessary information not needed in the tooltips:
-		unset ($person_info['FIRST_INITIAL']);
 		unset ($person_info['EMPLOYER']);
 		unset ($person_info['MGMT_POSITION_YN']);
 		unset ($person_info['TYPE_ABBR']);
@@ -148,7 +147,6 @@ class org_chart
 		//generate the select query to retrieve the personnel records
 		$SQL = "SELECT pers_id,
 		firstname,
-		SUBSTR(firstname, 1, 1) first_initial, 
 		lastname,
 		email_addr,
 		workph1,
