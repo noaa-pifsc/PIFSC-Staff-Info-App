@@ -4,66 +4,64 @@ Future updates:
 
 
 
-X deployment/restart container testing (testing completed on 11/5/25):
-	X deploy to local
-		success:
-			args: dev mount
-				X container running
-				X container not running
-			args: dev stack
-				X container running
-				X container not running
-	X deploy to host
-		success:
-			X args: dev
-				X container running
-				X container not running
-			X args: test
-				X container running
-				X container not running
-
-	X restart container
-		args: dev yes
-			X success:
-				stack rm
-				drop image
-				run restart with rebuild
-			X success (container running)
-		args: dev no
-			X success (no rebuild):
-				stack rm
-				run restart
-			X success (automatic rebuild):
-				stack rm
-				drop image
-				run restart
-			X success (container running)
-		args: test yes
-			X success:
-				stack rm
-				drop image
-				run restart with rebuild
-			X success (container running)
-		args: test no
-			X success (no rebuild):
-				stack rm
-				run restart
-			X success (automatic rebuild):
-				stack rm
-				drop image
-				run restart
-			X success (container running)
-
+	_ testing (6/8/2026):
+		_ local:
+			_ build - yes
+				_ mount
+					_ image does not exist
+						_ build and deploy image
+						_ rem_vol = yes
+					_ image exists
+						_ build and deploy image
+						_ rem_vol = yes
+				_ stack
+					_ image does not exist
+						_ build and deploy image
+						_ rem_vol = yes
+					_ image exists
+						_ build and deploy image
+						_ rem_vol = yes
+			_ build - no
+				_ mount
+					_ image does not exist
+						_ rebuild image and deploy stack
+						_ rem_vol = yes
+					_ image exists
+						_ restart container (no build)
+						_ rem_vol = yes
+				_ stack
+					_ image does not exist
+						_ rebuild image and deploy stack
+						_ rem_vol = yes
+					_ image exists
+						_ restart container (no build)
+						_ rem_vol = yes
+		_ server (always stack mode):
+			_ build - yes
+				_ image does not exist
+					_ build and deploy image
+					_ rem_vol = yes
+				_ image exists
+					_ build and deploy image
+					_ rem_vol = yes
+					
+			_ build - no
+				_ image does not exist
+					_ rebuild image and deploy stack
+					_ rem_vol = yes
+				_ image exists
+					_ restart container (no build)
+					_ rem_vol = yes
 
 	commands for scenarios:
-		docker stack rm SIA_stack
+		docker stack rm PRI_stack
 		docker image rm pifsc/staff-info-app
 		docker image inspect pifsc/staff-info-app
 		
 		
 		
 
-	cd /c/Users/jesse.abdul/Documents/Version\ Control/Git/staff-info-app/container_application_deployment
+	cd /c/Users/USERNAME/Documents/Version\ Control/Git/staff-info-app/container_application_deployment
 
 	# Deploy Container:
 
