@@ -15,7 +15,7 @@
 	PROJECT_FOLDER="staff-info-app"
 
 	# define the container git project URL
-	GIT_URL="--branch Branch_CAD_v1.1 git@github.com:noaa-pifsc/PIFSC-Staff-Info-App.git"
+	GIT_URL="git@github.com:noaa-pifsc/PIFSC-Staff-Info-App.git"
 
 	# define the target directory for the container project when the container image is built
 	HOST_TARGET_PATH="/home/${PRIV_USER}/containers/${PROJECT_FOLDER}"
