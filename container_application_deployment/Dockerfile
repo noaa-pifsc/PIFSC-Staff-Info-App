@@ -3,10 +3,12 @@
 # Start build from official Oracle Linux 8 image
 FROM oraclelinux:8
 
-# Install required repos and packages
-RUN dnf -y install oracle-instantclient-release-el8 && \
+# Install required repos and packages (using Instant Client 23ai and Remi PHP 8.2)
+RUN dnf -y install oracle-instantclient-release-23ai-el8 oracle-epel-release-el8 && \
     dnf -y install oracle-instantclient-basic oracle-instantclient-devel oracle-instantclient-sqlplus && \
-    dnf -y module enable php:8.2 httpd:2.4 && \
+    dnf -y install https://rpms.remirepo.net/enterprise/remi-release-8.rpm && \
+    dnf -y module reset php && \
+    dnf -y module enable php:remi-8.2 httpd:2.4 && \
     dnf -y install \
         httpd \
         httpd-filesystem \
@@ -20,8 +22,7 @@ RUN dnf -y install oracle-instantclient-release-el8 && \
         php-mysqlnd \
         php-pdo \
         php-xml \
-        php-pear \
-        php-devel && \
+        php-oci8 && \
     rm -rf /var/cache/dnf \
     && \
     # Disable event module and enable prefork so that mod_php is enabled
@@ -40,16 +41,11 @@ RUN dnf -y install oracle-instantclient-release-el8 && \
     # Disable userdirs and the auto-generated welcome message
     rm -f /etc/httpd/conf.d/{userdir.conf,welcome.conf}
     
-# Set environment variables for Oracle Instant Client libraries
-ENV PATH=$PATH:/usr/lib/oracle/21/client64/bin
-ENV ORACLE_HOME=/usr/lib/oracle/21/client64
-ENV TNS_ADMIN=/usr/lib/oracle/21/network/admin
+# Set environment variables for Oracle Instant Client 23 libraries
+ENV PATH=$PATH:/usr/lib/oracle/23/client64/bin
+ENV ORACLE_HOME=/usr/lib/oracle/23/client64
+ENV TNS_ADMIN=/usr/lib/oracle/23/network/admin
 ENV LD_LIBRARY_PATH=$ORACLE_HOME/lib
-
-
-# Install OCI8 PHP extension using PECL
-RUN echo instantclient,/usr/lib/oracle/21/client64/lib | pecl install oci8 \
-    && echo "extension=oci8.so" > /etc/php.d/20-oci8.ini
 
 # Configure httpd
 COPY container_application_deployment/config/httpd/*.conf /etc/httpd/conf.d/
@@ -74,4 +70,3 @@ ENTRYPOINT ["/usr/sbin/httpd"]
 
 # Start the daemon to keep process running
 CMD ["-D", "FOREGROUND"]
-
