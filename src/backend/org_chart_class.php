@@ -192,8 +192,8 @@ class org_chart
 									 DECODE( perstype, 'PIC-Volunteer', 8, 'PIC-Associate', 7, 'PIC-Contracted', 6, DECODE(employer, 'MOP', 5, 'CIMAR', 4, 'AF', 3, 2) )
 									 , 1), lastname";
 
-		//specify the where clause for the specified organization
-		$where_clause = "org_id = :org_id";
+		//specify the where clause for the specified organization (do not include CIMAR staff for the OMI division)
+		$where_clause = "org_id = :org_id AND NOT (EMPLOYER = 'CIMAR' AND DIV_ABBR = 'OMI' AND PROGRAM = 'OMI')";
 		
 		//create the bind array for the specified organization
 		$bind_array = array(array(":org_id", $org_id));
@@ -235,10 +235,10 @@ class org_chart
 		$content_string = '';
 
 		//specify the where clause for the specified list of primary key ID values
-		$where_clause = "pers_id in (:p1, :p2, :p3, :p4, :p5)";
+		$where_clause = "DIV_ABBR = :div_abbr AND PROGRAM = :program AND EMPLOYER = :employer";
 		
 		//create the bind array for the specific list of values
-		$bind_array = array(array(":p1", 6449), array(":p2", 6720), array(":p3", 6715), array(":p4", 6708), array(":p5", 6945));
+		$bind_array = array(array(":div_abbr", 'OMI'), array(":program", 'OMI'), array(":employer", 'CIMAR'));
 
 		//specify the order by clause
 		$order_by_clause = "position_abbr DESC, lastname";
